@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Menu, X } from "lucide-react";
@@ -143,7 +145,7 @@ export default function Navbar() {
           </a>
           <div className="flex flex-col gap-3 mt-4">
             <Button
-              onClick={handleLoginClick}
+              onClick={() => console.log("TODO: implement login function here")}
               variant="outline"
               className="w-full rounded-full"
             >
