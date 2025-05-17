@@ -13,6 +13,10 @@ export const corsOptions: CorsOptions = {
 
 export const MAX_COOKIE_AGE = 60 * 60 * 24 * 365;
 
+/**
+ * There is a Cookie constant in the web app, so update that too
+ * if you change this.
+ */
 export enum Cookie {
   SessionId = "session_id",
 }
