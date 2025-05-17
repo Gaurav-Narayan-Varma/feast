@@ -1,12 +1,15 @@
-import { corsOptions } from "../../../src/constants";
-import { logHelloWorld } from "./procedures/logHelloWorld";
 import * as trpcExpress from "@trpc/server/adapters/express";
 import * as cors from "cors";
+import { corsOptions } from "../../../src/constants";
 
+import { registerUser } from "./procedures/auth/registerUser";
 import { trpcRouter } from "./trpcBase";
-
+import { verifyEmail } from "./procedures/auth/verifyEmail";
 export const appRouter = trpcRouter({
-  test: logHelloWorld,
+  auth: trpcRouter({
+    registerUser,
+    verifyEmail,
+  }),
 });
 
 export type AppRouter = typeof appRouter;
@@ -19,4 +22,3 @@ export const trpcExpressRouter = trpcExpress.createExpressMiddleware({
   createContext: ({ req, res }) => ({ req, res }),
   middleware: cors(corsOptions),
 });
-

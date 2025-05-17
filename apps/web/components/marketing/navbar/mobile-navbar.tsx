@@ -67,7 +67,7 @@ export default function MobileNavBar({
           >
             Log in
           </Button>
-          <a href="/chef-login" className="w-full">
+          <a href="/auth/chef-login" className="w-full">
             <Button className="w-full rounded-full bg-ds-chef-800 hover:bg-ds-chef-900">
               Start Cooking
             </Button>

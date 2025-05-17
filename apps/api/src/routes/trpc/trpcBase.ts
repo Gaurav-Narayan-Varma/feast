@@ -89,6 +89,9 @@ export const publicProcedure = t.procedure
     });
   });
 
+  /**
+   * TODO: Implement userProcedure
+   */
 // export const userWithoutWorkspaceProcedure = publicProcedure.use(
 //   async (opts) => {
 //     const { ctx } = opts;

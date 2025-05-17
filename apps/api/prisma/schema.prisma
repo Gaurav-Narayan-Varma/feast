@@ -13,8 +13,18 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
+model ChefUser {
+  id            String    @id
+  email         String    
+  password      String
+  name          String
+  zipCode       String
+  phoneNumber   String?
+  emailVerified Boolean   @default(false)
+  verifyToken   String?   
+  verifyTokenExpires DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @default(now()) @updatedAt
+
+  @@unique([email, emailVerified])
 }

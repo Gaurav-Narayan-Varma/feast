@@ -68,7 +68,7 @@ export default function Navbar() {
         </nav>
 
         <div className="hidden md:flex items-center gap-4">
-          <a href="/chef-login">
+          <a href="/auth/chef-login">
             <Button
               size="sm"
               className="rounded-full px-4 bg-ds-chef-800 hover:bg-ds-chef-900"

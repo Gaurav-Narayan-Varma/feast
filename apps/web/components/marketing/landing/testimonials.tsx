@@ -1,7 +1,7 @@
 "use client";
 import cx from "clsx";
 import { Star } from "lucide-react";
-
+import { trpc } from "@/app/_trpc/client";
 const testimonials = [
   {
     id: 1,
@@ -42,6 +42,8 @@ const testimonials = [
 ];
 
 export default function Testimonials() {
+  const { data } = trpc.test.useQuery();
+  console.log("data", data);
   return (
     <section id="testimonials" className="py-24 px-6 lg:px-12">
       <div className="max-w-7xl mx-auto">

@@ -1,8 +1,12 @@
 {
   "compilerOptions": {
+    "rootDir": "src",
     "baseUrl": ".",
+    /**
+     * Leaving note here that import alias is not working.
+     */
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./src/*"]
     }
   },
   "include": ["src"],

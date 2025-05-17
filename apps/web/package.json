@@ -11,6 +11,7 @@
     "check-types": "tsc --noEmit"
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.0.1",
     "@radix-ui/react-label": "^2.1.6",
     "@radix-ui/react-slot": "^1.2.2",
     "@repo/ui": "*",
@@ -23,8 +24,10 @@
     "next": "^15.3.2",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "react-hook-form": "^7.56.3",
     "react-hot-toast": "^2.5.2",
-    "tailwind-merge": "^3.3.0"
+    "tailwind-merge": "^3.3.0",
+    "zod": "^3.24.4"
   },
   "devDependencies": {
     "@repo/eslint-config": "*",

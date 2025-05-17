@@ -74,7 +74,7 @@ body {
   --color-ds-chef-500: #9c8585;
   --color-ds-chef-600: #8a7272;
   --color-ds-chef-700: #705d5d;
-  --color-ds-chef-800: #e2533f; /* Dark reddish-brown */
+  --color-ds-chef-800: #e2533f; /* Deep orange */
   --color-ds-chef-900: #e2533f; /* Very dark reddish-brown */
 }
 
@@ -154,4 +154,17 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0px 1000px var(--background) inset;
+  -webkit-text-fill-color: var(--foreground);
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+input:-internal-autofill-selected {
+  background-color: var(--background) !important;
+  color: var(--foreground) !important;
 }

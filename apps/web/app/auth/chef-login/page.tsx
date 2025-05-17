@@ -123,7 +123,7 @@ export default function ChefLogin() {
         <div className="mt-8 pt-6 border-t border-gray-200 text-center">
           <p className="text-ds-chef-600">Don't have an account?</p>
           <Link
-            href="/chef-create-account"
+            href="/auth/chef-signup"
             className="inline-block mt-2 text-ds-chef-700 hover:text-ds-chef-900 font-medium hover:underline"
           >
             Sign up as a Chef
