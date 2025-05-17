@@ -1,4 +1,5 @@
 "use client";
+import { trpc } from "@/app/_trpc/client";
 import { Button } from "@/components/ui/button";
 import {
   Sidebar,
@@ -79,13 +80,12 @@ export default function ChefSidebar() {
     },
   ];
 
-  const handleLogout = () => {
-    localStorage.removeItem("Sasdf");
-
-    toast.success("Logged out successfully");
-
-    router.push("/auth/chef-login");
-  };
+  const logout = trpc.auth.logout.useMutation({
+    onSuccess: () => {
+      toast.success("Logged out successfully");
+      router.push("/auth/chef-login");
+    },
+  });
 
   return (
     <Sidebar className="border-r border-gray-200 bg-white text-gray-800 h-screen flex flex-col">
@@ -112,10 +112,12 @@ export default function ChefSidebar() {
           <Button
             variant="ghost"
             className="w-full justify-start text-gray-700 hover:text-red-600 hover:bg-red-50"
-            onClick={handleLogout}
+            onClick={() => {
+              logout.mutate();
+            }}
           >
             <LogOut size={18} className="mr-2" />
-            <span>Logout</span>
+            Logout
           </Button>
         </div>
       </SidebarContent>

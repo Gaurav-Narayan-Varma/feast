@@ -6,12 +6,14 @@ import { registerUser } from "./procedures/auth/registerUser";
 import { trpcRouter } from "./trpcBase";
 import { verifyEmail } from "./procedures/auth/verifyEmail";
 import { login } from "./procedures/auth/login";
+import { logout } from "./procedures/auth/logout";
 
 export const appRouter = trpcRouter({
   auth: trpcRouter({
     registerUser,
     verifyEmail,
     login,
+    logout,
   }),
 });
 

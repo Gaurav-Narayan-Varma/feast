@@ -1,7 +1,9 @@
-import { initTRPC } from "@trpc/server";
+import { initTRPC, TRPCError } from "@trpc/server";
 import cookie, { CookieSerializeOptions } from "cookie";
 import type { IncomingMessage, ServerResponse } from "http";
-import { Cookie, MAX_COOKIE_AGE } from "../../../src/constants";
+import { Cookie, MAX_COOKIE_AGE } from "../../constants";
+import { db } from "../../db";
+import { logoutChefUser } from "../../utils/authUtils";
 
 const t = initTRPC.create();
 
@@ -35,16 +37,38 @@ export const publicProcedure = t.procedure
   .use((opts) => {
     const { req, res } = opts.ctx;
 
+    const getCookieHeader = () => {
+      const cookieHeader =
+        req.headers instanceof Headers
+          ? req.headers.get("cookie")
+          : req.headers.cookie;
+
+      if (!cookieHeader) {
+        return;
+      }
+
+      return cookieHeader;
+    };
+
     const getCookies = () => {
-      const cookieHeader = req.headers["Cookie"] ?? req.headers["cookie"];
-      if (!cookieHeader) return {};
+      const cookieHeader = getCookieHeader();
+
+      if (!cookieHeader) {
+        return {};
+      }
+
       return cookie.parse(cookieHeader.toString());
     };
 
     const getCookie = (name: Cookie) => {
-      const cookieHeader = req.headers["Cookie"] ?? req.headers["cookie"];
-      if (!cookieHeader) return;
+      const cookieHeader = getCookieHeader();
+
+      if (!cookieHeader) {
+        return;
+      }
+
       const cookies = cookie.parse(cookieHeader.toString());
+
       return cookies[name];
     };
 
@@ -81,6 +105,7 @@ export const publicProcedure = t.procedure
 
     return opts.next({
       ctx: {
+        getCookieHeader,
         getCookies,
         getCookie,
         setCookie,
@@ -89,82 +114,44 @@ export const publicProcedure = t.procedure
     });
   });
 
-/**
- * TODO: Implement chefUserProcedure
- */
-// export const userWithoutWorkspaceProcedure = publicProcedure.use(
-//   async (opts) => {
-//     const { ctx } = opts;
+export const chefUserProcedure = publicProcedure.use(async (opts) => {
+  const { ctx } = opts;
 
-//     const cookieHeader = ctx.req.headers["cookie"];
+  /**
+   * Next.js will sometimes wrap the headers in a Headers object,
+   * so we need to check for that and access the cookie header accordingly.
+   */
+  const cookieHeader = ctx.getCookieHeader();
+  console.log("cookieHeader", cookieHeader);
 
-//     if (!cookieHeader) {
-//       logoutUser(ctx);
-//       throw new TRPCError({ code: "UNAUTHORIZED" });
-//     }
+  if (!cookieHeader) {
+    throw new TRPCError({ code: "UNAUTHORIZED" });
+  }
 
-//     const parsedCookie = cookie.parse(cookieHeader) as Record<
-//       string,
-//       string | undefined
-//     >;
-//     let userId = parsedCookie[Cookie.UserId];
-//     const sessionId = parsedCookie[Cookie.SessionId];
-//     let workspaceId = parsedCookie[Cookie.WorkspaceId];
-//     const viewAsUserId = parsedCookie[Cookie.ViewAsUserId];
-//     const viewAsWorkspaceId = parsedCookie[Cookie.ViewAsWorkspaceId];
+  const parsedCookie = cookie.parse(cookieHeader) as Record<
+    string,
+    string | undefined
+  >;
+  const sessionId = parsedCookie[Cookie.SessionId];
 
-//     if (!userId || !sessionId) {
-//       logoutUser(ctx);
-//       throw new TRPCError({ code: "UNAUTHORIZED" });
-//     }
+  if (!sessionId) {
+    throw new TRPCError({ code: "UNAUTHORIZED" });
+  }
 
-//     const session = await db.session.findUnique({
-//       where: {
-//         id: sessionId,
-//         userId,
-//       },
-//     });
+  const session = await db.session.findUnique({
+    where: {
+      id: sessionId,
+    },
+  });
 
-//     if (!session) {
-//       logoutUser(ctx);
-//       throw new TRPCError({ code: "UNAUTHORIZED" });
-//     }
+  if (!session) {
+    logoutChefUser(ctx);
+    throw new TRPCError({ code: "UNAUTHORIZED" });
+  }
 
-//     const user = await db.user.findUnique({
-//       where: {
-//         id: userId,
-//       },
-//       select: {
-//         enabled: true,
-//       },
-//     });
-
-//     if (!user?.enabled) {
-//       logoutUser(ctx);
-//       throw new TRPCError({ code: "UNAUTHORIZED" });
-//     }
-
-//     if (viewAsUserId) {
-//       const user = await db.user.findUnique({
-//         where: {
-//           id: userId,
-//         },
-//       });
-
-//       if (!user?.isSuperUser || !viewAsWorkspaceId) {
-//         logoutUser(ctx);
-//         throw new TRPCError({ code: "UNAUTHORIZED" });
-//       }
-
-//       userId = viewAsUserId;
-//       workspaceId = viewAsWorkspaceId;
-//     }
-
-//     return opts.next({
-//       ctx: {
-//         userId,
-//         workspaceId,
-//       },
-//     });
-//   },
-// );
+  return opts.next({
+    ctx: {
+      chefUserId: session.chefUserId,
+    },
+  });
+});
