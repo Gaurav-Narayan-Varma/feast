@@ -1,7 +1,7 @@
-import { Cookie, MAX_COOKIE_AGE } from "../../../src/constants";
 import { initTRPC } from "@trpc/server";
 import cookie, { CookieSerializeOptions } from "cookie";
 import type { IncomingMessage, ServerResponse } from "http";
+import { Cookie, MAX_COOKIE_AGE } from "../../../src/constants";
 
 const t = initTRPC.create();
 
@@ -89,9 +89,9 @@ export const publicProcedure = t.procedure
     });
   });
 
-  /**
-   * TODO: Implement userProcedure
-   */
+/**
+ * TODO: Implement chefUserProcedure
+ */
 // export const userWithoutWorkspaceProcedure = publicProcedure.use(
 //   async (opts) => {
 //     const { ctx } = opts;

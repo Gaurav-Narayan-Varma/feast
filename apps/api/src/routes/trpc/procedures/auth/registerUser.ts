@@ -5,17 +5,17 @@ import { sendVerificationEmail } from "../../../../utils/emailUtils";
 import { nid } from "../../../../utils/generalUtils";
 import { publicProcedure } from "../../trpcBase";
 
+const input = z.object({
+  email: z.string().email(),
+  password: z.string().min(8),
+  name: z.string(),
+  zipCode: z.string(),
+  phoneNumber: z.string().optional(),
+});
+
 export const registerUser = publicProcedure
-  .input(
-    z.object({
-      email: z.string().email(),
-      password: z.string().min(8),
-      name: z.string(),
-      zipCode: z.string(),
-      phoneNumber: z.string().optional(),
-    })
-  )
-  .mutation(async ({ input, ctx }) => {
+  .input(input)
+  .mutation(async ({ input }) => {
     const { email, password, name, zipCode, phoneNumber } = input;
 
     const existingVerifiedUser = await db.chefUser.findFirst({

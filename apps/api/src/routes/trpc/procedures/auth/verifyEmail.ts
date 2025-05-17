@@ -1,10 +1,14 @@
-import { publicProcedure } from "../../trpcBase";
 import { z } from "zod";
 import { db } from "../../../../db";
+import { publicProcedure } from "../../trpcBase";
+
+const input = z.object({
+  token: z.string(),
+});
 
 export const verifyEmail = publicProcedure
-  .input(z.object({ token: z.string() }))
-  .mutation(async ({ input, ctx }) => {
+  .input(input)
+  .mutation(async ({ input }) => {
     const chefUser = await db.chefUser.findFirst({
       where: {
         verifyToken: input.token,
@@ -12,9 +16,9 @@ export const verifyEmail = publicProcedure
          * Check that the token, or 'invite', has not expired
          */
         verifyTokenExpires: {
-          gt: new Date()
-        }
-      }
+          gt: new Date(),
+        },
+      },
     });
 
     if (!chefUser) {
@@ -26,8 +30,8 @@ export const verifyEmail = publicProcedure
       data: {
         emailVerified: true,
         verifyToken: null,
-        verifyTokenExpires: null
-      }
+        verifyTokenExpires: null,
+      },
     });
 
     return {

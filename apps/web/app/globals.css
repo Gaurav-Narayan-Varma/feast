@@ -154,6 +154,12 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+  /**
+   * Text selection should be light blue, default blue is too dark
+   */
+  ::selection {
+    background-color: #b3d7fe;
+  }
 }
 
 input:-webkit-autofill,
@@ -168,3 +174,12 @@ input:-internal-autofill-selected {
   background-color: var(--background) !important;
   color: var(--foreground) !important;
 }
+
+/**
+ * When user selects text in an input field that is autocompleted
+ */
+ input:-webkit-autofill::selection,
+ input:-webkit-autofill:focus::selection,
+ input:-internal-autofill-selected::selection {
+    background-color: #b3d7fe !important;
+ }

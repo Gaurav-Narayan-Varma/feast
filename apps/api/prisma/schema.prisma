@@ -15,7 +15,7 @@ datasource db {
 
 model ChefUser {
   id            String    @id
-  email         String    
+  email         String    @unique
   password      String
   name          String
   zipCode       String
@@ -23,8 +23,17 @@ model ChefUser {
   emailVerified Boolean   @default(false)
   verifyToken   String?   
   verifyTokenExpires DateTime?
+  sessions Session[]
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @default(now()) @updatedAt
+}
 
-  @@unique([email, emailVerified])
+model Session {
+  id        String   @id
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+  chefUser      ChefUser     @relation(fields: [chefUserId], references: [id], onDelete: Cascade)
+  chefUserId    String  
+
+  @@index([chefUserId, id])
 }

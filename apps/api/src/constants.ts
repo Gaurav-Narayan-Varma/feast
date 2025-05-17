@@ -14,5 +14,5 @@ export const corsOptions: CorsOptions = {
 export const MAX_COOKIE_AGE = 60 * 60 * 24 * 365;
 
 export enum Cookie {
-  ChefAuthToken = "chef_auth_token",
+  SessionId = "session_id",
 }

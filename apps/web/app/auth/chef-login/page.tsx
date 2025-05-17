@@ -1,57 +1,40 @@
 "use client";
 
+import { trpc } from "@/app/_trpc/client";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-// import { authApi, AuthTokenType, handleApiError } from "@/utils/api";
 import { AlertCircle } from "lucide-react";
-import React, { useRef, useState } from "react";
-// import { Link, useLocation, useNavigate } from "react-router-dom";
-import { toast } from "react-hot-toast";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import React, { useRef, useState } from "react";
+import { toast } from "react-hot-toast";
 
 export default function ChefLogin() {
   const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
-  // const navigate = useNavigate();
-  // const location = useLocation();
+  const router = useRouter();
 
-  // Get the redirect path from location state if available
-  // const from = location.state?.from?.pathname || "/chef-dashboard";
+  const login = trpc.auth.login.useMutation({
+    onSuccess: () => {
+      toast.success("Login successful! Welcome back");
+      router.push("/chef-console/dashboard");
+    },
+    onError: (error) => {
+      setError(error.message ?? "An error occurred");
+    },
+  });
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    setLoading(true);
     setError(null);
 
-    try {
-      // const response = await authApi.chefLogin({
-      //   email: emailRef.current?.value || "",
-      //   password: passwordRef.current?.value || "",
-      // });
-
-      // Store token in localStorage from the response
-      // localStorage.setItem(AuthTokenType.CHEF, response.token);
-
-      // Store chef information if available
-      // if (response.chef) {
-      //   localStorage.setItem("chefInfo", JSON.stringify(response.chef));
-      // }
-
-      toast.success("Login successful! Welcome back");
-
-      // Navigate to the original requested URL or dashboard
-      // navigate(from);
-    } catch (error) {
-      // handleApiError(error);
-      setError("Login failed. Please check your credentials and try again.");
-    } finally {
-      setLoading(false);
-    }
+    await login.mutateAsync({
+      email: emailRef.current?.value || "",
+      password: passwordRef.current?.value || "",
+    });
   };
 
   return (
@@ -94,12 +77,6 @@ export default function ChefLogin() {
               <Label htmlFor="password" className="text-ds-chef-700">
                 Password
               </Label>
-              <Link
-                href="/reset-password-request"
-                className="text-sm text-ds-chef-600 hover:text-ds-chef-800 hover:underline"
-              >
-                Forgot password?
-              </Link>
             </div>
             <Input
               type="password"
@@ -114,9 +91,8 @@ export default function ChefLogin() {
           <Button
             type="submit"
             className="w-full bg-ds-chef-700 hover:bg-ds-chef-800 text-white"
-            disabled={loading}
           >
-            {loading ? "Logging in..." : "Login"}
+            Login
           </Button>
         </form>
 
