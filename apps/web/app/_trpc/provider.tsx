@@ -14,30 +14,33 @@ import { trpc } from "./client";
 export default function Provider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
 
-  const queryClient = new QueryClient({
-    queryCache: new QueryCache({
-      onError: (error: any) => {
-        if (error?.data?.code === "UNAUTHORIZED") {
-          queryClient.clear();
-          router.push("/auth/chef-login");
-          toast.error(
-            "You are not authorized to access this page. Please login."
-          );
-        }
-      },
-    }),
-    mutationCache: new MutationCache({
-      onError: (error: any) => {
-        if (error?.data?.code === "UNAUTHORIZED") {
-          queryClient.clear();
-          router.push("/auth/chef-login");
-          toast.error(
-            "You are not authorized to access this page. Please login."
-          );
-        }
-      },
-    }),
-  });
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        queryCache: new QueryCache({
+          onError: (error: any) => {
+            if (error?.data?.code === "UNAUTHORIZED") {
+              queryClient.clear();
+              router.push("/auth/chef-login");
+              toast.error(
+                "You are not authorized to access this page. Please login."
+              );
+            }
+          },
+        }),
+        mutationCache: new MutationCache({
+          onError: (error: any) => {
+            if (error?.data?.code === "UNAUTHORIZED") {
+              queryClient.clear();
+              router.push("/auth/chef-login");
+              toast.error(
+                "You are not authorized to access this page. Please login."
+              );
+            }
+          },
+        }),
+      })
+  );
 
   const [trpcClient] = useState(() =>
     trpc.createClient({

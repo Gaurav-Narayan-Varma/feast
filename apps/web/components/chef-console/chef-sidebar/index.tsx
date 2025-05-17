@@ -34,7 +34,7 @@ export type MenuItem = {
 };
 
 export default function ChefSidebar() {
-  const basePath = "/chef-dashboard";
+  const basePath = "/chef-console";
   const router = useRouter();
 
   const menuItems: MenuItem[] = [
