@@ -5,7 +5,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, ArrowLeftIcon } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useRef, useState } from "react";
@@ -38,7 +38,10 @@ export default function ChefLogin() {
   };
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-ds-chef-50 to-ds-chef-100">
+    <div className="flex min-h-screen bg-gradient-to-br from-ds-chef-50 to-ds-chef-100 relative">
+      <Link href="/" className="absolute top-4 left-4">
+        <Button variant="outline" label="Home" leftIcon={<ArrowLeftIcon />} />
+      </Link>
       <div className="m-auto w-full max-w-md p-8 rounded-xl bg-white shadow-lg">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-display font-bold text-ds-chef-800">
@@ -91,9 +94,9 @@ export default function ChefLogin() {
           <Button
             type="submit"
             className="w-full bg-ds-chef-700 hover:bg-ds-chef-800 text-white"
-          >
-            Login
-          </Button>
+            label="Login"
+            isLoading={login.isPending}
+          />
         </form>
 
         <div className="mt-8 pt-6 border-t border-gray-200 text-center">

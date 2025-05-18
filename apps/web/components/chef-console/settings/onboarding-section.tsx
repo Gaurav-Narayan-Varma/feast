@@ -22,21 +22,9 @@ import { useState } from "react";
 import { toast } from "react-hot-toast";
 import OnboardingItem from "./onboarding-item";
 
-export default function OnboardingSection({
-  onOpenContractDialog,
-  onOpenPasswordDialog,
-  chefStatusFlags,
-}: {
-  onOpenContractDialog: () => void;
-  onOpenPasswordDialog: () => void;
-  chefStatusFlags?: any;
-}) {
+export default function OnboardingSection() {
   const isMobile = useIsMobile();
   const [isContractDialogOpen, setIsContractDialogOpen] = useState(false);
-  const [isDownloading1099, setIsDownloading1099] = useState(false);
-  const [localIdVerified, setLocalIdVerified] = useState(
-    chefStatusFlags?.idVerification
-  );
   const [isStripeOnboardingLoading, setIsStripeOnboardingLoading] =
     useState(false);
   const router = useRouter();
@@ -68,55 +56,7 @@ export default function OnboardingSection({
       },
     });
 
-  // const handleDownload1099Contract = async () => {
-  //   try {
-  //     setIsDownloading1099(true);
-  //     const result = await chefApi.get1099Contract();
-
-  //     if (result.contractUrl) {
-  //       // Open the contract URL in a new window
-  //       window.open(result.contractUrl, "_blank");
-  //       toast({
-  //         title: "Success",
-  //         description: "Contract downloaded successfully!",
-  //         variant: "default",
-  //       });
-  //     } else {
-  //       toast({
-  //         title: "Error",
-  //         description: "No contract URL was returned. Please try again later.",
-  //         variant: "destructive",
-  //       });
-  //     }
-  //   } catch (error) {
-  //     console.error("Error downloading contract:", error);
-  //     toast({
-  //       title: "Error",
-  //       description: "Failed to download contract. Please try again later.",
-  //       variant: "destructive",
-  //     });
-  //   } finally {
-  //     setIsDownloading1099(false);
-  //   }
-  // };
-
-  // Get task status ('completed' or 'pending')
-  const getTaskStatus = (taskName: any) => {
-    // Special case for ID verification to use local state
-    if (taskName === "idVerification") {
-      return localIdVerified ? "completed" : "pending";
-    }
-    // In CompletedTasksData, true means task is completed
-    // return chefStatusFlags[taskName] ? "completed" : "pending";
-    return "pending";
-  };
-
-  chefStatusFlags = {
-    idVerification: false,
-    stripeAccountOnboarding: false,
-    form1099: false,
-    emailConfirmation: false,
-  };
+  const get1099ContractLink = trpc.onboarding.get1099ContractLink.useQuery();
 
   if (getChefUser.isLoading) {
     return (
@@ -193,7 +133,11 @@ export default function OnboardingSection({
             icon={<Upload />}
             title="1099 Contract Form"
             description="Upload and digitally sign your 1099 contract"
-            status={getTaskStatus("form1099")}
+            status={
+              getChefUser.data?.chefUser.form1099Status === "Submitted"
+                ? "completed"
+                : "pending"
+            }
             isMobile={isMobile}
           >
             {/* Download Contract Button */}
@@ -205,13 +149,26 @@ export default function OnboardingSection({
                       type="button"
                       variant="outline"
                       label="Download Contract"
-                      // onClick={handleDownload1099Contract}
-                      disabled={!chefStatusFlags.form1099 || isDownloading1099}
+                      onClick={() => {
+                        console.log(
+                          "get1099ContractLink.data",
+                          get1099ContractLink.data
+                        );
+                        // "https://s3.eu-north-1.amazonaws.com/venkatesh.goud/1099-contracts/llefj72dkx4x2ed8fj/5a967b2a-7961-4152-b847-c0779b6bd628.pdf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA46ZDFJSTSZOD6GPG%2F20250518%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20250518T175016Z&X-Amz-Expires=21600&X-Amz-Signature=e44dc2b65264d899fe978c9b7669ebd7ee6c95959c7d609f03b48f220bcba273&X-Amz-SignedHeaders=host"
+
+                        // https://s3.eu-north-1.amazonaws.com/venkatesh.goud/1099-contracts/6828dfd19d34a43f0b5ffc9a/f0dbc74c-47dc-448f-8938-bc8193a0df12.pdf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA46ZDFJSTSZOD6GPG%2F20250518%2Feu-north-1%2Fs3%2Faws4_request&X-Amz-Date=20250518T175156Z&X-Amz-Expires=21600&X-Amz-Signature=499470235f2f2a25679216915da04c6ea18f62c42e6c8ff1b0c3f3800b738def&X-Amz-SignedHeaders=host
+                        get1099ContractLink.data?.contractUrl &&
+                          window.open(
+                            get1099ContractLink.data.contractUrl,
+                            "_blank"
+                          );
+                      }}
+                      disabled={get1099ContractLink.isPending}
                       className="w-full"
                     />
                   </span>
                 </TooltipTrigger>
-                {!chefStatusFlags.form1099 && (
+                {getChefUser.data?.chefUser.form1099Status !== "Submitted" && (
                   <TooltipContent className="p-2">
                     <p className="text-xs">
                       You must sign the contract before downloading it

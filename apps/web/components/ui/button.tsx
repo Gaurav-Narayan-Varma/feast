@@ -63,9 +63,9 @@ function Button({
       disabled={isLoading}
       {...props}
     >
-      {leftIcon && <span className="mr-2">{leftIcon}</span>}
+      {leftIcon && <span className="mr-1">{leftIcon}</span>}
       {label}
-      {rightIcon && <span className="ml-2">{rightIcon}</span>}
+      {rightIcon && <span className="ml-1">{rightIcon}</span>}
       {isLoading && <Loader2 className="size-4 animate-spin" />}
     </Comp>
   )

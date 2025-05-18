@@ -1,7 +1,7 @@
 "use client";
 import cx from "clsx";
 import { Star } from "lucide-react";
-import { trpc } from "@/app/_trpc/client";
+
 const testimonials = [
   {
     id: 1,

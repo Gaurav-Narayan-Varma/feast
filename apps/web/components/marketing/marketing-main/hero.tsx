@@ -3,10 +3,11 @@ import React from "react";
 export default function Hero() {
   return (
     <section className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-12 pt-20 overflow-hidden">
+      <img src="" alt="" />
       <div
         className="absolute inset-0 bg-cover bg-center z-0 fade-mask"
         style={{
-          backgroundImage: "url('./hero.png')",
+          backgroundImage: "url('/hero.png')",
           opacity: 0.8,
           transition: "opacity 1s ease-in-out",
         }}

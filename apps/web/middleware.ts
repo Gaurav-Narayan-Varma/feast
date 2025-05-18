@@ -3,17 +3,15 @@ import { NextResponse } from "next/server";
 import { Cookie } from "../api/src/constants";
 
 export function middleware(request: NextRequest) {
+  const sessionId = request.cookies.get(Cookie.SessionId);
+
   /**
    * If person tries to access chef-console and
    * they do not have a session_id cookie, redirect to login
    */
-  if (request.nextUrl.pathname.startsWith("/chef-console")) {
-    const sessionId = request.cookies.get(Cookie.SessionId);
-
-    if (!sessionId) {
-      const loginUrl = new URL("/auth/chef-login", request.url);
-      return NextResponse.redirect(loginUrl);
-    }
+  if (request.nextUrl.pathname.startsWith("/chef-console") && !sessionId) {
+    const loginUrl = new URL("/auth/chef-login", request.url);
+    return NextResponse.redirect(loginUrl);
   }
 
   /**
@@ -31,7 +29,7 @@ export function middleware(request: NextRequest) {
    * If user with session_id cookie tries to access /auth routes,
    * redirect to /chef-console/dashboard
    */
-  if (request.nextUrl.pathname.startsWith("/auth")) {
+  if (request.nextUrl.pathname.startsWith("/auth") && !!sessionId) {
     const dashboardUrl = new URL("/chef-console/dashboard", request.url);
     return NextResponse.redirect(dashboardUrl);
   }

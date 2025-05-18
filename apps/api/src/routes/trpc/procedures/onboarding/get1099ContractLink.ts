@@ -1,0 +1,29 @@
+import { getSignedUrl } from "../../../../utils/s3";
+import { db } from "../../../../db";
+import { chefUserProcedure } from "../../../../routes/trpc/trpcBase";
+
+type Response = {
+  contractUrl: string;
+};
+
+export const get1099ContractLink = chefUserProcedure.query<Response>(
+  async ({ ctx }) => {
+    console.log("ctx.chefUserId", ctx.chefUserId);
+
+    const chefUser = await db.chefUser.findUniqueOrThrow({
+      where: { id: ctx.chefUserId },
+    });
+
+    if (!chefUser.form1099DocumentKey) {
+      throw new Error("No 1099 contract found. Please reach out to support.");
+    }
+
+    const contractUrl = await getSignedUrl(chefUser.form1099DocumentKey);
+    
+    console.log("contractUrl BE", contractUrl);
+
+    return {
+      contractUrl,
+    };
+  }
+);

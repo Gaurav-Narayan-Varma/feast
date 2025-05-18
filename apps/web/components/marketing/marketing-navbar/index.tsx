@@ -19,11 +19,14 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
+  const scrollToSection = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    targetId: string
+  ) => {
     e.preventDefault();
     const element = document.getElementById(targetId);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+      element.scrollIntoView({ behavior: "smooth" });
     }
   };
 
@@ -71,10 +74,9 @@ export default function Navbar() {
           <a href="/auth/chef-login">
             <Button
               size="sm"
+              label="Start Cooking"
               className="rounded-full px-4 bg-ds-chef-800 hover:bg-ds-chef-900"
-            >
-              Start Cooking
-            </Button>
+            />
           </a>
         </div>
 

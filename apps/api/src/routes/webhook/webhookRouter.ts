@@ -26,7 +26,9 @@ stripeWebhookRouter.use(express.raw({ type: "application/json" }));
  */
 stripeWebhookRouter.post(
   "/stripe-id-verification-status",
-  handleStripeIdVerificationStatus
+  async (req: express.Request, res: express.Response) => {
+    await handleStripeIdVerificationStatus(req, res);
+  }
 );
 
 webhookRouter.use(stripeWebhookRouter);

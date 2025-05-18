@@ -13,6 +13,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Form1099Status {
+  NotStarted
+  Submitted
+  Approved
+}
+
 model ChefUser {
   id                 String    @id
   email              String    @unique
@@ -34,6 +40,8 @@ model ChefUser {
   stripeOnboardingComplete    Boolean @default(false)
   stripeVerificationReportId  String?
   legalName                   String?
+  form1099DocumentKey         String?
+  form1099Status              Form1099Status @default(NotStarted)
 }
 
 model Session {

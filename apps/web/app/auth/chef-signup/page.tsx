@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, ArrowLeftIcon } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -81,7 +81,10 @@ export default function ChefSignup() {
   }
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-ds-chef-50 to-ds-chef-100">
+    <div className="flex min-h-screen bg-gradient-to-br from-ds-chef-50 to-ds-chef-100 relative">
+      <Link href="/" className="absolute top-4 left-4">
+        <Button variant="outline" label="Home" leftIcon={<ArrowLeftIcon />} />
+      </Link>
       <div className="m-auto w-full max-w-md p-8 rounded-xl bg-white shadow-lg">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-display font-bold text-ds-chef-800">
@@ -214,10 +217,9 @@ export default function ChefSignup() {
             <Button
               type="submit"
               className="w-full mt-6 bg-ds-chef-700 hover:bg-ds-chef-800 text-white"
-              disabled={registerUser.isPending}
-            >
-              Create Account
-            </Button>
+              label="Create Account"
+              isLoading={registerUser.isPending}
+            />
           </form>
         </Form>
 

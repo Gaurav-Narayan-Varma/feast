@@ -1,3 +1,4 @@
+import { trpc } from "@/app/_trpc/client";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -19,15 +20,9 @@ import { Input } from "@/components/ui/input";
 import { useIsMobile } from "@/hooks/use-mobile";
 // import { chefApi } from "@/utils/api";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { z } from "zod";
-
-const contractFormSchema = z.object({
-  fullName: z.string().min(2, { message: "Please enter your full legal name" }),
-});
-type ContractFormValues = z.infer<typeof contractFormSchema>;
 
 export default function SignContractModal({
   open,
@@ -38,40 +33,36 @@ export default function SignContractModal({
   onOpenChange: (open: boolean) => void;
   chefLegalName: string;
 }) {
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const isMobile = useIsMobile();
-
+  const contractFormSchema = z.object({
+    fullName: z
+      .string()
+      .min(2, { message: "Please enter your full legal name" })
+      .refine((val) => val.trim() === chefLegalName.trim(), {
+        message: "Name must match your stored legal name exactly",
+      }),
+  });
+  type ContractFormValues = z.infer<typeof contractFormSchema>;
   const form = useForm<ContractFormValues>({
     resolver: zodResolver(contractFormSchema),
     defaultValues: {
       fullName: chefLegalName,
     },
   });
-
-  async function onSubmit(data: ContractFormValues) {
-    try {
-      setIsSubmitting(true);
-
-      // Check if the entered name matches the chef's legal name
-      if (chefLegalName && data.fullName.trim() !== chefLegalName.trim()) {
-        toast.error(
-          "The name you entered doesn't match your stored legal name. Please use your legal name exactly as it appears on official documents."
-        );
-        return;
-      }
-
-      // Call the API to sign the contract
-      //   await chefApi.sign1099Contract(data.fullName);
-
+  const sign1099Contract = trpc.onboarding.sign1099Contract.useMutation({
+    onSuccess: () => {
       toast.success("Contract signed successfully!");
       onOpenChange(false);
-      window.location.reload();
-    } catch (error) {
-      console.error("Error signing contract:", error);
-      toast.error("Failed to sign contract. Please try again.");
-    } finally {
-      setIsSubmitting(false);
-    }
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+
+  async function onSubmit(data: ContractFormValues) {
+    await sign1099Contract.mutate({
+      fullName: data.fullName,
+    });
   }
 
   return (
@@ -130,9 +121,8 @@ export default function SignContractModal({
               />
               <Button
                 type="submit"
-                disabled={isSubmitting}
                 className={isMobile ? "w-full" : ""}
-                label={isSubmitting ? "Signing..." : "Sign Contract"}
+                label="Sign Contract"
               />
             </DialogFooter>
           </form>
