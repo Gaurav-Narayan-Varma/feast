@@ -1,5 +1,5 @@
 import ChefSidebar from "@/components/chef-console/chef-sidebar";
-import { SidebarProvider, useSidebar } from "@/components/ui/sidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
 
 export default function ChefConsoleLayout({
   children,
@@ -8,8 +8,10 @@ export default function ChefConsoleLayout({
 }) {
   return (
     <SidebarProvider className="flex">
-        <ChefSidebar />
+      <ChefSidebar />
+      <div className="flex justify-center w-full">
         {children}
+      </div>
     </SidebarProvider>
   );
 }

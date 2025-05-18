@@ -30,6 +30,27 @@ export const registerUser = publicProcedure
     }
 
     /**
+     * If the user already has a valid invite (verification token within the last 24 hours)
+     * sent out to them, push them to use the existing invite
+     */
+    const existingValidInvite = await db.chefUser.findFirst({
+      where: {
+        email,
+        emailVerified: false,
+        verifyToken: {
+          not: null,
+          gte: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
+        },
+      },
+    });
+
+    if (existingValidInvite) {
+      throw new Error(
+        "Verification link already sent out within the last 24 hours, please check your email"
+      );
+    }
+
+    /**
      * Delete any existing unverified users with this email, thus expiring any existing verification tokens
      *
      * Must convert email to lowercase, because Prisma is case-insensitive by default and we store all emails in lowercase in the db

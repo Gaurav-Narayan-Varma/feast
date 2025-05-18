@@ -122,7 +122,6 @@ export const chefUserProcedure = publicProcedure.use(async (opts) => {
    * so we need to check for that and access the cookie header accordingly.
    */
   const cookieHeader = ctx.getCookieHeader();
-  console.log("cookieHeader", cookieHeader);
 
   if (!cookieHeader) {
     throw new TRPCError({ code: "UNAUTHORIZED" });

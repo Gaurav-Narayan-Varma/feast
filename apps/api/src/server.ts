@@ -4,6 +4,7 @@ import * as express from "express";
 import { createServer } from "http";
 import { trpcExpressRouter } from "./routes/trpc/trpcRouter";
 import { db } from "./db";
+import { webhookRouter } from "./routes/webhook/webhookRouter";
 
 async function main() {
   const port = Number(process.env.PORT);
@@ -12,6 +13,7 @@ async function main() {
   const httpServer = createServer(app);
 
   app.use("/trpc", trpcExpressRouter);
+  app.use("/webhook", webhookRouter);
 
   app.on("close", async () => {
     await db.$disconnect().catch(async (e) => {

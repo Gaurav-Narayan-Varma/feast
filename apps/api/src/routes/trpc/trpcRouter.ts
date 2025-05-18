@@ -7,6 +7,10 @@ import { trpcRouter } from "./trpcBase";
 import { verifyEmail } from "./procedures/auth/verifyEmail";
 import { login } from "./procedures/auth/login";
 import { logout } from "./procedures/auth/logout";
+import { getOrCreateVerificationSession } from "./procedures/onboarding/getOrCreateVerificationSession";
+import { getChefUser } from "./procedures/chefUser/getChefUser";
+import { getStripeOnboardingLink } from "./procedures/onboarding/getStripeOnboardingLink";
+import { updateChefUser } from "./procedures/chefUser/updateChefUser";
 
 export const appRouter = trpcRouter({
   auth: trpcRouter({
@@ -14,6 +18,14 @@ export const appRouter = trpcRouter({
     verifyEmail,
     login,
     logout,
+  }),
+  onboarding: trpcRouter({
+    getOrCreateVerificationSession,
+    getStripeOnboardingLink,
+  }),
+  chefUser: trpcRouter({
+    getChefUser,
+    updateChefUser,
   }),
 });
 

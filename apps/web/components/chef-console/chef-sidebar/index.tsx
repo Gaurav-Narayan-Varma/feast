@@ -6,7 +6,6 @@ import {
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
 } from "@/components/ui/sidebar";
@@ -89,16 +88,13 @@ export default function ChefSidebar() {
 
   return (
     <Sidebar className="border-r border-gray-200 bg-white text-gray-800 h-screen flex flex-col">
-      <SidebarHeader>
+      <SidebarHeader className="bg-sidebar">
         <div className="flex items-center justify-between w-full pl-4 pt-4">
           <img src="/feast-logo-red.png" alt="Feast Logo" className="h-8" />
         </div>
       </SidebarHeader>
-      <SidebarContent className="bg-white flex flex-col flex-grow justify-between">
+      <SidebarContent className="bg-sidebar flex flex-col flex-grow justify-between mt-4">
         <SidebarGroup>
-          <SidebarGroupLabel className="text-gray-600">
-            Navigation
-          </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>{menuItems.map(NavItem)}</SidebarMenu>
           </SidebarGroupContent>

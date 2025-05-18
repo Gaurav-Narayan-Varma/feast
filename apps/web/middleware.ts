@@ -4,7 +4,8 @@ import { Cookie } from "../api/src/constants";
 
 export function middleware(request: NextRequest) {
   /**
-   * Redirect to login if session cookie is not present
+   * If person tries to access chef-console and
+   * they do not have a session_id cookie, redirect to login
    */
   if (request.nextUrl.pathname.startsWith("/chef-console")) {
     const sessionId = request.cookies.get(Cookie.SessionId);
@@ -26,10 +27,21 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(dashboardUrl);
   }
 
+  /**
+   * If user with session_id cookie tries to access /auth routes,
+   * redirect to /chef-console/dashboard
+   */
+  if (request.nextUrl.pathname.startsWith("/auth")) {
+    const dashboardUrl = new URL("/chef-console/dashboard", request.url);
+    return NextResponse.redirect(dashboardUrl);
+  }
+
   return NextResponse.next();
 }
 
-// Configure which paths the middleware should run on
+/**
+ * Configure which paths the middleware should run on
+ */
 export const config = {
-  matcher: "/chef-console/:path*",
+  matcher: ["/chef-console/:path*", "/auth/:path*"],
 };

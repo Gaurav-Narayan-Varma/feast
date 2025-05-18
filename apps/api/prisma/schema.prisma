@@ -26,6 +26,12 @@ model ChefUser {
   sessions Session[]
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @default(now()) @updatedAt
+
+  // Chef specific fields
+  isIdVerified Boolean @default(false)
+  stripeVerificationSessionId String?
+  stripeAccountId String?
+  stripeOnboardingComplete Boolean @default(false)
 }
 
 model Session {
