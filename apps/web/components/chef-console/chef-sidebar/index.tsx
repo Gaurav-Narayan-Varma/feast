@@ -100,20 +100,19 @@ export default function ChefSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
 
-        <div className="px-4 mt-2">
+        <div>
           <ChefOnboardingAlert />
-        </div>
-
-        <div className="px-4 py-4 border-t border-gray-200">
-          <Button
-            variant="ghost"
-            className="w-full justify-start text-gray-700 hover:text-red-600 hover:bg-red-50"
-            onClick={() => {
-              logout.mutate();
-            }}
-            label="Logout"
-            leftIcon={<LogOut size={18} />}
-          />
+          <div className="px-4 py-4 border-t border-gray-200">
+            <Button
+              variant="ghost"
+              className="w-full justify-start text-gray-700 hover:text-red-600 hover:bg-red-50"
+              onClick={() => {
+                logout.mutate();
+              }}
+              label="Logout"
+              leftIcon={<LogOut size={18} />}
+            />
+          </div>
         </div>
       </SidebarContent>
     </Sidebar>

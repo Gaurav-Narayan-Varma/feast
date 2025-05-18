@@ -183,3 +183,7 @@ input:-internal-autofill-selected {
  input:-internal-autofill-selected::selection {
     background-color: #b3d7fe !important;
  }
+
+ .section-title {
+  @apply text-2xl font-bold;
+ }

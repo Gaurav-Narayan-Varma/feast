@@ -72,8 +72,8 @@ export default function OnboardingSection() {
   }
 
   return (
-    <div className="space-y-6 pt-10">
-      <div className="text-2xl font-bold">Account Settings</div>
+    <>
+      <div className="section-title">Account Settings</div>
       <Card>
         <CardHeader>
           <CardTitle>Onboarding Tasks</CardTitle>
@@ -200,6 +200,6 @@ export default function OnboardingSection() {
           chefLegalName={getChefUser.data?.chefUser.legalName}
         />
       )}
-    </div>
+    </>
   );
 }

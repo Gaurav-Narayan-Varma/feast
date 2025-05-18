@@ -41,33 +41,10 @@ export default function ChefSettings() {
   };
 
   return (
-    <div className="space-y-6 mx-10 w-full max-w-[800px]">
+    <div className="space-y-6 w-full">
       <div className="mx-auto space-y-6">
-        <OnboardingSection
-          onOpenContractDialog={() => setContractDialogOpen(true)}
-          onOpenPasswordDialog={() => setPasswordDialogOpen(true)}
-          chefStatusFlags={chefStatusFlags}
-        />
+        <OnboardingSection />
       </div>
-
-      {/* <ProfileDialogs
-        contractDialogOpen={contractDialogOpen}
-        setContractDialogOpen={setContractDialogOpen}
-        passwordDialogOpen={passwordDialogOpen}
-        setPasswordDialogOpen={setPasswordDialogOpen}
-        chef={chef}
-        // Only include the props needed for administrative dialogs
-        cuisineModalOpen={false}
-        setCuisineModalOpen={() => {}}
-        profileImageUploadOpen={false}
-        setProfileImageUploadOpen={() => {}}
-        exampleHeadshotsOpen={false}
-        setExampleHeadshotsOpen={() => {}}
-        exampleHeadshots={[]}
-        onUploadProfileImage={() => {}}
-        selectedCuisines={[]}
-        onConfirmCuisines={() => {}}
-      /> */}
     </div>
   );
 }

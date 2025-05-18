@@ -1,12 +1,11 @@
 "use client";
+import { trpc } from "@/app/_trpc/client";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-// import { chefApi } from "@/utils/api";
-// import { ChefStatusFlagsResponse } from "@/utils/api/types";
 import {
   ChevronDown,
   ChevronUp,
@@ -14,89 +13,64 @@ import {
   HelpCircle,
 } from "lucide-react";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
-import { toast } from "react-hot-toast";
+import { useState } from "react";
 
 export default function ChefOnboardingAlert() {
-  const [chefStatusFlagResponse, setChefStatusFlagResponse] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
   const [isCollapsed, setIsCollapsed] = useState(false);
 
-  useEffect(() => {
-    const loadOnboardingTasks = async () => {
-      try {
-        // const flagResponse = await chefApi.getChefStatusFlags();
-        // setChefStatusFlagResponse(flagResponse);
-        // setIsLoading(false);
+  const getChefUser = trpc.chefUser.getChefUser.useQuery();
 
-      } catch (error) {
-        toast.error("Failed to load onboarding requirements");
-      }
-    };
+  const incompleteTasks = [];
 
-    loadOnboardingTasks();
-  }, [toast]);
-
-  if (isLoading || !chefStatusFlagResponse) {
-    return null;
+  if (getChefUser.data?.chefUser.isIdVerified === false) {
+    incompleteTasks.push("hasVerificationSession");
   }
 
-  // If there are no remaining tasks, don't show the component
-//   if (chefStatusFlagResponse.isReadyToCook) {
-//     return null;
-//   }
+  if (getChefUser.data?.chefUser.stripeAccountId === null) {
+    incompleteTasks.push("stripeAccountOnboarding");
+  }
 
-  const { statuses } = chefStatusFlagResponse;
-  // Pre-filter incomplete tasks
-  const incompleteTasks = statuses
-    ? Object.entries(statuses)
-        .filter(([_, isCompleted]) => !isCompleted)
-        .map(([key]) => key as keyof typeof taskLabels)
-    : [];
+  if (getChefUser.data?.chefUser.form1099DocumentKey === null) {
+    incompleteTasks.push("form1099");
+  }
+
+  if (getChefUser.data?.chefUser.isApproved === false) {
+    incompleteTasks.push("platformApproval");
+  }
+
   const taskCount = incompleteTasks.length;
 
   const taskLabels = {
     hasVerificationSession: {
       label: "ID verification",
-      path: "/chef-dashboard/settings#administrative",
-      tooltip: "Begin the process of ID verification.",
-    },
-    idVerification: {
-      label: "ID verification",
-      path: "/chef-dashboard/settings#administrative",
+      path: "/chef-console/settings",
       tooltip:
-        "Finish verifying your identity to build trust with customers and ensure platform security.",
-    },
-    emailConfirmation: {
-      label: "Email confirmation",
-      path: "/chef-dashboard/settings#administrative",
-      tooltip:
-        "Confirm your email address to receive important notifications and booking requests.",
+        "Verify your identity to build trust with customers and ensure platform security.",
     },
     stripeAccountOnboarding: {
       label: "Stripe account setup",
-      path: "/chef-dashboard/settings#administrative",
+      path: "/chef-console/settings",
       tooltip:
         "Set up your Stripe account to receive secure payments directly to your bank account.",
     },
-    platformApproval: {
-      label: "Platform approval",
-      path: "/chef-dashboard/settings#administrative",
-      tooltip:
-        "After finishing all other remaining tasks, please contact [feast-team@joinfeastco.com] for next steps in your approval process.",
-    },
     form1099: {
       label: "Form 1099 submission",
-      path: "/chef-dashboard/settings#administrative",
+      path: "/chef-console/settings",
       tooltip:
         "Submit your 1099 contract to officially join the Feast platform.",
+    },
+    platformApproval: {
+      label: "Platform approval",
+      path: "/chef-console/settings",
+      tooltip:
+        "After finishing all other remaining tasks, please contact [feast-team@joinfeastco.com] for next steps in your approval process.",
     },
   };
 
   if (isCollapsed) {
     return (
       <div
-        className="bg-amber-50 p-2 rounded-md cursor-pointer mb-2"
+        className="bg-amber-50 p-2 rounded-md cursor-pointer m-4"
         onClick={() => setIsCollapsed(false)}
       >
         <div className="flex items-center justify-between text-amber-800 text-xs">
@@ -113,7 +87,7 @@ export default function ChefOnboardingAlert() {
   }
 
   return (
-    <div className="bg-amber-50 p-3 rounded-md mb-2 text-sm">
+    <div className="bg-amber-50 p-3 m-4 rounded-md text-sm">
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center text-amber-800 font-medium">
           <ClipboardCheck className="w-4 h-4 mr-2" />
@@ -132,7 +106,7 @@ export default function ChefOnboardingAlert() {
       <ul className="space-y-1">
         <TooltipProvider delayDuration={100}>
           {incompleteTasks.map((key) => {
-            const task = taskLabels[key];
+            const task = taskLabels[key as keyof typeof taskLabels];
             return (
               <li key={key} className="text-xs">
                 <div className="flex items-center">
@@ -158,4 +132,4 @@ export default function ChefOnboardingAlert() {
       </ul>
     </div>
   );
-};
+}

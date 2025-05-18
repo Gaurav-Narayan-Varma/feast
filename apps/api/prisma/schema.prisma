@@ -42,6 +42,7 @@ model ChefUser {
   legalName                   String?
   form1099DocumentKey         String?
   form1099Status              Form1099Status @default(NotStarted)
+  isApproved                  Boolean @default(false)
 }
 
 model Session {
