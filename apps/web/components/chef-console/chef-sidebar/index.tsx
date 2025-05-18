@@ -111,10 +111,9 @@ export default function ChefSidebar() {
             onClick={() => {
               logout.mutate();
             }}
-          >
-            <LogOut size={18} className="mr-2" />
-            Logout
-          </Button>
+            label="Logout"
+            leftIcon={<LogOut size={18} />}
+          />
         </div>
       </SidebarContent>
     </Sidebar>

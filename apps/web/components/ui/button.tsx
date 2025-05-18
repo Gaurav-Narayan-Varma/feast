@@ -43,12 +43,16 @@ function Button({
   asChild = false,
   isLoading,
   label,
+  leftIcon,
+  rightIcon,
   ...props
 }: React.ComponentProps<"button"> &
   VariantProps<typeof buttonVariants> & {
     asChild?: boolean
     isLoading?: boolean
     label: string
+    leftIcon?: React.ReactNode
+    rightIcon?: React.ReactNode
   }) {
   const Comp = asChild ? Slot : "button"
 
@@ -59,7 +63,9 @@ function Button({
       disabled={isLoading}
       {...props}
     >
+      {leftIcon && <span className="mr-2">{leftIcon}</span>}
       {label}
+      {rightIcon && <span className="ml-2">{rightIcon}</span>}
       {isLoading && <Loader2 className="size-4 animate-spin" />}
     </Comp>
   )

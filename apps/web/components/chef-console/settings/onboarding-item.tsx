@@ -77,7 +77,7 @@ export default function OnboardingItem({
                   <TooltipTrigger asChild>
                     <Info className="h-4 w-4 text-muted-foreground cursor-help" />
                   </TooltipTrigger>
-                  <TooltipContent className="max-w-[300px] p-3 text-xs bg-card text-card-foreground border shadow-md">
+                  <TooltipContent className="max-w-[300px] p-3 text-xs">
                     <p>{tooltipContent}</p>
                   </TooltipContent>
                 </Tooltip>

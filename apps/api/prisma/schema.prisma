@@ -14,32 +14,34 @@ datasource db {
 }
 
 model ChefUser {
-  id            String    @id
-  email         String    @unique
-  password      String
-  name          String
-  zipCode       String
-  phoneNumber   String?
-  emailVerified Boolean   @default(false)
-  verifyToken   String?   
+  id                 String    @id
+  email              String    @unique
+  password           String
+  name               String
+  zipCode            String
+  phoneNumber        String?
+  emailVerified      Boolean   @default(false)
+  verifyToken        String?
   verifyTokenExpires DateTime?
-  sessions Session[]
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @default(now()) @updatedAt
+  sessions           Session[]
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @default(now()) @updatedAt
 
   // Chef specific fields
-  isIdVerified Boolean @default(false)
+  isIdVerified                Boolean @default(false)
   stripeVerificationSessionId String?
-  stripeAccountId String?
-  stripeOnboardingComplete Boolean @default(false)
+  stripeAccountId             String?
+  stripeOnboardingComplete    Boolean @default(false)
+  stripeVerificationReportId  String?
+  legalName                   String?
 }
 
 model Session {
-  id        String   @id
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
-  chefUser      ChefUser     @relation(fields: [chefUserId], references: [id], onDelete: Cascade)
-  chefUserId    String  
+  id         String   @id
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now()) @updatedAt
+  chefUser   ChefUser @relation(fields: [chefUserId], references: [id], onDelete: Cascade)
+  chefUserId String
 
   @@index([chefUserId, id])
 }

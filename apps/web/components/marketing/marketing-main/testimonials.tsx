@@ -42,8 +42,6 @@ const testimonials = [
 ];
 
 export default function Testimonials() {
-  const { data } = trpc.test.useQuery();
-  console.log("data", data);
   return (
     <section id="testimonials" className="py-24 px-6 lg:px-12">
       <div className="max-w-7xl mx-auto">

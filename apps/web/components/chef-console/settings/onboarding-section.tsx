@@ -1,5 +1,6 @@
 "use client";
 import { trpc } from "@/app/_trpc/client";
+import SignContractModal from "@/components/modals/sign-contract-modal";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -8,8 +9,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { CreditCard, Loader2, ShieldCheck } from "lucide-react";
+import { CreditCard, Loader2, ShieldCheck, Upload } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
@@ -25,6 +32,7 @@ export default function OnboardingSection({
   chefStatusFlags?: any;
 }) {
   const isMobile = useIsMobile();
+  const [isContractDialogOpen, setIsContractDialogOpen] = useState(false);
   const [isDownloading1099, setIsDownloading1099] = useState(false);
   const [localIdVerified, setLocalIdVerified] = useState(
     chefStatusFlags?.idVerification
@@ -157,56 +165,50 @@ export default function OnboardingSection({
             icon={<CreditCard />}
             title="Stripe Account"
             description="Set up your Stripe account for direct payments"
-            status={getChefUser.data?.chefUser.stripeOnboardingComplete ? "completed" : "pending"}
+            status={
+              getChefUser.data?.chefUser.stripeOnboardingComplete
+                ? "completed"
+                : "pending"
+            }
             tooltipContent="Stripe Connect allows Feast to securely process payments and transfer funds directly to your bank account. We use Stripe to handle all payment processing, ensuring your earnings are deposited promptly and securely. Setting up your Stripe account is required to receive payments from customers."
             isMobile={isMobile}
           >
             {!getChefUser.data?.chefUser.stripeOnboardingComplete && (
-            <Button
-              type="button"
-              onClick={async () => {
-                setIsStripeOnboardingLoading(true);
-                await getStripeOnboardingLink.mutate();
-              }}
-              className={isMobile ? "w-full mt-2" : ""}
-              label="Connect Stripe"
+              <Button
+                type="button"
+                variant="outline"
+                onClick={async () => {
+                  setIsStripeOnboardingLoading(true);
+                  await getStripeOnboardingLink.mutate();
+                }}
+                className={isMobile ? "w-full mt-2" : ""}
+                label="Connect Stripe"
                 isLoading={isStripeOnboardingLoading}
               />
             )}
           </OnboardingItem>
 
           {/* 1099 Contract */}
-          {/* <OnboardingItem
+          <OnboardingItem
             icon={<Upload />}
             title="1099 Contract Form"
             description="Upload and digitally sign your 1099 contract"
             status={getTaskStatus("form1099")}
             isMobile={isMobile}
-          > */}
-          {/* Download Contract Button */}
-          {/* <TooltipProvider delayDuration={0}>
+          >
+            {/* Download Contract Button */}
+            <TooltipProvider delayDuration={100}>
               <Tooltip>
                 <TooltipTrigger asChild>
                   <span className={isMobile ? "w-full" : ""}>
                     <Button
                       type="button"
                       variant="outline"
+                      label="Download Contract"
                       // onClick={handleDownload1099Contract}
                       disabled={!chefStatusFlags.form1099 || isDownloading1099}
                       className="w-full"
-                    >
-                      {isDownloading1099 ? (
-                        <span className="flex items-center gap-2">
-                          <Loader2 className="h-4 w-4 animate-spin" />
-                          Loading...
-                        </span>
-                      ) : (
-                        <span className="flex items-center gap-2">
-                          <Download className="h-4 w-4" />
-                          Download Contract
-                        </span>
-                      )}
-                    </Button>
+                    />
                   </span>
                 </TooltipTrigger>
                 {!chefStatusFlags.form1099 && (
@@ -217,42 +219,44 @@ export default function OnboardingSection({
                   </TooltipContent>
                 )}
               </Tooltip>
-            </TooltipProvider> */}
+            </TooltipProvider>
 
-          {/* Sign Contract Button */}
-          {/* <TooltipProvider delayDuration={0}>
+            {/* Sign Contract Button */}
+            <TooltipProvider delayDuration={100}>
               <Tooltip>
                 <TooltipTrigger asChild>
                   <span className={isMobile ? "w-full" : ""}>
                     <Button
                       type="button"
-                      onClick={onOpenContractDialog}
-                      disabled={!localIdVerified || chefStatusFlags.form1099}
+                      label="Sign Contract"
+                      variant="outline"
+                      onClick={() => setIsContractDialogOpen(true)}
+                      disabled={!getChefUser.data?.chefUser.isIdVerified}
                       className="w-full"
-                    >
-                      Sign Contract
-                    </Button>
+                    />
                   </span>
                 </TooltipTrigger>
-                {!localIdVerified && (
+                {!getChefUser.data?.chefUser.isIdVerified && (
                   <TooltipContent className="p-2">
                     <p className="text-xs">
                       Please complete ID verification first
                     </p>
                   </TooltipContent>
                 )}
-                {localIdVerified && chefStatusFlags.form1099 && (
-                  <TooltipContent className="p-2">
-                    <p className="text-xs">
-                      You have already signed the contract
-                    </p>
-                  </TooltipContent>
-                )}
               </Tooltip>
-            </TooltipProvider> */}
-          {/* </OnboardingItem> */}
+            </TooltipProvider>
+          </OnboardingItem>
         </CardContent>
       </Card>
+
+      {/* Sign Contract Modal */}
+      {getChefUser.data?.chefUser.legalName && (
+        <SignContractModal
+          open={isContractDialogOpen}
+          onOpenChange={setIsContractDialogOpen}
+          chefLegalName={getChefUser.data?.chefUser.legalName}
+        />
+      )}
     </div>
   );
 }

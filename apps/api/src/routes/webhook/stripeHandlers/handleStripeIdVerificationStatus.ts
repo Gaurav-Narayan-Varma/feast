@@ -29,19 +29,41 @@ export async function handleStripeIdVerificationStatus(
    */
   if (event.type === "identity.verification_session.verified") {
     if (event.data.object.status === "verified") {
-      await db.chefUser.update({
+      let chefUser = await db.chefUser.update({
         where: {
           id: event.data.object.metadata.chefUserId,
         },
         data: {
           isIdVerified: true,
-          stripeVerificationSessionId: null,
         },
       });
-      console.log(
-        "Verification completed for user:",
-        event.data.object.metadata.chefUserId
-      );
+
+      const verificationSession =
+        await stripe.identity.verificationSessions.retrieve(
+          chefUser.stripeVerificationSessionId
+        );
+
+      /**
+       * last_verification_report is the verification report id
+       */
+      const verificationReport =
+        await stripe.identity.verificationReports.retrieve(
+          verificationSession.last_verification_report as string
+        );
+
+      chefUser = await db.chefUser.update({
+        where: {
+          id: chefUser.id,
+        },
+        data: {
+          stripeVerificationReportId:
+            verificationSession.last_verification_report as string,
+          legalName:
+            verificationReport.document?.first_name +
+            " " +
+            verificationReport.document?.last_name,
+        },
+      });
     }
   } else if (event.type === "identity.verification_session.requires_input") {
     /**
