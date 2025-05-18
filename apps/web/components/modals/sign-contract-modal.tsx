@@ -49,8 +49,12 @@ export default function SignContractModal({
       fullName: chefLegalName,
     },
   });
+
+  const utils = trpc.useUtils();
+
   const sign1099Contract = trpc.onboarding.sign1099Contract.useMutation({
     onSuccess: () => {
+      utils.chefUser.getChefUser.invalidate();
       toast.success("Contract signed successfully!");
       onOpenChange(false);
     },
@@ -123,6 +127,7 @@ export default function SignContractModal({
                 type="submit"
                 className={isMobile ? "w-full" : ""}
                 label="Sign Contract"
+                isLoading={sign1099Contract.isPending}
               />
             </DialogFooter>
           </form>

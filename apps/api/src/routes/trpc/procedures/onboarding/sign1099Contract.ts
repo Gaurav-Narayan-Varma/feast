@@ -13,9 +13,13 @@ const input = z.object({
   fullName: z.string(),
 });
 
+type Response = {
+  s3Key: string;
+};
+
 export const sign1099Contract = chefUserProcedure
   .input(input)
-  .mutation<void>(async ({ ctx, input }) => {
+  .mutation<Response>(async ({ ctx, input }) => {
     const chefUser = await db.chefUser.findUniqueOrThrow({
       where: { id: ctx.chefUserId },
     });
@@ -63,4 +67,8 @@ export const sign1099Contract = chefUserProcedure
         form1099Status: Form1099Status.Submitted,
       },
     });
+
+    return {
+      s3Key: key,
+    };
   });
