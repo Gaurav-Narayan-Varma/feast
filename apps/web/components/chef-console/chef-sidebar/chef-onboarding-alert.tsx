@@ -17,7 +17,6 @@ import { useState } from "react";
 
 export default function ChefOnboardingAlert() {
   const [isCollapsed, setIsCollapsed] = useState(false);
-
   const getChefUser = trpc.chefUser.getChefUser.useQuery();
 
   const incompleteTasks = [];
@@ -66,6 +65,10 @@ export default function ChefOnboardingAlert() {
         "After finishing all other remaining tasks, please contact [feast-team@joinfeastco.com] for next steps in your approval process.",
     },
   };
+
+  if (getChefUser.data?.chefUser.isApproved || getChefUser.isLoading) {
+    return null;
+  }
 
   if (isCollapsed) {
     return (

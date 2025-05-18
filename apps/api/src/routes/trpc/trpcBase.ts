@@ -154,3 +154,23 @@ export const chefUserProcedure = publicProcedure.use(async (opts) => {
     },
   });
 });
+
+export const adminProcedure = chefUserProcedure.use(async (opts) => {
+  const { ctx } = opts;
+
+  const chefUser = await db.chefUser.findUnique({
+    where: {
+      id: ctx.chefUserId,
+    },
+  });
+
+  if (!chefUser) {
+    throw new TRPCError({ code: "UNAUTHORIZED" });
+  }
+
+  if (!chefUser.isAdmin) {
+    throw new TRPCError({ code: "UNAUTHORIZED" });
+  }
+
+  return opts.next();
+});

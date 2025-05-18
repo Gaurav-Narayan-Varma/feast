@@ -17,7 +17,7 @@ import {
   HelpCircle,
   LogOut,
   Settings,
-  Store,
+  Shield,
   User,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -32,19 +32,19 @@ export type MenuItem = {
   icon: React.FC<{ className?: string }>;
 };
 
-export default function ChefSidebar() {
+export default function ChefSidebar({ isAdmin }: { isAdmin: boolean }) {
   const basePath = "/chef-console";
   const router = useRouter();
 
   const menuItems: MenuItem[] = [
     {
       title: "Dashboard",
-      path: `${basePath}`,
+      path: `${basePath}/dashboard`,
       icon: BarChart2,
     },
     {
-      title: "My Menu",
-      path: `${basePath}/menu`,
+      title: "My Menus",
+      path: `${basePath}/menus`,
       icon: FileText,
     },
     {
@@ -68,15 +68,19 @@ export default function ChefSidebar() {
       icon: HelpCircle,
     },
     {
-      title: "Customer Order Page",
-      path: `/chefs/asflsadfkkasdf`,
-      icon: Store,
-    },
-    {
       title: "Settings",
       path: `${basePath}/settings`,
       icon: Settings,
     },
+    ...(isAdmin
+      ? [
+          {
+            title: "Admin Panel",
+            path: `${basePath}/admin-panel`,
+            icon: Shield,
+          },
+        ]
+      : []),
   ];
 
   const logout = trpc.auth.logout.useMutation({

@@ -13,6 +13,8 @@ import { getStripeOnboardingLink } from "./procedures/onboarding/getStripeOnboar
 import { updateChefUser } from "./procedures/chefUser/updateChefUser";
 import { sign1099Contract } from "./procedures/onboarding/sign1099Contract";
 import { get1099ContractLink } from "./procedures/onboarding/get1099ContractLink";
+import { listChefUsers } from "./procedures/admin/listChefUsers";
+import { approveChef } from "./procedures/admin/approveChefUser";
 
 export const appRouter = trpcRouter({
   auth: trpcRouter({
@@ -20,6 +22,10 @@ export const appRouter = trpcRouter({
     verifyEmail,
     login,
     logout,
+  }),
+  admin: trpcRouter({
+    listChefUsers,
+    approveChef,
   }),
   onboarding: trpcRouter({
     getOrCreateVerificationSession,

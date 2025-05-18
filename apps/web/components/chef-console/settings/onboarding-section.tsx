@@ -16,10 +16,11 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { CreditCard, Loader2, ShieldCheck, Upload } from "lucide-react";
+import { CreditCard, ShieldCheck, Upload } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
+import PageSpinner from "../page-spinner";
 import OnboardingItem from "./onboarding-item";
 
 export default function OnboardingSection() {
@@ -59,16 +60,14 @@ export default function OnboardingSection() {
   const get1099ContractLink = trpc.onboarding.get1099ContractLink.useQuery(
     undefined,
     {
-      enabled: getChefUser.data?.chefUser.form1099Status === "Submitted",
+      enabled:
+        getChefUser.data?.chefUser.form1099Status === "Submitted" ||
+        getChefUser.data?.chefUser.form1099Status === "Approved",
     }
   );
 
   if (getChefUser.isLoading) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <Loader2 className="animate-spin" />
-      </div>
-    );
+    return <PageSpinner />;
   }
 
   return (
@@ -78,7 +77,8 @@ export default function OnboardingSection() {
         <CardHeader>
           <CardTitle>Onboarding Tasks</CardTitle>
           <CardDescription>
-            Complete the following tasks to get started
+            Complete the following tasks to become an approved chef. Once
+            approved, your profile will be visible in the chef marketplace
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -139,14 +139,16 @@ export default function OnboardingSection() {
             title="1099 Contract Form"
             description="Upload and digitally sign your 1099 contract"
             status={
-              getChefUser.data?.chefUser.form1099Status === "Submitted"
+              getChefUser.data?.chefUser.form1099Status === "Submitted" ||
+              getChefUser.data?.chefUser.form1099Status === "Approved"
                 ? "completed"
                 : "pending"
             }
             isMobile={isMobile}
           >
             {/* Download Contract Button */}
-            {getChefUser.data?.chefUser.form1099Status === "Submitted" ? (
+            {getChefUser.data?.chefUser.form1099Status === "Submitted" ||
+            getChefUser.data?.chefUser.form1099Status === "Approved" ? (
               <span className={isMobile ? "w-full" : ""}>
                 <Button
                   type="button"
@@ -189,6 +191,33 @@ export default function OnboardingSection() {
               </TooltipProvider>
             )}
           </OnboardingItem>
+          <div className="text-sm text-muted-foreground">
+            Status:{" "}
+            {getChefUser.data?.chefUser.isApproved
+              ? "Approved"
+              : getChefUser.data?.chefUser.isIdVerified &&
+                  getChefUser.data?.chefUser.stripeOnboardingComplete &&
+                  (getChefUser.data?.chefUser.form1099Status === "Submitted" ||
+                    getChefUser.data?.chefUser.form1099Status === "Approved")
+                ? "Pending Approval"
+                : "Unapproved"}
+            <br />
+            {!getChefUser.data?.chefUser.isApproved &&
+              getChefUser.data?.chefUser.isIdVerified &&
+              getChefUser.data?.chefUser.stripeOnboardingComplete &&
+              (getChefUser.data?.chefUser.form1099Status === "Submitted" ||
+                getChefUser.data?.chefUser.form1099Status === "Approved") && (
+                <div>
+                  Thank you for completing the onboarding tasks! Your profile is
+                  currently pending approval.
+                </div>
+              )}
+            {getChefUser.data?.chefUser.isApproved && (
+              <div>
+                Your profile is currently visible in the chef marketplace!
+              </div>
+            )}
+          </div>
         </CardContent>
       </Card>
 
