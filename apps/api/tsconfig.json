@@ -1,14 +1,34 @@
 {
+  "extends": "@tsconfig/node22/tsconfig.json",
+  "include": ["src"],
   "compilerOptions": {
+    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",
     "rootDir": "src",
-    "baseUrl": ".",
-    /**
-     * Leaving note here that import alias is not working.
-     */
+    "outDir": "dist",
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+
+    "esModuleInterop": true,
+
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "composite": true,
+
+    "plugins": [
+      /* Transform paths in output .js files */
+      {
+        "transform": "typescript-transform-paths"
+      },
+      /* Transform paths in output .d.ts files */
+      {
+        "transform": "typescript-transform-paths",
+        "afterDeclarations": true
+      }
+    ]
   },
-  "include": ["src"],
-  "exclude": ["node_modules"]
+  "ts-node": {
+    "swc": true,
+    "require": ["tsconfig-paths/register"]
+  }
 }

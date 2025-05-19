@@ -14,11 +14,14 @@
     "turbo": "^2.5.3",
     "typescript": "5.8.2"
   },
-  "engines": {  
+  "engines": {
     "node": ">=18"
   },
   "packageManager": "npm@10.9.2",
   "workspaces": [
     "apps/*"
-  ]
+  ],
+  "dependencies": {
+    "tsc-alias": "^1.8.16"
+  }
 }

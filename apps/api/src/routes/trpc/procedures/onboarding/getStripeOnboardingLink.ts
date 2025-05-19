@@ -35,7 +35,7 @@ export const getStripeOnboardingLink =
       throw new Error("Stripe account onboarding complete");
     } else {
       const accountLink = await stripe.accountLinks.create({
-        account: chefUser.stripeAccountId,
+        account: chefUser.stripeAccountId ?? "",
         refresh_url: `${process.env.FEAST_WEB_URL}/chef-console/stripe-return?status=refresh`,
         return_url: `${process.env.FEAST_WEB_URL}/chef-console/stripe-return?status=success`,
         type: "account_onboarding",

@@ -1,5 +1,5 @@
 import * as trpcExpress from "@trpc/server/adapters/express";
-import * as cors from "cors";
+import cors from "cors";
 import { corsOptions } from "../../../src/constants";
 
 import { approveChef } from "./procedures/admin/approveChefUser";

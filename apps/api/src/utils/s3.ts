@@ -2,7 +2,7 @@ import * as pdfLibFontkit from "@pdf-lib/fontkit";
 import * as AWS from "aws-sdk";
 import * as path from "path";
 import { PDFDocument, rgb, StandardFonts } from "pdf-lib/cjs";
-import * as sharp from "sharp";
+import sharp from "sharp";
 import { v4 as uuidv4 } from "uuid";
 import { ALLOWED_ORIGINS } from "../../src/constants";
 
@@ -158,7 +158,7 @@ export const uploadToS3 = async (
 ): Promise<AWS.S3.ManagedUpload.SendData> => {
   try {
     const params: AWS.S3.PutObjectRequest = {
-      Bucket: process.env.S3_BUCKET_NAME,
+      Bucket: process.env.S3_BUCKET_NAME ?? "",
       Key: key,
       Body: data,
       ...(contentType && { ContentType: contentType }),
@@ -281,7 +281,7 @@ export const uploadFileToS3 = async (
 export const deleteFromS3 = async (key: string): Promise<void> => {
   try {
     const params = {
-      Bucket: process.env.S3_BUCKET_NAME,
+      Bucket: process.env.S3_BUCKET_NAME ?? "",
       Key: key,
     };
 
@@ -326,7 +326,7 @@ export const deleteImageVariants = async (baseKey: string): Promise<void> => {
 
     // List all objects with this base prefix to find all variants
     const listParams = {
-      Bucket: process.env.S3_BUCKET_NAME,
+      Bucket: process.env.S3_BUCKET_NAME ?? "",
       Prefix: basePart,
     };
 
@@ -371,7 +371,7 @@ export const generateS3Key = (
 export const configureBucketCORS = async (): Promise<void> => {
   try {
     const corsParams = {
-      Bucket: process.env.S3_BUCKET_NAME,
+      Bucket: process.env.S3_BUCKET_NAME ?? "",
       CORSConfiguration: {
         CORSRules: [
           {
@@ -398,7 +398,7 @@ export const configureBucketCORS = async (): Promise<void> => {
 export const getBucketCORS = async (): Promise<AWS.S3.GetBucketCorsOutput> => {
   try {
     const params = {
-      Bucket: process.env.S3_BUCKET_NAME,
+      Bucket: process.env.S3_BUCKET_NAME ?? "",
     };
 
     return await s3.getBucketCors(params).promise();

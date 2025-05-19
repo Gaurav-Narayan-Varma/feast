@@ -1,5 +1,5 @@
 import { initTRPC, TRPCError } from "@trpc/server";
-import { parse, serialize, SerializeOptions } from "cookie";
+import { parse, serialize, CookieSerializeOptions } from "cookie";
 import type { IncomingMessage, ServerResponse } from "http";
 import { Cookie, MAX_COOKIE_AGE } from "../../constants";
 import { db } from "../../db";
@@ -7,7 +7,7 @@ import { logoutChefUser } from "../../utils/authUtils";
 
 const t = initTRPC.create();
 
-type SetCookieOptions = SerializeOptions & {
+type SetCookieOptions = CookieSerializeOptions & {
   /**
    * Sets the Max-Age value to 1 year
    */

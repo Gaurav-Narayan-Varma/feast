@@ -13,7 +13,7 @@ export async function handleStripeIdVerificationStatus(
     event = stripe.webhooks.constructEvent(
       req.body,
       signature as string,
-      process.env.STRIPE_WEBHOOK_SECRET
+      process.env.STRIPE_WEBHOOK_SECRET ?? ""
     );
   } catch (err) {
     console.log("Webhook signature verification failed:", err);
@@ -40,7 +40,7 @@ export async function handleStripeIdVerificationStatus(
 
       const verificationSession =
         await stripe.identity.verificationSessions.retrieve(
-          chefUser.stripeVerificationSessionId
+          chefUser.stripeVerificationSessionId ?? ""
         );
 
       /**

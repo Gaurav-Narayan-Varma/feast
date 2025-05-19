@@ -1,6 +1,6 @@
 import "dotenv/config";
 
-import * as express from "express";
+import express from "express";
 import { createServer } from "http";
 import { trpcExpressRouter } from "./routes/trpc/trpcRouter";
 import { db } from "./db";
