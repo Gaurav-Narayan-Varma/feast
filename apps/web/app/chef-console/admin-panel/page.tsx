@@ -18,14 +18,11 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { CheckCircle2, FileCheck, XCircle } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 
 export default function ChefConsoleAdminPanelPage() {
-  const router = useRouter();
-  const getChefUser = trpc.chefUser.getChefUser.useQuery();
   const listChefUsers = trpc.admin.listChefUsers.useQuery(undefined, {
-    enabled: getChefUser.data?.chefUser.isAdmin === true,
+    retry: 1,
   });
 
   const approveChef = trpc.admin.approveChef.useMutation({
@@ -33,18 +30,10 @@ export default function ChefConsoleAdminPanelPage() {
       toast.success("Chef approved successfully");
       listChefUsers.refetch();
     },
-    onError: (error) => {
-      toast.error(error.message);
-    },
   });
 
-  if (getChefUser.isLoading) {
+  if (listChefUsers.isLoading) {
     return <PageSpinner />;
-  }
-
-  if (!getChefUser.data?.chefUser.isAdmin) {
-    router.push("/chef-console/dashboard");
-    return null;
   }
 
   return (

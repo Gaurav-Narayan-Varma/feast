@@ -1,15 +1,15 @@
 "use client";
 import { trpc } from "@/app/_trpc/client";
+import { Loader2 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
-import { Loader2 } from "lucide-react";
 import { toast } from "react-hot-toast";
 
 export default function VerifyEmailPage() {
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
   const router = useRouter();
-  
+
   const verifyEmail = trpc.auth.verifyEmail.useMutation({
     onSuccess: () => {
       toast.success("Email verified successfully");

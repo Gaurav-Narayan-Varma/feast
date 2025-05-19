@@ -165,10 +165,12 @@ export const adminProcedure = chefUserProcedure.use(async (opts) => {
   });
 
   if (!chefUser) {
+    logoutChefUser(ctx);
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
 
   if (!chefUser.isAdmin) {
+    logoutChefUser(ctx);
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
 
