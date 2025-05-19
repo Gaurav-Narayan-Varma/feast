@@ -9,8 +9,6 @@ export const logout = chefUserProcedure.mutation<LogoutResponse>(
   async ({ ctx }) => {
     const sessionId = ctx.getCookie(Cookie.SessionId);
 
-    console.log("hello world");
-
     /**
      * If the sessionId is not found, the user is not logged in
      * and we can just return an empty object
