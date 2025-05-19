@@ -1,20 +1,20 @@
 import * as trpcExpress from "@trpc/server/adapters/express";
-import * as cors from "cors";
+import cors from "cors";
 import { corsOptions } from "../../../src/constants";
 
-import { registerUser } from "./procedures/auth/registerUser";
-import { trpcRouter } from "./trpcBase";
-import { verifyEmail } from "./procedures/auth/verifyEmail";
+import { approveChef } from "./procedures/admin/approveChefUser";
+import { listChefUsers } from "./procedures/admin/listChefUsers";
 import { login } from "./procedures/auth/login";
 import { logout } from "./procedures/auth/logout";
-import { getOrCreateVerificationSession } from "./procedures/onboarding/getOrCreateVerificationSession";
+import { registerUser } from "./procedures/auth/registerUser";
+import { verifyEmail } from "./procedures/auth/verifyEmail";
 import { getChefUser } from "./procedures/chefUser/getChefUser";
-import { getStripeOnboardingLink } from "./procedures/onboarding/getStripeOnboardingLink";
 import { updateChefUser } from "./procedures/chefUser/updateChefUser";
-import { sign1099Contract } from "./procedures/onboarding/sign1099Contract";
 import { get1099ContractLink } from "./procedures/onboarding/get1099ContractLink";
-import { listChefUsers } from "./procedures/admin/listChefUsers";
-import { approveChef } from "./procedures/admin/approveChefUser";
+import { getOrCreateVerificationSession } from "./procedures/onboarding/getOrCreateVerificationSession";
+import { getStripeOnboardingLink } from "./procedures/onboarding/getStripeOnboardingLink";
+import { sign1099Contract } from "./procedures/onboarding/sign1099Contract";
+import { trpcRouter } from "./trpcBase";
 
 export const appRouter = trpcRouter({
   auth: trpcRouter({

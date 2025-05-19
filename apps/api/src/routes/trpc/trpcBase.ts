@@ -1,5 +1,5 @@
 import { initTRPC, TRPCError } from "@trpc/server";
-import cookie, { CookieSerializeOptions } from "cookie";
+import { parse, serialize, SerializeOptions } from "cookie";
 import type { IncomingMessage, ServerResponse } from "http";
 import { Cookie, MAX_COOKIE_AGE } from "../../constants";
 import { db } from "../../db";
@@ -7,7 +7,7 @@ import { logoutChefUser } from "../../utils/authUtils";
 
 const t = initTRPC.create();
 
-type SetCookieOptions = CookieSerializeOptions & {
+type SetCookieOptions = SerializeOptions & {
   /**
    * Sets the Max-Age value to 1 year
    */
@@ -57,7 +57,7 @@ export const publicProcedure = t.procedure
         return {};
       }
 
-      return cookie.parse(cookieHeader.toString());
+      return parse(cookieHeader.toString());
     };
 
     const getCookie = (name: Cookie) => {
@@ -67,7 +67,7 @@ export const publicProcedure = t.procedure
         return;
       }
 
-      const cookies = cookie.parse(cookieHeader.toString());
+      const cookies = parse(cookieHeader.toString());
 
       return cookies[name];
     };
@@ -81,7 +81,7 @@ export const publicProcedure = t.procedure
 
       res.appendHeader(
         "Set-Cookie",
-        cookie.serialize(name, value, {
+        serialize(name, value, {
           secure: process.env.NODE_ENV === "production",
           domain: process.env.COOKIE_DOMAIN,
           path: "/",
@@ -94,7 +94,7 @@ export const publicProcedure = t.procedure
     const deleteCookie = (name: Cookie) => {
       res.appendHeader(
         "Set-Cookie",
-        cookie.serialize(name, "", {
+        serialize(name, "", {
           secure: process.env.NODE_ENV === "production",
           domain: process.env.COOKIE_DOMAIN,
           path: "/",
@@ -127,7 +127,7 @@ export const chefUserProcedure = publicProcedure.use(async (opts) => {
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
 
-  const parsedCookie = cookie.parse(cookieHeader) as Record<
+  const parsedCookie = parse(cookieHeader) as Record<
     string,
     string | undefined
   >;
