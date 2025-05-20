@@ -75,7 +75,7 @@ export default function OnboardingItem({
               <TooltipProvider delayDuration={100}>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Info className="h-4 w-4 text-muted-foreground cursor-help" />
+                    <Info className="h-4 w-4 text-muted-foreground cursor-help stroke-[1.5]" />
                   </TooltipTrigger>
                   <TooltipContent className="max-w-[300px] p-3 text-xs">
                     <p>{tooltipContent}</p>

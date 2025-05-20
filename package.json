@@ -19,7 +19,8 @@
   },
   "packageManager": "npm@10.9.2",
   "workspaces": [
-    "apps/*"
+    "apps/*",
+    "packages/*"
   ],
   "dependencies": {
     "tsc-alias": "^1.8.16"

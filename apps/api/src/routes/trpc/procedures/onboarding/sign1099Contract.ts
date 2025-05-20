@@ -3,11 +3,11 @@ import {
   generateSigned1099Pdf,
   S3Prefix,
   uploadToS3,
-} from "../../../../utils/s3";
+} from "@/utils/s3.js";
 import { Form1099Status } from "@prisma/client";
 import { z } from "zod";
-import { db } from "../../../../db";
-import { chefUserProcedure } from "../../../../routes/trpc/trpcBase";
+import { db } from "@/db.js";
+import { chefUserProcedure } from "@/routes/trpc/trpcBase.js";
 
 const input = z.object({
   fullName: z.string(),

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { db } from "../../../db";
-import { stripe } from "../../../utils/stripe";
+import { db } from "@/db.js";
+import { stripe } from "@/utils/stripe.js";
 
 export async function handleStripeIdVerificationStatus(
   req: Request,

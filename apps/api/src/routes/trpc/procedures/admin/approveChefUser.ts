@@ -1,7 +1,7 @@
+import { db } from "@/db.js";
+import { adminProcedure } from "@/routes/trpc/trpcBase.js";
 import { ChefUser } from "@prisma/client";
 import { z } from "zod";
-import { db } from "../../../../db";
-import { adminProcedure } from "../../trpcBase";
 
 const input = z.object({
   chefId: z.string(),

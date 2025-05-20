@@ -1,6 +1,6 @@
-import { getSignedUrl } from "../../../../utils/s3";
-import { db } from "../../../../db";
-import { chefUserProcedure } from "../../../../routes/trpc/trpcBase";
+import { getSignedUrlUtil } from "@/utils/s3.js";
+import { db } from "@/db.js";
+import { chefUserProcedure } from "@/routes/trpc/trpcBase.js";
 
 type Response = {
   contractUrl: string;
@@ -18,7 +18,7 @@ export const get1099ContractLink = chefUserProcedure.query<Response>(
       throw new Error("No 1099 contract found. Please reach out to support.");
     }
 
-    const contractUrl = await getSignedUrl(chefUser.form1099DocumentKey);
+    const contractUrl = await getSignedUrlUtil(chefUser.form1099DocumentKey);
     
     console.log("contractUrl BE", contractUrl);
 

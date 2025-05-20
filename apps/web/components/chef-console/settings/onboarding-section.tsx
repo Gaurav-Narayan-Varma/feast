@@ -214,7 +214,7 @@ export default function OnboardingSection() {
               )}
             {getChefUser.data?.chefUser.isApproved && (
               <div>
-                Your profile is currently visible in the chef marketplace!
+                Your menus and recipes will be visible in the chef marketplace!
               </div>
             )}
           </div>

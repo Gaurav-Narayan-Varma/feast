@@ -1,17 +1,19 @@
 import * as pdfLibFontkit from "@pdf-lib/fontkit";
-import * as AWS from "aws-sdk";
+import {DeleteObjectCommand, GetBucketCorsCommand, GetBucketCorsOutput, GetObjectCommand, ListObjectsV2Command, PutBucketCorsCommand, PutObjectCommand, PutObjectCommandInput, S3Client} from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import * as path from "path";
-import { PDFDocument, rgb, StandardFonts } from "pdf-lib/cjs";
+import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
 import sharp from "sharp";
 import { v4 as uuidv4 } from "uuid";
-import { ALLOWED_ORIGINS } from "../../src/constants";
+import { ALLOWED_ORIGINS } from "@/constants.js";
 
 // Configure AWS
-const s3 = new AWS.S3({
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+const s3 = new S3Client({
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
+  },
   region: process.env.AWS_REGION,
-  signatureVersion: "v4",
 });
 
 export enum S3Prefix {
@@ -61,7 +63,7 @@ export const imageVariantConfigs: Record<
   },
 };
 
-export const getSignedUrl = async (key: string): Promise<string> => {
+export const getSignedUrlUtil = async (key: string): Promise<string> => {
   try {
     const params = {
       Bucket: process.env.S3_BUCKET_NAME,
@@ -69,7 +71,8 @@ export const getSignedUrl = async (key: string): Promise<string> => {
       Expires: 60 * 60 * 6, // 6 hours
     };
 
-    return s3.getSignedUrl("getObject", params);
+    const command = new GetObjectCommand(params);
+    return getSignedUrl(s3, command, { expiresIn: 60 * 60 * 6 });
   } catch (error) {
     throw new Error("Error generating signed URL:");
   }
@@ -128,7 +131,7 @@ export const getImageSignedUrl = async (
     // Construct the key with quality suffix
     const qualityKey = constructQualityVariantKey(baseKey, quality);
 
-    return await getSignedUrl(qualityKey);
+    return await getSignedUrlUtil(qualityKey);
   } catch (error) {
     // Try to fall back to original image if specific quality fails
     if (quality !== ImageQuality.ORIGINAL) {
@@ -155,9 +158,9 @@ export const uploadToS3 = async (
   key: string,
   contentType?: string,
   metadata?: Record<string, string>
-): Promise<AWS.S3.ManagedUpload.SendData> => {
+) => {
   try {
-    const params: AWS.S3.PutObjectRequest = {
+    const params: PutObjectCommandInput = {
       Bucket: process.env.S3_BUCKET_NAME ?? "",
       Key: key,
       Body: data,
@@ -165,7 +168,7 @@ export const uploadToS3 = async (
       ...(metadata && { Metadata: metadata }),
     };
 
-    return await s3.upload(params).promise();
+    return await s3.send(new PutObjectCommand(params));
   } catch (error) {
     throw new Error("Error uploading data to S3:");
   }
@@ -274,7 +277,7 @@ export const uploadFileToS3 = async (
   file: Express.Multer.File,
   key: string,
   metadata?: Record<string, string>
-): Promise<AWS.S3.ManagedUpload.SendData> => {
+) => {
   return uploadToS3(file.buffer, key, file.mimetype, metadata);
 };
 
@@ -285,7 +288,7 @@ export const deleteFromS3 = async (key: string): Promise<void> => {
       Key: key,
     };
 
-    await s3.deleteObject(params).promise();
+    await s3.send(new DeleteObjectCommand(params));
   } catch (error) {
     throw new Error("Error deleting file from S3:");
   }
@@ -330,7 +333,7 @@ export const deleteImageVariants = async (baseKey: string): Promise<void> => {
       Prefix: basePart,
     };
 
-    const response = await s3.listObjectsV2(listParams).promise();
+    const response = await s3.send(new ListObjectsV2Command(listParams));
 
     if (!response.Contents || response.Contents.length === 0) {
       // No variants found, try deleting the original key
@@ -385,7 +388,7 @@ export const configureBucketCORS = async (): Promise<void> => {
       },
     };
 
-    await s3.putBucketCors(corsParams).promise();
+    await s3.send(new PutBucketCorsCommand(corsParams));
   } catch (error) {
     throw new Error("Error configuring S3 CORS:");
   }
@@ -395,13 +398,13 @@ export const configureBucketCORS = async (): Promise<void> => {
  * Check current CORS configuration for the S3 bucket
  * @returns Promise that resolves to the current CORS configuration
  */
-export const getBucketCORS = async (): Promise<AWS.S3.GetBucketCorsOutput> => {
+export const getBucketCORS = async (): Promise<GetBucketCorsOutput> => {
   try {
     const params = {
       Bucket: process.env.S3_BUCKET_NAME ?? "",
     };
 
-    return await s3.getBucketCors(params).promise();
+    return await s3.send(new GetBucketCorsCommand(params));
   } catch (error) {
     throw new Error("Error getting S3 CORS configuration:");
   }

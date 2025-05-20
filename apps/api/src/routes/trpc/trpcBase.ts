@@ -1,9 +1,10 @@
 import { initTRPC, TRPCError } from "@trpc/server";
 import { parse, serialize, CookieSerializeOptions } from "cookie";
 import type { IncomingMessage, ServerResponse } from "http";
-import { Cookie, MAX_COOKIE_AGE } from "../../constants";
-import { db } from "../../db";
-import { logoutChefUser } from "../../utils/authUtils";
+import { MAX_COOKIE_AGE } from "@/constants.js";
+import { db } from "@/db.js";
+import { logoutChefUser } from "@/utils/authUtils.js";
+import { Cookie } from "@feast/shared";
 
 const t = initTRPC.create();
 

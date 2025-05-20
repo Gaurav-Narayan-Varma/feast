@@ -1,7 +1,7 @@
-import { Cookie } from "../../../../constants";
-import { db } from "../../../../db";
-import { chefUserProcedure } from "../../../../routes/trpc/trpcBase";
-import { logoutChefUser } from "../../../../utils/authUtils";
+import { Cookie } from "@feast/shared";
+import { db } from "@/db.js";
+import { chefUserProcedure } from "@/routes/trpc/trpcBase.js";
+import { logoutChefUser } from "@/utils/authUtils.js";
 
 type LogoutResponse = {};
 

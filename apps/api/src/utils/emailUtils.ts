@@ -1,5 +1,5 @@
 import { Resend } from "resend";
-import { sleep } from "./generalUtils";
+import { sleep } from "./generalUtils.js";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 

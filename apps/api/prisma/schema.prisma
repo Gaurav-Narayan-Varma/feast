@@ -35,15 +35,16 @@ model ChefUser {
   updatedAt          DateTime  @default(now()) @updatedAt
 
   // Chef specific fields
-  isIdVerified                Boolean @default(false)
+  isIdVerified                Boolean        @default(false)
   stripeVerificationSessionId String?
   stripeAccountId             String?
-  stripeOnboardingComplete    Boolean @default(false)
+  stripeOnboardingComplete    Boolean        @default(false)
   stripeVerificationReportId  String?
   legalName                   String?
   form1099DocumentKey         String?
   form1099Status              Form1099Status @default(NotStarted)
-  isApproved                  Boolean @default(false)
+  isApproved                  Boolean        @default(false)
+  Recipe                      Recipe[]
 }
 
 model Session {
@@ -54,4 +55,21 @@ model Session {
   chefUserId String
 
   @@index([chefUserId, id])
+}
+
+model Recipe {
+  id            String   @id @default(cuid())
+  name          String
+  description   String?
+  priceRange    String // Stores PriceRange enum as string
+  cuisines      String[] // Stores Cuisine enum values
+  dietaryTags   String[] // Stores DietaryTags enum values
+  foodAllergens String[] // Stores FoodAllergen enum values
+  ingredients   Json[] // Stores IngredientDetails as JSON
+  chefUserId    String
+  chefUser      ChefUser @relation(fields: [chefUserId], references: [id])
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([chefUserId])
 }

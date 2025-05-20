@@ -14,7 +14,7 @@ export default async function ChefConsoleLayout({
     <SidebarProvider className="flex">
       <ChefSidebar isAdmin={chefUser.isAdmin} />
       <div className="flex-1 flex justify-center">
-        <div className="w-full max-w-[800px] mx-10 space-y-6 pt-10">
+        <div className="w-full max-w-[800px] mx-10 space-y-6 py-10">
           {children}
         </div>
       </div>

@@ -1,0 +1,17 @@
+{
+  // "extends": "@hc/typescript-config/cjs-base.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist/cjs",
+    "declaration": true,
+
+    "lib": ["ES2023", "DOM"],
+    "module": "node16",
+    "target": "ES2022",
+
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["src"],
+  "exclude": ["**/*.test.ts"]
+}

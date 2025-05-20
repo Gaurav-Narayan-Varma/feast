@@ -1,9 +1,9 @@
-import { Cookie } from "../../../../constants";
-import { db } from "../../../../db";
-import { nid } from "../../../../utils/generalUtils";
+import { Cookie } from "@feast/shared";
+import { db } from "@/db.js";
+import { nid } from "@/utils/generalUtils.js";
 import { compare } from "bcryptjs";
 import { z } from "zod";
-import { publicProcedure } from "../../trpcBase";
+import { publicProcedure } from "@/routes/trpc/trpcBase.js";
 
 const input = z.object({
   email: z.string().email(),

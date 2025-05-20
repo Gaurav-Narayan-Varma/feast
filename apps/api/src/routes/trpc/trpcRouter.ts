@@ -1,20 +1,20 @@
 import * as trpcExpress from "@trpc/server/adapters/express";
 import cors from "cors";
-import { corsOptions } from "../../../src/constants";
+import { corsOptions } from "@/constants.js";
 
-import { approveChef } from "./procedures/admin/approveChefUser";
-import { listChefUsers } from "./procedures/admin/listChefUsers";
-import { login } from "./procedures/auth/login";
-import { logout } from "./procedures/auth/logout";
-import { registerUser } from "./procedures/auth/registerUser";
-import { verifyEmail } from "./procedures/auth/verifyEmail";
-import { getChefUser } from "./procedures/chefUser/getChefUser";
-import { updateChefUser } from "./procedures/chefUser/updateChefUser";
-import { get1099ContractLink } from "./procedures/onboarding/get1099ContractLink";
-import { getOrCreateVerificationSession } from "./procedures/onboarding/getOrCreateVerificationSession";
-import { getStripeOnboardingLink } from "./procedures/onboarding/getStripeOnboardingLink";
-import { sign1099Contract } from "./procedures/onboarding/sign1099Contract";
-import { trpcRouter } from "./trpcBase";
+import { approveChef } from "./procedures/admin/approveChefUser.js";
+import { listChefUsers } from "./procedures/admin/listChefUsers.js";
+import { login } from "./procedures/auth/login.js";
+import { logout } from "./procedures/auth/logout.js";
+import { registerUser } from "./procedures/auth/registerUser.js";
+import { verifyEmail } from "./procedures/auth/verifyEmail.js";
+import { getChefUser } from "./procedures/chefUser/getChefUser.js";
+import { updateChefUser } from "./procedures/chefUser/updateChefUser.js";
+import { get1099ContractLink } from "./procedures/onboarding/get1099ContractLink.js";
+import { getOrCreateVerificationSession } from "./procedures/onboarding/getOrCreateVerificationSession.js";
+import { getStripeOnboardingLink } from "./procedures/onboarding/getStripeOnboardingLink.js";
+import { sign1099Contract } from "./procedures/onboarding/sign1099Contract.js";
+import { trpcRouter } from "./trpcBase.js";
 
 export const appRouter = trpcRouter({
   auth: trpcRouter({

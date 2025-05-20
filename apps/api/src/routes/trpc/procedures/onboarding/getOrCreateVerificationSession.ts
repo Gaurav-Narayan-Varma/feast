@@ -1,6 +1,6 @@
-import { db } from "../../../../db";
-import { stripe } from "../../../../utils/stripe";
-import { chefUserProcedure } from "../../trpcBase";
+import { db } from "@/db.js";
+import { stripe } from "@/utils/stripe.js";
+import { chefUserProcedure } from "@/routes/trpc/trpcBase.js";
 
 type GetOrCreateVerificationSessionResponse = {
   sessionUrl: string;

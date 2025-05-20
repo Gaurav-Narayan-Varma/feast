@@ -5,6 +5,7 @@
     "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",
     "rootDir": "src",
     "outDir": "dist",
+    /* DX time path alias resolution */
     "paths": {
       "@/*": ["./src/*"]
     },
@@ -14,7 +15,7 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "composite": true,
-
+    /* Compile time path alias resolution */
     "plugins": [
       /* Transform paths in output .js files */
       {
@@ -27,6 +28,7 @@
       }
     ]
   },
+  /* Runtime path alias resolution */
   "ts-node": {
     "swc": true,
     "require": ["tsconfig-paths/register"]

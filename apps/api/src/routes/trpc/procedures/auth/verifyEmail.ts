@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { db } from "../../../../db";
-import { publicProcedure } from "../../trpcBase";
+import { db } from "@/db.js";
+import { publicProcedure } from "@/routes/trpc/trpcBase.js";
 
 const input = z.object({
   token: z.string(),

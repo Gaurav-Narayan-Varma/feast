@@ -1,6 +1,6 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import { Cookie } from "../api/src/constants";
+import { Cookie } from "@feast/shared";
 
 export function middleware(request: NextRequest) {
   const sessionId = request.cookies.get(Cookie.SessionId);

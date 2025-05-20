@@ -1,5 +1,5 @@
 import * as express from "express";
-import { handleStripeIdVerificationStatus } from "./stripeHandlers/handleStripeIdVerificationStatus";
+import { handleStripeIdVerificationStatus } from "./stripeHandlers/handleStripeIdVerificationStatus.js";
 
 export const webhookRouter = express.Router();
 

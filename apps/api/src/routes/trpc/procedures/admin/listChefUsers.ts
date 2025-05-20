@@ -1,6 +1,6 @@
 import { ChefUser } from "@prisma/client";
-import { db } from "../../../../db";
-import { adminProcedure } from "../../trpcBase";
+import { db } from "@/db.js";
+import { adminProcedure } from "@/routes/trpc/trpcBase.js";
 
 type ListChefUsersResponse = {
   chefUsers: ChefUser[];

@@ -2,9 +2,9 @@ import "dotenv/config";
 
 import express from "express";
 import { createServer } from "http";
-import { trpcExpressRouter } from "./routes/trpc/trpcRouter";
-import { db } from "./db";
-import { webhookRouter } from "./routes/webhook/webhookRouter";
+import { db } from "./db.js";
+import { trpcExpressRouter } from "./routes/trpc/trpcRouter.js";
+import { webhookRouter } from "./routes/webhook/webhookRouter.js";
 
 async function main() {
   const port = Number(process.env.PORT);

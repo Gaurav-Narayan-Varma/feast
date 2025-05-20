@@ -1,9 +1,9 @@
 import { hash } from "bcryptjs";
 import { z } from "zod";
-import { db } from "../../../../db";
-import { sendVerificationEmail } from "../../../../utils/emailUtils";
-import { nid } from "../../../../utils/generalUtils";
-import { publicProcedure } from "../../trpcBase";
+import { db } from "@/db.js";
+import { sendVerificationEmail } from "@/utils/emailUtils.js";
+import { nid } from "@/utils/generalUtils.js";
+import { publicProcedure } from "@/routes/trpc/trpcBase.js";
 
 const input = z.object({
   email: z.string().email(),
