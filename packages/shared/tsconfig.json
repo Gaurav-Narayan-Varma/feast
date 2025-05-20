@@ -1,13 +1,13 @@
 {
-  // "extends": "@hc/typescript-config/cjs-base.json",
   "compilerOptions": {
     "rootDir": "src",
-    "outDir": "dist/cjs",
+    "outDir": "dist",
     "declaration": true,
 
     "lib": ["ES2023", "DOM"],
-    "module": "node16",
+    "module": "ESNext",
     "target": "ES2022",
+    "moduleResolution": "Bundler",
 
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true

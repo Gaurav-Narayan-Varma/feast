@@ -4,29 +4,22 @@
   "type": "module",
   "exports": {
     ".": {
-      "require": {
-        "types": "./dist/cjs/index.d.ts",
-        "default": "./dist/cjs/index.js"
-      },
       "import": {
-        "types": "./dist/esm/index.d.ts",
-        "default": "./dist/esm/index.js"
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
       }
     }
   },
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/esm/index.d.ts",
-        "./dist/cjs/index.d.ts"
+        "./dist/index.d.ts"
       ]
     }
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npm run build:cjs && npm run build:esm",
-    "build:cjs": "tsc -p tsconfig.cjs.json",
-    "build:esm": "tsc -p tsconfig.esm.json"
+    "build": "tsc -p tsconfig.json"
   },
   "author": "",
   "license": "ISC",
