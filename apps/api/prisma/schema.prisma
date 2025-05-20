@@ -8,6 +8,10 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator json {
+  provider = "prisma-json-types-generator"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -60,12 +64,13 @@ model Session {
 model Recipe {
   id            String   @id @default(cuid())
   name          String
-  description   String?
-  priceRange    String // Stores PriceRange enum as string
-  cuisines      String[] // Stores Cuisine enum values
-  dietaryTags   String[] // Stores DietaryTags enum values
-  foodAllergens String[] // Stores FoodAllergen enum values
-  ingredients   Json[] // Stores IngredientDetails as JSON
+  description   String
+  priceRange    String
+  cuisines      String[]
+  dietaryTags   String[]
+  foodAllergens String[]
+  /// [Ingredient]
+  ingredients   Json[]
   chefUserId    String
   chefUser      ChefUser @relation(fields: [chefUserId], references: [id])
   createdAt     DateTime @default(now())

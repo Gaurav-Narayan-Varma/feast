@@ -10,7 +10,12 @@
     "moduleResolution": "Bundler",
 
     "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    /**
+     * Without strict mode, Zod schemas imported from this package incorrectly showed fields as optional
+     * even when they were marked as required. Enabling strict mode fixes this type inference issue.
+     */
+    "strict": true
   },
   "include": ["src"],
   "exclude": ["**/*.test.ts"]

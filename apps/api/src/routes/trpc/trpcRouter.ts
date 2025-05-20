@@ -1,6 +1,6 @@
+import { corsOptions } from "@/constants.js";
 import * as trpcExpress from "@trpc/server/adapters/express";
 import cors from "cors";
-import { corsOptions } from "@/constants.js";
 
 import { approveChef } from "./procedures/admin/approveChefUser.js";
 import { listChefUsers } from "./procedures/admin/listChefUsers.js";
@@ -14,6 +14,8 @@ import { get1099ContractLink } from "./procedures/onboarding/get1099ContractLink
 import { getOrCreateVerificationSession } from "./procedures/onboarding/getOrCreateVerificationSession.js";
 import { getStripeOnboardingLink } from "./procedures/onboarding/getStripeOnboardingLink.js";
 import { sign1099Contract } from "./procedures/onboarding/sign1099Contract.js";
+import { createRecipe } from "./procedures/recipes/createRecipe.js";
+import { listRecipes } from "./procedures/recipes/listRecipes.js";
 import { trpcRouter } from "./trpcBase.js";
 
 export const appRouter = trpcRouter({
@@ -36,6 +38,10 @@ export const appRouter = trpcRouter({
   chefUser: trpcRouter({
     getChefUser,
     updateChefUser,
+  }),
+  recipes: trpcRouter({
+    createRecipe,
+    listRecipes,
   }),
 });
 
