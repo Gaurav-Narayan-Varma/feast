@@ -17,6 +17,8 @@ import { sign1099Contract } from "./procedures/onboarding/sign1099Contract.js";
 import { createRecipe } from "./procedures/recipes/createRecipe.js";
 import { listRecipes } from "./procedures/recipes/listRecipes.js";
 import { trpcRouter } from "./trpcBase.js";
+import { deleteRecipe } from "./procedures/recipes/deleteRecipe.js";
+import { editRecipe } from "./procedures/recipes/editRecipe.js";
 
 export const appRouter = trpcRouter({
   auth: trpcRouter({
@@ -42,6 +44,8 @@ export const appRouter = trpcRouter({
   recipes: trpcRouter({
     createRecipe,
     listRecipes,
+    deleteRecipe,
+    editRecipe,
   }),
 });
 

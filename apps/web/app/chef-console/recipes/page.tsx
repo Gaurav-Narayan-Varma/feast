@@ -1,8 +1,10 @@
 "use client";
 import { trpc } from "@/app/_trpc/client";
+import PageSpinner from "@/components/chef-console/page-spinner";
 import RecipeSelectionModals from "@/components/modals/recipe-selection-modals";
 import FilterableBadgeList from "@/components/recipes/filterable-badge-list";
 import IngredientFormSection from "@/components/recipes/ingredient-form-section";
+import { RecipeCard } from "@/components/recipes/recipe-card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
@@ -23,8 +25,13 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { IngredientDetails, Recipe } from "@/lib/types";
-import { Cuisine, DietaryTags, FoodAllergen, PriceRange } from "@feast/shared";
-import { recipeSchema } from "@feast/shared";
+import {
+  Cuisine,
+  DietaryTags,
+  FoodAllergen,
+  PriceRange,
+  recipeSchema,
+} from "@feast/shared";
 import {
   AlertCircle,
   ArrowLeftIcon,
@@ -38,7 +45,9 @@ import { z } from "zod";
 
 export default function ChefConsoleRecipesPage() {
   const [isCreateMode, setIsCreateMode] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
   const [recipe, setRecipe] = useState<Recipe>({
+    id: "",
     name: "",
     description: "",
     cuisines: [],
@@ -59,19 +68,13 @@ export default function ChefConsoleRecipesPage() {
 
   const listRecipes = trpc.recipes.listRecipes.useQuery();
 
-  if (listRecipes.data) {
-    // console.log("listRecipes.data", listRecipes.data);
-
-    // listRecipes.data.recipes.map((recipe) => {
-    //   // console.log("recipe", recipe);
-    // });
-  }
-
   const createRecipe = trpc.recipes.createRecipe.useMutation({
     onSuccess: () => {
+      listRecipes.refetch();
       setIsCreateMode(false);
       toast.success("Recipe created successfully");
       setRecipe({
+        id: "",
         name: "",
         description: "",
         cuisines: [],
@@ -82,7 +85,22 @@ export default function ChefConsoleRecipesPage() {
       });
     },
   });
-  
+
+  const deleteRecipe = trpc.recipes.deleteRecipe.useMutation({
+    onSuccess: () => {
+      toast.success("Recipe deleted successfully");
+      listRecipes.refetch();
+    },
+  });
+
+  const updateRecipe = trpc.recipes.editRecipe.useMutation({
+    onSuccess: () => {
+      toast.success("Recipe updated successfully");
+      listRecipes.refetch();
+      setIsEditMode(false);
+    },
+  });
+
   const removeAllergen = (allergen: FoodAllergen) => {
     setRecipe({
       ...recipe,
@@ -147,15 +165,33 @@ export default function ChefConsoleRecipesPage() {
     setIsFormModified(true);
   };
 
+  if (listRecipes.isLoading) {
+    return <PageSpinner />;
+  }
+
   return (
     <div className="flex flex-col gap-6">
       <div className="flex justify-between">
         <div className="section-title">My Recipes</div>
-        {isCreateMode ? (
+        {isCreateMode || isEditMode ? (
           <Button
             label="Back to Recipes"
             leftIcon={<ArrowLeftIcon />}
-            onClick={() => setIsCreateMode(false)}
+            onClick={() => {
+              setRecipe({
+                id: "",
+                name: "",
+                description: "",
+                cuisines: [],
+                dietaryTags: [],
+                foodAllergens: [],
+                ingredients: [],
+                priceRange: PriceRange.BUDGET,
+              });
+              setError(null);
+              setIsCreateMode(false);
+              setIsEditMode(false);
+            }}
           />
         ) : (
           <Button
@@ -166,25 +202,44 @@ export default function ChefConsoleRecipesPage() {
         )}
       </div>
 
-      {!isCreateMode && listRecipes.data && (
-        <div className="flex flex-col gap-4">
+      {/* Recipe Grid */}
+      {!isCreateMode && !isEditMode && listRecipes.data && (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {listRecipes.data.recipes.map((recipe) => (
-            <Card key={recipe.id}>
-              <CardHeader>
-                <CardTitle>{recipe.name}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p>{recipe.description}</p>
-              </CardContent>
-            </Card>
+            <RecipeCard
+              key={recipe.id}
+              recipe={{
+                ...recipe,
+                cuisines: recipe.cuisines as Cuisine[],
+                dietaryTags: recipe.dietaryTags as DietaryTags[],
+                foodAllergens: recipe.foodAllergens as FoodAllergen[],
+                priceRange: recipe.priceRange as PriceRange,
+              }}
+              onDelete={() => {
+                deleteRecipe.mutate({ id: recipe.id });
+              }}
+              onEdit={() => {
+                setRecipe({
+                  ...recipe,
+                  cuisines: recipe.cuisines as Cuisine[],
+                  dietaryTags: recipe.dietaryTags as DietaryTags[],
+                  foodAllergens: recipe.foodAllergens as FoodAllergen[],
+                  priceRange: recipe.priceRange as PriceRange,
+                });
+                setIsEditMode(true);
+              }}
+            />
           ))}
         </div>
       )}
 
-      {isCreateMode && (
+      {/* Recipe Form */}
+      {(isCreateMode || isEditMode) && (
         <Card>
           <CardHeader>
-            <CardTitle>Create Recipe</CardTitle>
+            <CardTitle>
+              {isCreateMode ? "Create Recipe" : "Edit Recipe"}
+            </CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-5">
             {error?.errors[0]?.message && (
@@ -319,9 +374,11 @@ export default function ChefConsoleRecipesPage() {
           </CardContent>
           <CardFooter className="flex justify-end">
             <Button
-              label="Create Recipe"
+              label={isCreateMode ? "Create Recipe" : "Save Changes"}
               leftIcon={<SaveIcon />}
-              isLoading={createRecipe.isPending}
+              isLoading={
+                isCreateMode ? createRecipe.isPending : updateRecipe.isPending
+              }
               onClick={() => {
                 setError(null);
                 const result = recipeSchema.safeParse(recipe);
@@ -331,9 +388,16 @@ export default function ChefConsoleRecipesPage() {
                   return;
                 }
 
-                createRecipe.mutate({
-                  ...recipe,
-                });
+                if (isCreateMode) {
+                  createRecipe.mutate({
+                    ...recipe,
+                  });
+                } else {
+                  updateRecipe.mutate({
+                    recipeId: recipe.id,
+                    recipe: recipe,
+                  });
+                }
               }}
             />
           </CardFooter>

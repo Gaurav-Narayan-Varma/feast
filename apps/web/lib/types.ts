@@ -50,7 +50,7 @@ export interface IngredientDetails {
 }
 
 export interface Recipe {
-  id?: string;
+  id: string;
   _id?: string;
   name: string;
   description: string;
