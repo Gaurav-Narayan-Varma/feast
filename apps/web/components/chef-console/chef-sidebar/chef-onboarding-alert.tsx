@@ -62,7 +62,7 @@ export default function ChefOnboardingAlert() {
       label: "Platform approval",
       path: "/chef-console/settings",
       tooltip:
-        "After finishing all other remaining tasks, please contact [feast-team@joinfeastco.com] for next steps in your approval process.",
+        "After finishing all other remaining tasks, the Feast team will review your profile and approve you to display your profile on the platform.",
     },
   };
 

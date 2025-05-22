@@ -17,7 +17,7 @@ import { PlusIcon, SaveIcon } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { z } from "zod";
-import ErrorAlert from "../error-alert";
+import ErrorAlert from "../../error-alert";
 import RecipeGrid from "../recipes/recipe-grid";
 import RecipeSelector from "./recipe-selector";
 

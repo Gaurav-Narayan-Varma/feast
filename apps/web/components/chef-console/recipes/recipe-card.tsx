@@ -9,8 +9,8 @@ import { Recipe } from "@/lib/types";
 import cx from "clsx";
 import { Check, EditIcon, TrashIcon } from "lucide-react";
 import { useState } from "react";
-import { Button } from "../ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { Button } from "../../ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "../../ui/card";
 
 export const RecipeCard = ({
   recipe,
@@ -36,14 +36,11 @@ export const RecipeCard = ({
   return (
     <Card
       key={recipe.id}
-      className={cx(
-        "gap-1 cursor-default relative",
-        {
-          "pb-2": isEditable,
-          "pb-4": !isEditable,
-          "bg-ds-chef-800/[0.05] border border-ds-chef-800/40": isSelected,
-        }
-      )}
+      className={cx("gap-1 cursor-default relative", {
+        "pb-2": isEditable,
+        "pb-4": !isEditable,
+        "bg-ds-chef-800/[0.05] border border-ds-chef-800/40": isSelected,
+      })}
       onClick={() => {
         if (!isEditable && !nonSelectable) {
           if (isSelected) {

@@ -35,15 +35,13 @@ const CuisineSelectionModal = ({
   const [search, setSearch] = useState("");
   const [tempSelected, setTempSelected] = useState<string[]>([]);
 
-  // Reset temp selections whenever the modal opens
   useEffect(() => {
     if (open) {
-      setTempSelected([...selectedCuisines]);
+      setTempSelected([...(selectedCuisines || [])]);
       setSearch("");
     }
   }, [open, selectedCuisines]);
 
-  // Filter cuisines based on search
   const filteredCuisines = availableCuisines.filter((cuisine) =>
     cuisine.toLowerCase().includes(search.toLowerCase())
   );

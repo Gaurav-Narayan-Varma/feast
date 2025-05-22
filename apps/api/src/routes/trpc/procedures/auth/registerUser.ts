@@ -81,6 +81,7 @@ export const registerUser = publicProcedure
         phoneNumber,
         verifyToken,
         verifyTokenExpires,
+        cuisines: [],
       },
     });
 

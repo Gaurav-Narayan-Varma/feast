@@ -33,10 +33,11 @@ model ChefUser {
   emailVerified      Boolean   @default(false)
   verifyToken        String?
   verifyTokenExpires DateTime?
-  sessions           Session[]
-  isAdmin            Boolean   @default(false)
-  createdAt          DateTime  @default(now())
-  updatedAt          DateTime  @default(now()) @updatedAt
+
+  sessions  Session[]
+  isAdmin   Boolean   @default(false)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now()) @updatedAt
 
   // Chef specific fields
   isIdVerified                Boolean        @default(false)
@@ -50,6 +51,9 @@ model ChefUser {
   isApproved                  Boolean        @default(false)
   recipes                     Recipe[]
   menus                       Menu[]
+  bio                         String?
+  cuisines                    String[]       @default([])
+  profilePictureKey           String?
 }
 
 model Session {

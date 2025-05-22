@@ -2,9 +2,14 @@ import { db } from "@/db.js";
 import { ChefUser } from "@prisma/client";
 import { chefUserProcedure } from "@/routes/trpc/trpcBase.js";
 import { z } from "zod";
+import { Cuisine } from "@feast/shared";
 
 const input = z.object({
   data: z.object({
+    name: z.string(),
+    bio: z.string().optional(),
+    zipCode: z.string(),
+    cuisines: z.array(z.nativeEnum(Cuisine)).optional(),
     stripeOnboardingComplete: z.boolean().optional(),
   }),
 });

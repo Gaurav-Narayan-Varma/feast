@@ -1,5 +1,5 @@
-import IngredientList from "@/components/recipes/ingredient-list";
-import IngredientSearch from "@/components/recipes/ingredient-search";
+import IngredientList from "@/components/chef-console/recipes/ingredient-list";
+import IngredientSearch from "@/components/chef-console/recipes/ingredient-search";
 import { Button } from "@/components/ui/button";
 import { ItemQuantity } from "@/components/ui/item-quantity";
 import { Label } from "@/components/ui/label";

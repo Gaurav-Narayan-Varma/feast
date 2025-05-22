@@ -1,7 +1,7 @@
 "use client";
 import { trpc } from "@/app/_trpc/client";
-import MenuCard from "@/components/menus/menu-card";
-import MenuForm from "@/components/menus/menu-form";
+import MenuCard from "@/components/chef-console/menus/menu-card";
+import MenuForm from "@/components/chef-console/menus/menu-form";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Menu } from "@/lib/types";
@@ -17,7 +17,7 @@ export default function ChefConsoleMenusPage() {
   const listMenus = trpc.menus.listMenus.useQuery();
 
   return (
-    <div className="flex flex-col gap-6 h-full">
+    <div className="flex flex-col gap-6 h-full w-full max-w-[800px]">
       <div className="flex justify-between">
         <div className="section-title">My Menus</div>
         <Button

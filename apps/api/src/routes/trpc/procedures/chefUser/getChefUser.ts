@@ -1,9 +1,13 @@
 import { ChefUser } from "@prisma/client";
 import { db } from "@/db.js";
 import { chefUserProcedure } from "@/routes/trpc/trpcBase.js";
+import { ImageQuality } from "@/utils/s3.js";
+import { getImageSignedUrl } from "@/utils/s3.js";
 
 type GetChefUserResponse = {
-  chefUser: ChefUser;
+  chefUser: ChefUser & {
+    profilePictureUrl: string | null;
+  };
 };
 
 export const getChefUser = chefUserProcedure.query<GetChefUserResponse>(
@@ -12,6 +16,10 @@ export const getChefUser = chefUserProcedure.query<GetChefUserResponse>(
       where: { id: ctx.chefUserId },
     });
 
-    return { chefUser };
+    const profilePictureUrl = chefUser.profilePictureKey
+      ? await getImageSignedUrl(chefUser.profilePictureKey, ImageQuality.LARGE)
+      : null;
+
+    return { chefUser: { ...chefUser, profilePictureUrl } };
   }
 );

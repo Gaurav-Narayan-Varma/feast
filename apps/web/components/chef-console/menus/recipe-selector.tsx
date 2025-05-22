@@ -1,5 +1,5 @@
 import { trpc } from "@/app/_trpc/client";
-import RecipeGrid from "@/components/recipes/recipe-grid";
+import RecipeGrid from "@/components/chef-console/recipes/recipe-grid";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -67,17 +67,13 @@ export default function RecipeSelector({
           </div>
         ) : (menuId
             ? listAvailableRecipes.data?.recipes.filter(
-              (recipe) =>
-                !menuRecipes.some(
-                  (menuRecipe) => menuRecipe.id === recipe.id
-                )
-            )
+                (recipe) =>
+                  !menuRecipes.some((menuRecipe) => menuRecipe.id === recipe.id)
+              )
             : listRecipes.data?.recipes.filter(
-              (recipe) =>
-                !menuRecipes.some(
-                  (menuRecipe) => menuRecipe.id === recipe.id
-                )
-            )
+                (recipe) =>
+                  !menuRecipes.some((menuRecipe) => menuRecipe.id === recipe.id)
+              )
           )?.length === 0 ? (
           <EmptyRecipeState onOpenChange={onOpenChange} />
         ) : (

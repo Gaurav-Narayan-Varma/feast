@@ -25,6 +25,7 @@ import { listRecipes } from "./procedures/recipes/listRecipes.js";
 import { removeRecipeFromMenu } from "./procedures/recipes/removeRecipeFromMenu.js";
 import { trpcRouter } from "./trpcBase.js";
 import { deleteMenu } from "./procedures/menus/deleteMenu.js";
+import { updateProfilePicture } from "./procedures/chefUser/updateProfilePicture.js";
 
 export const appRouter = trpcRouter({
   auth: trpcRouter({
@@ -46,6 +47,7 @@ export const appRouter = trpcRouter({
   chefUser: trpcRouter({
     getChefUser,
     updateChefUser,
+    updateProfilePicture,
   }),
   recipes: trpcRouter({
     createRecipe,

@@ -1,12 +1,11 @@
 "use client";
 import { trpc } from "@/app/_trpc/client";
 import PageSpinner from "@/components/chef-console/page-spinner";
+import FilterableBadgeList from "@/components/chef-console/recipes/filterable-badge-list";
+import IngredientFormSection from "@/components/chef-console/recipes/ingredient-form-section";
+import RecipeGrid from "@/components/chef-console/recipes/recipe-grid";
 import ErrorAlert from "@/components/error-alert";
 import RecipeSelectionModals from "@/components/modals/recipe-selection-modals";
-import FilterableBadgeList from "@/components/recipes/filterable-badge-list";
-import IngredientFormSection from "@/components/recipes/ingredient-form-section";
-import RecipeGrid from "@/components/recipes/recipe-grid";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -33,13 +32,7 @@ import {
   PriceRange,
   recipeSchema,
 } from "@feast/shared";
-import {
-  AlertCircle,
-  ArrowLeftIcon,
-  Info,
-  PlusIcon,
-  SaveIcon,
-} from "lucide-react";
+import { ArrowLeftIcon, Info, PlusIcon, SaveIcon } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
@@ -177,8 +170,8 @@ export default function ChefConsoleRecipesPage() {
   }
 
   return (
-    <div className="flex flex-col gap-6">
-      <div className="flex justify-between">
+    <div className="flex flex-col gap-6 w-full max-w-[800px]">
+      <div className="flex justify-between w-full">
         <div className="section-title">My Recipes</div>
         {isCreateMode || isEditMode ? (
           <Button

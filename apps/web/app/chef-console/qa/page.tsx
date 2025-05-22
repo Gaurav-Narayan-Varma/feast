@@ -42,10 +42,10 @@ export default function ChefConsoleQA() {
   ];
 
   return (
-    <>
+    <div className="w-full max-w-[800px] flex flex-col gap-6">
       <div className="section-title">Help & Support</div>
 
-      <Card className="mb-6">
+      <Card>
         <CardHeader>
           <CardTitle>Frequently Asked Questions</CardTitle>
           <CardDescription>
@@ -83,6 +83,6 @@ export default function ChefConsoleQA() {
           </div>
         </CardContent>
       </Card>
-    </>
+    </div>
   );
 }
