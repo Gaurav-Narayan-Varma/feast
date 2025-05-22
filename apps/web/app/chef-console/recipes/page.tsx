@@ -1,10 +1,11 @@
 "use client";
 import { trpc } from "@/app/_trpc/client";
 import PageSpinner from "@/components/chef-console/page-spinner";
+import ErrorAlert from "@/components/error-alert";
 import RecipeSelectionModals from "@/components/modals/recipe-selection-modals";
 import FilterableBadgeList from "@/components/recipes/filterable-badge-list";
 import IngredientFormSection from "@/components/recipes/ingredient-form-section";
-import { RecipeCard } from "@/components/recipes/recipe-card";
+import RecipeGrid from "@/components/recipes/recipe-grid";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
@@ -39,12 +40,16 @@ import {
   PlusIcon,
   SaveIcon,
 } from "lucide-react";
+import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { z } from "zod";
 
 export default function ChefConsoleRecipesPage() {
-  const [isCreateMode, setIsCreateMode] = useState(false);
+  const params = useSearchParams();
+  const [isCreateMode, setIsCreateMode] = useState(
+    params.get("create") === "true"
+  );
   const [isEditMode, setIsEditMode] = useState(false);
   const [recipe, setRecipe] = useState<Recipe>({
     id: "",
@@ -61,7 +66,6 @@ export default function ChefConsoleRecipesPage() {
   const [dietaryTagsModalOpen, setDietaryTagsModalOpen] = useState(false);
   const [allergenModalOpen, setAllergenModalOpen] = useState(false);
   const [error, setError] = useState<z.ZodError | null>(null);
-
   const availableCuisines = Object.values(Cuisine);
   const availableDietaryTags = Object.values(DietaryTags);
   const availableAllergens = Object.values(FoodAllergen);
@@ -90,6 +94,9 @@ export default function ChefConsoleRecipesPage() {
     onSuccess: () => {
       toast.success("Recipe deleted successfully");
       listRecipes.refetch();
+    },
+    onError: (error) => {
+      toast.error(error.message);
     },
   });
 
@@ -204,33 +211,20 @@ export default function ChefConsoleRecipesPage() {
 
       {/* Recipe Grid */}
       {!isCreateMode && !isEditMode && listRecipes.data && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {listRecipes.data.recipes.map((recipe) => (
-            <RecipeCard
-              key={recipe.id}
-              recipe={{
-                ...recipe,
-                cuisines: recipe.cuisines as Cuisine[],
-                dietaryTags: recipe.dietaryTags as DietaryTags[],
-                foodAllergens: recipe.foodAllergens as FoodAllergen[],
-                priceRange: recipe.priceRange as PriceRange,
-              }}
-              onDelete={() => {
-                deleteRecipe.mutate({ id: recipe.id });
-              }}
-              onEdit={() => {
-                setRecipe({
-                  ...recipe,
-                  cuisines: recipe.cuisines as Cuisine[],
-                  dietaryTags: recipe.dietaryTags as DietaryTags[],
-                  foodAllergens: recipe.foodAllergens as FoodAllergen[],
-                  priceRange: recipe.priceRange as PriceRange,
-                });
-                setIsEditMode(true);
-              }}
-            />
-          ))}
-        </div>
+        <RecipeGrid
+          recipes={listRecipes.data.recipes as Recipe[]}
+          onDelete={(id) => deleteRecipe.mutate({ recipeId: id })}
+          onEdit={(recipe) => {
+            setRecipe({
+              ...recipe,
+              cuisines: recipe.cuisines as Cuisine[],
+              dietaryTags: recipe.dietaryTags as DietaryTags[],
+              foodAllergens: recipe.foodAllergens as FoodAllergen[],
+              priceRange: recipe.priceRange as PriceRange,
+            });
+            setIsEditMode(true);
+          }}
+        />
       )}
 
       {/* Recipe Form */}
@@ -243,12 +237,7 @@ export default function ChefConsoleRecipesPage() {
           </CardHeader>
           <CardContent className="flex flex-col gap-5">
             {error?.errors[0]?.message && (
-              <Alert className="border-red-200 bg-red-50">
-                <AlertCircle className="h-4 w-4 text-red-600" />
-                <AlertDescription className="text-red-700">
-                  {error.errors[0].message}
-                </AlertDescription>
-              </Alert>
+              <ErrorAlert message={error.errors[0].message} />
             )}
             {/* Recipe Name */}
             <div className="flex flex-col gap-2">

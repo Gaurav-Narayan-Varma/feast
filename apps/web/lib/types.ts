@@ -68,7 +68,7 @@ export interface Menu {
   _id?: string;
   name: string;
   description: string;
-  recipes: Recipe[] | string[];
+  recipes: Recipe[];
   createdBy?: string;
   order?: number;
 }

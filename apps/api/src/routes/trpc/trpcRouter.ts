@@ -10,15 +10,21 @@ import { registerUser } from "./procedures/auth/registerUser.js";
 import { verifyEmail } from "./procedures/auth/verifyEmail.js";
 import { getChefUser } from "./procedures/chefUser/getChefUser.js";
 import { updateChefUser } from "./procedures/chefUser/updateChefUser.js";
+import { createMenu } from "./procedures/menus/createMenu.js";
+import { listMenus } from "./procedures/menus/listMenus.js";
+import { updateMenu } from "./procedures/menus/updateMenu.js";
 import { get1099ContractLink } from "./procedures/onboarding/get1099ContractLink.js";
 import { getOrCreateVerificationSession } from "./procedures/onboarding/getOrCreateVerificationSession.js";
 import { getStripeOnboardingLink } from "./procedures/onboarding/getStripeOnboardingLink.js";
 import { sign1099Contract } from "./procedures/onboarding/sign1099Contract.js";
 import { createRecipe } from "./procedures/recipes/createRecipe.js";
-import { listRecipes } from "./procedures/recipes/listRecipes.js";
-import { trpcRouter } from "./trpcBase.js";
 import { deleteRecipe } from "./procedures/recipes/deleteRecipe.js";
 import { editRecipe } from "./procedures/recipes/editRecipe.js";
+import { listAvailableRecipes } from "./procedures/recipes/listAvailableRecipes.js";
+import { listRecipes } from "./procedures/recipes/listRecipes.js";
+import { removeRecipeFromMenu } from "./procedures/recipes/removeRecipeFromMenu.js";
+import { trpcRouter } from "./trpcBase.js";
+import { deleteMenu } from "./procedures/menus/deleteMenu.js";
 
 export const appRouter = trpcRouter({
   auth: trpcRouter({
@@ -46,6 +52,14 @@ export const appRouter = trpcRouter({
     listRecipes,
     deleteRecipe,
     editRecipe,
+    listAvailableRecipes,
+  }),
+  menus: trpcRouter({
+    createMenu,
+    listMenus,
+    updateMenu,
+    removeRecipeFromMenu,
+    deleteMenu,
   }),
 });
 

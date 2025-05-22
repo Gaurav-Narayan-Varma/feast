@@ -1,6 +1,5 @@
-import React from "react";
 import CuisineSelectionModal from "@/components/modals/cuisine-selection-modal";
-import { Cuisine, DietaryTags, FoodAllergen } from "@/lib/types";
+import { Cuisine, DietaryTags, FoodAllergen } from "@feast/shared";
 
 interface RecipeSelectionModalsProps {
   cuisineModalOpen: boolean;
@@ -8,13 +7,13 @@ interface RecipeSelectionModalsProps {
   availableCuisines: string[];
   selectedCuisines: Cuisine[];
   handleCuisineSelection: (cuisines: string[]) => void;
-  
+
   dietaryTagsModalOpen: boolean;
   setDietaryTagsModalOpen: (open: boolean) => void;
   availableDietaryTags: string[];
   selectedDietaryTags: DietaryTags[];
   handleDietaryTagsSelection: (tags: string[]) => void;
-  
+
   allergenModalOpen: boolean;
   setAllergenModalOpen: (open: boolean) => void;
   availableAllergens: string[];
@@ -22,25 +21,25 @@ interface RecipeSelectionModalsProps {
   handleAllergenSelection: (allergens: string[]) => void;
 }
 
-const RecipeSelectionModals: React.FC<RecipeSelectionModalsProps> = ({
+export default function RecipeSelectionModals({
   cuisineModalOpen,
   setCuisineModalOpen,
   availableCuisines,
   selectedCuisines,
   handleCuisineSelection,
-  
+
   dietaryTagsModalOpen,
   setDietaryTagsModalOpen,
   availableDietaryTags,
   selectedDietaryTags,
   handleDietaryTagsSelection,
-  
+
   allergenModalOpen,
   setAllergenModalOpen,
   availableAllergens,
   selectedAllergens,
-  handleAllergenSelection
-}) => {
+  handleAllergenSelection,
+}: RecipeSelectionModalsProps) {
   return (
     <>
       <CuisineSelectionModal
@@ -74,6 +73,4 @@ const RecipeSelectionModals: React.FC<RecipeSelectionModalsProps> = ({
       />
     </>
   );
-};
-
-export default RecipeSelectionModals;
+}

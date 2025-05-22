@@ -17,3 +17,9 @@ export const recipeSchema = z.object({
     })
   ),
 });
+
+export const menuSchema = z.object({
+  name: z.string().min(1, "Menu name is required"),
+  description: z.string().min(1, "Menu description is required"),
+  recipes: z.array(z.string()).nonempty("At least one recipe is required"),
+});

@@ -1,5 +1,6 @@
 import { db } from "@/db.js";
 import { chefUserProcedure } from "@/routes/trpc/trpcBase.js";
+import { nid } from "@/utils/generalUtils.js";
 import { recipeSchema } from "@feast/shared";
 
 export const createRecipe = chefUserProcedure
@@ -7,6 +8,7 @@ export const createRecipe = chefUserProcedure
   .mutation(async ({ ctx, input }) => {
     const recipe = await db.recipe.create({
       data: {
+        id: nid(),
         chefUserId: ctx.chefUserId,
         name: input.name,
         description: input.description,

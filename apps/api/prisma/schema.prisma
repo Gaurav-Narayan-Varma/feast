@@ -48,7 +48,8 @@ model ChefUser {
   form1099DocumentKey         String?
   form1099Status              Form1099Status @default(NotStarted)
   isApproved                  Boolean        @default(false)
-  Recipe                      Recipe[]
+  recipes                     Recipe[]
+  menus                       Menu[]
 }
 
 model Session {
@@ -57,12 +58,10 @@ model Session {
   updatedAt  DateTime @default(now()) @updatedAt
   chefUser   ChefUser @relation(fields: [chefUserId], references: [id], onDelete: Cascade)
   chefUserId String
-
-  @@index([chefUserId, id])
 }
 
 model Recipe {
-  id            String   @id @default(cuid())
+  id            String   @id
   name          String
   description   String
   priceRange    String
@@ -71,10 +70,21 @@ model Recipe {
   foodAllergens String[]
   /// [Ingredient]
   ingredients   Json[]
-  chefUserId    String
   chefUser      ChefUser @relation(fields: [chefUserId], references: [id])
+  chefUserId    String
+  menu          Menu?    @relation(fields: [menuId], references: [id])
+  menuId        String?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+}
 
-  @@index([chefUserId])
+model Menu {
+  id          String   @id
+  name        String
+  description String
+  recipes     Recipe[]
+  chefUser    ChefUser @relation(fields: [chefUserId], references: [id])
+  chefUserId  String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
