@@ -21,7 +21,6 @@ import {
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { toast } from "react-hot-toast";
 import ChefOnboardingAlert from "./chef-onboarding-alert";
 import NavItem from "./nav-item";
 
@@ -80,7 +79,6 @@ export default function ChefSidebar({ isAdmin }: { isAdmin: boolean }) {
 
   const logout = trpc.auth.logout.useMutation({
     onSuccess: () => {
-      toast.success("Logged out successfully");
       router.push("/auth/chef-login");
     },
   });

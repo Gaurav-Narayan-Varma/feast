@@ -12,6 +12,8 @@ import { addRecurringAvailability } from "./procedures/availability/addRecurring
 import { deleteDateOverride } from "./procedures/availability/deleteDateOverride.js";
 import { deleteRecurringAvailability } from "./procedures/availability/deleteRecurringAvailability.js";
 import { getChefUser } from "./procedures/chefUser/getChefUser.js";
+import { getChefUserPublic } from "./procedures/chefUser/getChefUserPublic.js";
+import { listChefUsersPublic } from "./procedures/chefUser/listChefUsersPublic.js";
 import { updateChefUser } from "./procedures/chefUser/updateChefUser.js";
 import { updateProfilePicture } from "./procedures/chefUser/updateProfilePicture.js";
 import { createMenu } from "./procedures/menus/createMenu.js";
@@ -51,6 +53,8 @@ export const appRouter = trpcRouter({
     getChefUser,
     updateChefUser,
     updateProfilePicture,
+    listChefUsersPublic,
+    getChefUserPublic,
   }),
   recipes: trpcRouter({
     createRecipe,

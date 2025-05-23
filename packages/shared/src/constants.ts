@@ -1,10 +1,9 @@
 import { z } from "zod";
-import { Cuisine, DietaryTags, FoodAllergen, PriceRange } from "./types";
+import { Cuisine, DietaryTags, FoodAllergen } from "./types";
 
 export const recipeSchema = z.object({
   name: z.string().min(1, "Recipe name is required"),
   description: z.string().min(1, "Recipe description is required"),
-  priceRange: z.nativeEnum(PriceRange),
   cuisines: z.array(z.nativeEnum(Cuisine)),
   dietaryTags: z.array(z.nativeEnum(DietaryTags)),
   foodAllergens: z.array(z.nativeEnum(FoodAllergen)),
@@ -16,6 +15,7 @@ export const recipeSchema = z.object({
       preparation: z.string(),
     })
   ),
+  price: z.number().min(1, "Price must be greater than 0"),
 });
 
 export const menuSchema = z.object({

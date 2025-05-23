@@ -18,7 +18,7 @@ export const editRecipe = chefUserProcedure
       data: {
         name: input.recipe.name,
         description: input.recipe.description,
-        priceRange: input.recipe.priceRange,
+        price: input.recipe.price,
         cuisines: input.recipe.cuisines,
         dietaryTags: input.recipe.dietaryTags,
         foodAllergens: input.recipe.foodAllergens,

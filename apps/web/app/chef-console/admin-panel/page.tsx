@@ -35,7 +35,7 @@ export default function ChefConsoleAdminPanelPage() {
   if (listChefUsers.isLoading) {
     return <PageSpinner />;
   }
-
+    
   return (
     <div className="space-y-6">
       <div className="section-title">Admin Panel</div>

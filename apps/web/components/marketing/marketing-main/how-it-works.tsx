@@ -5,25 +5,24 @@ const steps = [
     icon: <BookOpenCheck className="w-10 h-10 text-chef-800" />,
     title: "Browse & Select",
     description:
-      "Explore profiles of talented chefs and view their specialized menus, reviews, and availability",
+      "Explore profiles of talented chefs and view their specialized menus and availability",
   },
   {
     icon: <Calendar className="w-10 h-10 text-chef-800" />,
     title: "Book Your Experience",
-    description:
-      "Choose your date, menu, and any special dietary requirements for your meal",
+    description: "Choose your dishes and pick a date for your meal",
   },
   {
     icon: <ChefHat className="w-10 h-10 text-chef-800" />,
     title: "Chef Arrives & Cooks",
     description:
-      "Ingredients will be delivered, and your chef will cook, serve, and clean up, leaving you to enjoy the experience",
+      "Your chef will cook, serve, and clean up, leaving you to enjoy the experience",
   },
   {
     icon: <CreditCard className="w-10 h-10 text-chef-800" />,
-    title: "Pay & Review",
+    title: "Review & Pay",
     description:
-      "Secure payment is processed after your meal and we encourage you to share your experience with a review!",
+      "Secure payment is processed once you book your meal. We gaurantee satisfaction or your money back.",
   },
 ];
 
@@ -32,13 +31,13 @@ export default function HowItWorks() {
     <section id="how-it-works" className="py-24 px-6 lg:px-12 bg-ds-chef-50">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <span className="inline-block py-1 px-3 bg-ds-chef-100 text-chef-800 rounded-full text-sm font-medium mb-4 animate-on-scroll">
+          <span className="inline-block py-1 px-3 bg-ds-chef-100 text-ds-chef-800 rounded-full text-sm font-medium mb-4 animate-on-scroll">
             Simple Process
           </span>
           <h2 className="font-display text-3xl md:text-4xl font-bold mb-6 animate-on-scroll">
             How Feast Works
           </h2>
-          <p className="text-chef-700 max-w-2xl mx-auto animate-on-scroll">
+          <p className="text-ds-chef-700 max-w-2xl mx-auto animate-on-scroll">
             Our platform makes it easy to discover, book, and enjoy exceptional
             personal chef experiences in the comfort of your home
           </p>
@@ -48,7 +47,7 @@ export default function HowItWorks() {
           {steps.map((step, index) => (
             <div
               key={index}
-              className="bg-white p-8 rounded-xl shadow-sm border border-chef-100 flex flex-col items-center text-center animate-on-scroll"
+              className="bg-white p-8 rounded-xl shadow-sm border border-ds-chef-100 flex flex-col items-center text-center animate-on-scroll"
             >
               <div className="w-16 h-16 rounded-full bg-ds-chef-100 flex items-center justify-center mb-6">
                 {step.icon}
@@ -56,7 +55,7 @@ export default function HowItWorks() {
               <h3 className="font-display text-xl font-semibold mb-3">
                 {step.title}
               </h3>
-              <p className="text-chef-600">{step.description}</p>
+              <p className="text-ds-chef-600">{step.description}</p>
               {index < steps.length - 1 && (
                 <div className="hidden lg:block absolute right-0 top-1/2 transform translate-x-1/2 -translate-y-1/2">
                   <svg

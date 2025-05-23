@@ -181,7 +181,7 @@ input:-internal-autofill-selected {
  input:-webkit-autofill::selection,
  input:-webkit-autofill:focus::selection,
  input:-internal-autofill-selected::selection {
-    background-color: #b3d7fe !important;
+    background-color: #000000 !important;
  }
 
  .section-title {

@@ -14,13 +14,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { type AppRouter } from "@feast/api";
 import { Cuisine } from "@feast/shared";
+import { inferRouterOutputs } from "@trpc/server";
 import { AlertCircle, Save } from "lucide-react";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { z } from "zod";
-import { inferRouterOutputs } from '@trpc/server';
-import { type AppRouter } from "@feast/api";
 
 const profileFormSchema = z.object({
   name: z
@@ -36,12 +36,12 @@ const profileFormSchema = z.object({
 type ProfileForm = z.infer<typeof profileFormSchema>;
 
 type RouterOutput = inferRouterOutputs<AppRouter>;
-type GetChefUserOutput = RouterOutput['chefUser']['getChefUser'];
+type GetChefUserOutput = RouterOutput["chefUser"]["getChefUser"];
 
 export default function ProfileInformationCard({
   chefUser,
 }: {
-  chefUser: GetChefUserOutput['chefUser'];
+  chefUser: GetChefUserOutput["chefUser"];
 }) {
   const updateProfile = trpc.chefUser.updateChefUser.useMutation({
     onSuccess: () => {
@@ -57,7 +57,6 @@ export default function ProfileInformationCard({
     zipCode: chefUser.zipCode,
     cuisines: chefUser.cuisines as Cuisine[],
   });
-
 
   const removeCuisine = (cuisine: Cuisine) => {
     setProfileForm({
@@ -124,6 +123,16 @@ export default function ProfileInformationCard({
                 name: e.target.value,
               })
             }
+          />
+        </div>
+        {/* Email */}
+        <div className="flex flex-col gap-2">
+          <Label>Email</Label>
+          <Input
+            type="text"
+            placeholder="Enter email"
+            value={chefUser.email}
+            disabled
           />
         </div>
         {/* Bio */}

@@ -15,14 +15,14 @@ import {
 export default function ChefConsoleQA() {
   const faqs = [
     {
-      question: "How do I update my menu?",
+      question: "How do I update my menus?",
       answer:
-        "You can update your menu by navigating to the 'My Menu' section in the sidebar. From there, you can add new dishes, edit existing ones, or remove items that are no longer available. The order of your menu will be reflected what customers see!",
+        "You can update your menus by navigating to the 'My Menus' section in the sidebar. From there, you can add new dishes, edit existing ones, or remove items that are no longer available.",
     },
     {
       question: "How do I set my availability?",
       answer:
-        "Go to the 'My Availability' section to set your regular working hours and mark any dates when you're unavailable. This helps clients book your services when you're available to work.",
+        "Go to the Settings section to set your regular working hours and mark any dates when you're unavailable. This helps clients book your services when you're available to work.",
     },
     {
       question: "How are payments processed?",
@@ -32,7 +32,7 @@ export default function ChefConsoleQA() {
     {
       question: "Can I cancel a booking?",
       answer:
-        "Yes, but we encourage you to honor your commitments. Cancellations may affect your rating. If you need to cancel, please do so at least 1-2 days in advance and contact us directly to explain the situation.",
+        "Yes, but we encourage you to honor your commitments. If you need to cancel, please do so at least 1-2 days in advance and contact us directly to explain the situation.",
     },
     {
       question: "How do I contact support?",

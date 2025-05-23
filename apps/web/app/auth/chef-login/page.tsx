@@ -16,6 +16,12 @@ export default function ChefLogin() {
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
+  /**
+   * We manually track loading state instead of using React Query's isPending
+   * because we want the button to remain in loading state during the
+   * post-mutation navigation delay.
+   */
+  const [isLoading, setIsLoading] = useState(false);
 
   const login = trpc.auth.login.useMutation({
     onSuccess: () => {
@@ -24,12 +30,14 @@ export default function ChefLogin() {
     },
     onError: (error) => {
       setError(error.message ?? "An error occurred");
+      setIsLoading(false);
     },
   });
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    setIsLoading(true);
 
     await login.mutateAsync({
       email: emailRef.current?.value || "",
@@ -95,7 +103,7 @@ export default function ChefLogin() {
             type="submit"
             className="w-full bg-ds-chef-700 hover:bg-ds-chef-800 text-white"
             label="Login"
-            isLoading={login.isPending}
+            isLoading={isLoading}
           />
         </form>
 

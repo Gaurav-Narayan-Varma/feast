@@ -2,13 +2,6 @@ export enum Cookie {
   SessionId = "session_id",
 }
 
-export enum PriceRange {
-  BUDGET = "$",
-  LOW = "$$",
-  MEDIUM = "$$$",
-  HIGH = "$$$$",
-}
-
 export enum Cuisine {
   Italian = "Italian",
   Chinese = "Chinese",

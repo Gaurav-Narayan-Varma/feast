@@ -1,17 +1,19 @@
 import { db } from "@/db.js";
-import { ChefUser } from "@prisma/client";
 import { chefUserProcedure } from "@/routes/trpc/trpcBase.js";
-import { z } from "zod";
 import { Cuisine } from "@feast/shared";
+import { ChefUser } from "@prisma/client";
+import { z } from "zod";
 
 const input = z.object({
-  data: z.object({
-    name: z.string(),
-    bio: z.string().optional(),
-    zipCode: z.string(),
-    cuisines: z.array(z.nativeEnum(Cuisine)).optional(),
-    stripeOnboardingComplete: z.boolean().optional(),
-  }),
+  data: z
+    .object({
+      name: z.string().optional(),
+      bio: z.string().optional(),
+      zipCode: z.string().optional(),
+      cuisines: z.array(z.nativeEnum(Cuisine)).optional(),
+      stripeOnboardingComplete: z.boolean().optional(),
+    })
+    .partial(),
 });
 
 type UpdateChefUserResponse = {
@@ -24,9 +26,9 @@ export const updateChefUser = chefUserProcedure
     try {
       const { data } = input;
 
-    console.log("data", data);
+      console.log("data", data);
 
-    const chefUser = await db.chefUser.update({
+      const chefUser = await db.chefUser.update({
         where: { id: ctx.chefUserId },
         data,
       });

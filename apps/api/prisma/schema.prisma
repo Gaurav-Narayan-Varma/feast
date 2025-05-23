@@ -70,10 +70,10 @@ model Recipe {
   id            String   @id
   name          String
   description   String
-  priceRange    String
   cuisines      String[]
   dietaryTags   String[]
   foodAllergens String[]
+  price         Int
   /// [Ingredient]
   ingredients   Json[]
   chefUser      ChefUser @relation(fields: [chefUserId], references: [id])

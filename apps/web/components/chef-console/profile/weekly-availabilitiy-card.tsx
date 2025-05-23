@@ -90,7 +90,8 @@ export default function WeeklyAvailabilityCard({
       <CardHeader>
         <CardTitle>Weekly Availability</CardTitle>
         <CardDescription>
-          Set your cooking availability in Eastern Time (ET)
+          Set your cooking availability in Eastern Time (ET). Customers book in
+          2-hour blocks, so anything shorter will not be visible.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -205,6 +206,13 @@ export default function WeeklyAvailabilityCard({
                   leftIcon={<X />}
                   onClick={() => setIsAddMode(false)}
                 />
+              </div>
+            )}
+            {availabilities.filter(
+              (a) => a.dayOfWeek === recurringAvailabilityForm.dayOfWeek
+            ).length === 0 && (
+              <div className="text-muted-foreground h-full flex items-center justify-center">
+                No availabilities set for {recurringAvailabilityForm.dayOfWeek}
               </div>
             )}
             {/* Recurring availability list */}

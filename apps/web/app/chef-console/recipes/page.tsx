@@ -16,23 +16,15 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { IngredientDetails, Recipe } from "@/lib/types";
 import {
   Cuisine,
   DietaryTags,
   FoodAllergen,
-  PriceRange,
   recipeSchema,
 } from "@feast/shared";
-import { ArrowLeftIcon, Info, PlusIcon, SaveIcon } from "lucide-react";
+import { ArrowLeftIcon, PlusIcon, SaveIcon } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
@@ -52,7 +44,7 @@ export default function ChefConsoleRecipesPage() {
     dietaryTags: [],
     foodAllergens: [],
     ingredients: [],
-    priceRange: PriceRange.BUDGET,
+    price: 0,
   });
   const [isFormModified, setIsFormModified] = useState(false);
   const [cuisineModalOpen, setCuisineModalOpen] = useState(false);
@@ -78,7 +70,7 @@ export default function ChefConsoleRecipesPage() {
         dietaryTags: [],
         foodAllergens: [],
         ingredients: [],
-        priceRange: PriceRange.BUDGET,
+        price: 0,
       });
     },
   });
@@ -93,7 +85,7 @@ export default function ChefConsoleRecipesPage() {
     },
   });
 
-  const updateRecipe = trpc.recipes.editRecipe.useMutation({
+  const editRecipe = trpc.recipes.editRecipe.useMutation({
     onSuccess: () => {
       toast.success("Recipe updated successfully");
       listRecipes.refetch();
@@ -186,7 +178,7 @@ export default function ChefConsoleRecipesPage() {
                 dietaryTags: [],
                 foodAllergens: [],
                 ingredients: [],
-                priceRange: PriceRange.BUDGET,
+                price: 0,
               });
               setError(null);
               setIsCreateMode(false);
@@ -230,7 +222,6 @@ export default function ChefConsoleRecipesPage() {
               cuisines: recipe.cuisines as Cuisine[],
               dietaryTags: recipe.dietaryTags as DietaryTags[],
               foodAllergens: recipe.foodAllergens as FoodAllergen[],
-              priceRange: recipe.priceRange as PriceRange,
             });
             setIsEditMode(true);
           }}
@@ -270,68 +261,23 @@ export default function ChefConsoleRecipesPage() {
                 }
               />
             </div>
-            {/* Recipe Price */}
+
+            {/* Price */}
             <div className="flex gap-6 items-center">
-              <div className="flex gap-2 items-center">
-                <Label>Price Range</Label>
-                <TooltipProvider delayDuration={100}>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Info className="h-4 w-4 text-muted-foreground cursor-help stroke-[1.5]" />
-                    </TooltipTrigger>
-                    <TooltipContent className="p-3 text-xs text-muted-foreground">
-                      <li>$ Budget: ~$8/dish ($50 for 6 servings)</li>
-                      <li>$$ Standard: ~$16/dish ($95 for 6 servings)</li>
-                      <li>$$$ Premium: ~$25/dish ($150 for 6 servings)</li>
-                      <li>$$$$ Luxury: ~$35+/dish ($210+ for 6 servings)</li>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </div>
-              <RadioGroup
-                value={recipe.priceRange}
-                onValueChange={(value) =>
-                  setRecipe({ ...recipe, priceRange: value as PriceRange })
-                }
-                className="flex gap-4"
-              >
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value={PriceRange.BUDGET} id="budget" />
-                  <Label
-                    htmlFor="budget"
-                    className="font-light text-sm text-muted-foreground"
-                  >
-                    $
-                  </Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value={PriceRange.LOW} id="low" />
-                  <Label
-                    htmlFor="low"
-                    className="font-light text-sm text-muted-foreground"
-                  >
-                    $$
-                  </Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value={PriceRange.MEDIUM} id="medium" />
-                  <Label
-                    htmlFor="medium"
-                    className="font-light text-sm text-muted-foreground"
-                  >
-                    $$$
-                  </Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value={PriceRange.HIGH} id="high" />
-                  <Label
-                    htmlFor="high"
-                    className="font-light text-sm text-muted-foreground"
-                  >
-                    $$$$
-                  </Label>
-                </div>
-              </RadioGroup>
+              <Label>Price</Label>
+              <div className="flex items-center gap-2 relative">
+                <span className="text-muted-foreground font-light absolute left-2 text-sm">
+                  $
+                </span>
+                <Input
+                  type="number"
+                  className="w-14 pl-5 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  value={recipe.price || ""}
+                  onChange={(e) =>
+                    setRecipe({ ...recipe, price: parseInt(e.target.value) })
+                  }
+                />
+              </div>{" "}
             </div>
 
             {/* Badges */}
@@ -376,7 +322,7 @@ export default function ChefConsoleRecipesPage() {
               label={isCreateMode ? "Create Recipe" : "Save Changes"}
               leftIcon={<SaveIcon />}
               isLoading={
-                isCreateMode ? createRecipe.isPending : updateRecipe.isPending
+                isCreateMode ? createRecipe.isPending : editRecipe.isPending
               }
               onClick={() => {
                 setError(null);
@@ -388,13 +334,11 @@ export default function ChefConsoleRecipesPage() {
                 }
 
                 if (isCreateMode) {
-                  createRecipe.mutate({
-                    ...recipe,
-                  });
+                  createRecipe.mutate(result.data);
                 } else {
-                  updateRecipe.mutate({
+                  editRecipe.mutate({
                     recipeId: recipe.id,
-                    recipe: recipe,
+                    recipe: result.data,
                   });
                 }
               }}

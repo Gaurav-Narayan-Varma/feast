@@ -217,6 +217,11 @@ export function DateOverridesCard({
                 />
               </div>
             )}
+            {dateOverrides.filter(a => a.date.toDateString() === dateOverrideForm.selectedDate.toDateString()).length === 0 && (
+              <div className="text-muted-foreground h-full flex items-center justify-center">
+                No date overrides set for {dateOverrideForm.selectedDate.toLocaleDateString()}
+              </div>
+            )}
             {/* Recurring availability list */}
             <ScrollArea className="overflow-y-auto">
               {dateOverrides.map((dateOverride) => {

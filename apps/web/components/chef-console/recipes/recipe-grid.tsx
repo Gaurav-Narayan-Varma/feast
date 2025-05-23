@@ -1,5 +1,5 @@
 import { Recipe } from "@/lib/types";
-import { Cuisine, DietaryTags, FoodAllergen, PriceRange } from "@feast/shared";
+import { Cuisine, DietaryTags, FoodAllergen } from "@feast/shared";
 import { RecipeCard } from "./recipe-card";
 
 export default function RecipeGrid({
@@ -29,7 +29,6 @@ export default function RecipeGrid({
             cuisines: recipe.cuisines as Cuisine[],
             dietaryTags: recipe.dietaryTags as DietaryTags[],
             foodAllergens: recipe.foodAllergens as FoodAllergen[],
-            priceRange: recipe.priceRange as PriceRange,
           }}
           isEditable={!!onEdit}
           isRemovableFromMenu={isRemovableFromMenu ?? false}

@@ -55,6 +55,13 @@ export default function Navbar() {
             How it Works
           </a>
           <a
+            href="#chefs"
+            className="text-sm font-medium hover:text-ds-chef-700 transition-colors"
+            onClick={(e) => scrollToSection(e, "chefs")}
+          >
+            Explore Chefs
+          </a>
+          <a
             href="#cuisines"
             className="text-sm font-medium hover:text-ds-chef-700 transition-colors"
             onClick={(e) => scrollToSection(e, "cuisines")}

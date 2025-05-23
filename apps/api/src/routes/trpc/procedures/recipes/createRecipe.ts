@@ -12,11 +12,11 @@ export const createRecipe = chefUserProcedure
         chefUserId: ctx.chefUserId,
         name: input.name,
         description: input.description,
-        priceRange: input.priceRange,
         cuisines: input.cuisines,
         dietaryTags: input.dietaryTags,
         foodAllergens: input.foodAllergens,
         ingredients: input.ingredients,
+        price: input.price,
       },
     });
     return recipe;
