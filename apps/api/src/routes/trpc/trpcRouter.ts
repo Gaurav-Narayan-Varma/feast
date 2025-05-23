@@ -28,6 +28,7 @@ import { deleteMenu } from "./procedures/menus/deleteMenu.js";
 import { updateProfilePicture } from "./procedures/chefUser/updateProfilePicture.js";
 import { addRecurringAvailability } from "./procedures/availability/addRecurringAvailability.js";
 import { deleteRecurringAvailability } from "./procedures/availability/deleteRecurringAvailability.js";
+import { addDateOverride } from "./procedures/availability/addDateOverride.js";
 
 export const appRouter = trpcRouter({
   auth: trpcRouter({
@@ -68,6 +69,7 @@ export const appRouter = trpcRouter({
   availability: trpcRouter({
     addRecurringAvailability,
     deleteRecurringAvailability,
+    addDateOverride,
   }),
 });
 

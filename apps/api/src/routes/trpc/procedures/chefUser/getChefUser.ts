@@ -1,12 +1,13 @@
 import { db } from "@/db.js";
 import { chefUserProcedure } from "@/routes/trpc/trpcBase.js";
 import { getImageSignedUrl, ImageQuality } from "@/utils/s3.js";
-import { ChefUser, RecurringAvailability } from "@prisma/client";
+import { ChefUser, DateOverride, RecurringAvailability } from "@prisma/client";
 
 type GetChefUserResponse = {
   chefUser: ChefUser & {
     profilePictureUrl: string | null;
     availabilities: RecurringAvailability[];
+    dateOverrides: DateOverride[];
   };
 };
 
@@ -25,6 +26,23 @@ export const getChefUser = chefUserProcedure.query<GetChefUserResponse>(
       orderBy: { startTime: "asc" },
     });
 
-    return { chefUser: { ...chefUser, profilePictureUrl, availabilities } };
+    const dateOverrides = await db.dateOverride.findMany({
+      where: {
+        chefUserId: ctx.chefUserId,
+        startTime: {
+          gte: new Date(new Date().setHours(0, 0, 0, 0) - 24 * 60 * 60 * 1000),
+        },
+      },
+      orderBy: { startTime: "asc" },
+    });
+
+    return {
+      chefUser: {
+        ...chefUser,
+        profilePictureUrl,
+        availabilities,
+        dateOverrides,
+      },
+    };
   }
 );

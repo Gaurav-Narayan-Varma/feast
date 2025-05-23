@@ -69,9 +69,6 @@ export default function WeeklyAvailabilityCard({
       },
       onError: (error) => {
         toast.error(error.message);
-
-        // const parsedError = JSON.parse(error.message);
-        // toast.error(parsedError[0].message);
       },
     });
 
@@ -221,7 +218,7 @@ export default function WeeklyAvailabilityCard({
                       key={availability.id}
                       className="px-3 py-1 text-muted-foreground flex flex-row justify-between items-center ml-1 mr-3 mb-2 last:mb-1"
                     >
-                      <div>
+                      <div className="text-sm">
                         {format(availability.startTime, "h:mm a")} -{" "}
                         {format(availability.endTime, "h:mm a")}
                       </div>

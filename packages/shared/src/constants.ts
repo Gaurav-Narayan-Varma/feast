@@ -61,23 +61,36 @@ export const timesOfDay = [
   "11:00 PM",
 ] as const;
 
-export const recurringAvailabilitySchema = z.object({
-  dayOfWeek: z.enum(daysOfWeek, {
-    errorMap: () => ({ message: "Day of week is required" }),
-  }),
+export const recurringAvailabilitySchema = z
+  .object({
+    dayOfWeek: z.enum(daysOfWeek, {
+      errorMap: () => ({ message: "Day of week is required" }),
+    }),
+    startTime: z.enum(timesOfDay, {
+      errorMap: () => ({ message: "Start time is required" }),
+    }),
+    endTime: z.enum(timesOfDay, {
+      errorMap: () => ({ message: "End time is required" }),
+    }),
+  })
+  .refine(
+    (data) => {
+      const startIndex = timesOfDay.indexOf(data.startTime);
+      const endIndex = timesOfDay.indexOf(data.endTime);
+      return startIndex < endIndex;
+    },
+    {
+      message: "Start time must be before end time",
+    }
+  );
+
+export const dateOverrideSchema = z.object({
+  date: z.coerce.date(),
   startTime: z.enum(timesOfDay, {
     errorMap: () => ({ message: "Start time is required" }),
   }),
   endTime: z.enum(timesOfDay, {
     errorMap: () => ({ message: "End time is required" }),
   }),
-}).refine(
-  (data) => {
-    const startIndex = timesOfDay.indexOf(data.startTime);
-    const endIndex = timesOfDay.indexOf(data.endTime);
-    return startIndex < endIndex;
-  },
-  {
-    message: "Start time must be before end time",
-  }
-);
+  isAvailable: z.boolean(),
+});
