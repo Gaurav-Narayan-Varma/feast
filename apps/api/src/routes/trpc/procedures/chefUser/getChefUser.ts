@@ -1,12 +1,12 @@
-import { ChefUser } from "@prisma/client";
 import { db } from "@/db.js";
 import { chefUserProcedure } from "@/routes/trpc/trpcBase.js";
-import { ImageQuality } from "@/utils/s3.js";
-import { getImageSignedUrl } from "@/utils/s3.js";
+import { getImageSignedUrl, ImageQuality } from "@/utils/s3.js";
+import { ChefUser, RecurringAvailability } from "@prisma/client";
 
 type GetChefUserResponse = {
   chefUser: ChefUser & {
     profilePictureUrl: string | null;
+    availabilities: RecurringAvailability[];
   };
 };
 
@@ -20,6 +20,11 @@ export const getChefUser = chefUserProcedure.query<GetChefUserResponse>(
       ? await getImageSignedUrl(chefUser.profilePictureKey, ImageQuality.LARGE)
       : null;
 
-    return { chefUser: { ...chefUser, profilePictureUrl } };
+    const availabilities = await db.recurringAvailability.findMany({
+      where: { chefUserId: ctx.chefUserId },
+      orderBy: { startTime: "asc" },
+    });
+
+    return { chefUser: { ...chefUser, profilePictureUrl, availabilities } };
   }
 );

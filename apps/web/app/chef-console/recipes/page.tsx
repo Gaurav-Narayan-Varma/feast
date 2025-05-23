@@ -201,7 +201,24 @@ export default function ChefConsoleRecipesPage() {
           />
         )}
       </div>
-
+      {!isCreateMode &&
+        !isEditMode &&
+        listRecipes.data?.recipes.length === 0 && (
+          <Card>
+            <CardContent className="flex flex-col items-center justify-center p-9">
+              <div className="text-muted-foreground mb-4">
+                You don't have any recipes yet
+              </div>
+              <Button
+                onClick={() => {
+                  setIsCreateMode(true);
+                }}
+                label="Create Recipe"
+                leftIcon={<PlusIcon />}
+              />
+            </CardContent>
+          </Card>
+        )}
       {/* Recipe Grid */}
       {!isCreateMode && !isEditMode && listRecipes.data && (
         <RecipeGrid

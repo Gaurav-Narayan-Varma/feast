@@ -50,7 +50,7 @@ export default function ChefConsoleMenusPage() {
                 <Card>
                   <CardContent className="flex flex-col items-center justify-center p-9">
                     <div className="text-muted-foreground mb-4">
-                      You don't have any recipes yet
+                      You don't have any menus yet
                     </div>
                     <Button
                       onClick={() => {

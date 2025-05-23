@@ -40,20 +40,21 @@ model ChefUser {
   updatedAt DateTime  @default(now()) @updatedAt
 
   // Chef specific fields
-  isIdVerified                Boolean        @default(false)
+  isIdVerified                Boolean                 @default(false)
   stripeVerificationSessionId String?
   stripeAccountId             String?
-  stripeOnboardingComplete    Boolean        @default(false)
+  stripeOnboardingComplete    Boolean                 @default(false)
   stripeVerificationReportId  String?
   legalName                   String?
   form1099DocumentKey         String?
-  form1099Status              Form1099Status @default(NotStarted)
-  isApproved                  Boolean        @default(false)
+  form1099Status              Form1099Status          @default(NotStarted)
+  isApproved                  Boolean                 @default(false)
   recipes                     Recipe[]
   menus                       Menu[]
   bio                         String?
-  cuisines                    String[]       @default([])
+  cuisines                    String[]                @default([])
   profilePictureKey           String?
+  recurringAvailabilities     RecurringAvailability[]
 }
 
 model Session {
@@ -91,4 +92,15 @@ model Menu {
   chefUserId  String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model RecurringAvailability {
+  id         String   @id
+  chefUser   ChefUser @relation(fields: [chefUserId], references: [id])
+  chefUserId String
+  dayOfWeek  String
+  startTime  DateTime
+  endTime    DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }

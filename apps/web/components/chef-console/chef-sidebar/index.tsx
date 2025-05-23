@@ -12,7 +12,6 @@ import {
 import {
   BarChart2,
   BookOpen,
-  Calendar,
   FileText,
   HelpCircle,
   LogOut,
@@ -53,24 +52,20 @@ export default function ChefSidebar({ isAdmin }: { isAdmin: boolean }) {
       icon: BookOpen,
     },
     {
-      title: "My Availability",
-      path: `${basePath}/availability`,
-      icon: Calendar,
-    },
-    {
       title: "My Profile",
       path: `${basePath}/profile`,
       icon: User,
+    },
+
+    {
+      title: "Settings",
+      path: `${basePath}/settings`,
+      icon: Settings,
     },
     {
       title: "Q&A",
       path: `${basePath}/qa`,
       icon: HelpCircle,
-    },
-    {
-      title: "Settings",
-      path: `${basePath}/settings`,
-      icon: Settings,
     },
     ...(isAdmin
       ? [

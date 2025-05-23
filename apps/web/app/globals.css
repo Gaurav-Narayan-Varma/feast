@@ -187,3 +187,18 @@ input:-internal-autofill-selected {
  .section-title {
   @apply text-2xl font-bold;
  }
+
+ /* Scrollbar Styling */
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-border);
+}

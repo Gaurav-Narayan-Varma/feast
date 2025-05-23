@@ -62,7 +62,7 @@ export default function ChefOnboardingAlert() {
       label: "Platform approval",
       path: "/chef-console/settings",
       tooltip:
-        "After finishing all other remaining tasks, the Feast team will review your profile and approve you to display your profile on the platform.",
+        "Once finished with all the tasks, the Feast Team will review your profile for approval. Once approved, your profile will be displayed on the marketplace. Feel free to reach out to us at feast-team@joinfeastco.com if you have any questions.",
     },
   };
 

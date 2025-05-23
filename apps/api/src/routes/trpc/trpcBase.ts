@@ -1,12 +1,47 @@
-import { initTRPC, TRPCError } from "@trpc/server";
-import { parse, serialize, CookieSerializeOptions } from "cookie";
-import type { IncomingMessage, ServerResponse } from "http";
 import { MAX_COOKIE_AGE } from "@/constants.js";
 import { db } from "@/db.js";
 import { logoutChefUser } from "@/utils/authUtils.js";
 import { Cookie } from "@feast/shared";
+import { initTRPC, TRPCError } from "@trpc/server";
+import { CookieSerializeOptions, parse, serialize } from "cookie";
+import type { IncomingMessage, ServerResponse } from "http";
+import { Context } from "vm";
+import { ZodError } from "zod";
 
-const t = initTRPC.create();
+/**
+ * Custom TRPC error formatter for zod errors
+ *
+ * This is a custom error formatter that formats the error message so that
+ * the error message can be accessed in the front end the same way that
+ * a regular error message is.
+ */
+export const t = initTRPC.context<Context>().create({
+  errorFormatter(opts) {
+    const { shape, error } = opts;
+    if (error.code === "BAD_REQUEST" && error.cause instanceof ZodError) {
+      /**
+       * Get the first error message from the ZodError
+       */
+      const firstError = error.cause.errors[0];
+      return {
+        ...shape,
+        message: firstError?.message || "Validation error",
+        data: {
+          ...shape.data,
+          zodError: error.cause.flatten(),
+        },
+      };
+    }
+
+    return {
+      ...shape,
+      data: {
+        ...shape.data,
+        zodError: null,
+      },
+    };
+  },
+});
 
 type SetCookieOptions = CookieSerializeOptions & {
   /**
