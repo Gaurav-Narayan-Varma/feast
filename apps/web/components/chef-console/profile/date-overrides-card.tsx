@@ -72,6 +72,16 @@ export function DateOverridesCard({
     },
   });
 
+  const deleteDateOverride = trpc.availability.deleteDateOverride.useMutation({
+    onSuccess: () => {
+      utils.chefUser.getChefUser.invalidate();
+      toast.success("Date override deleted");
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+
   return (
     <Card>
       <CardHeader>
@@ -239,9 +249,9 @@ export function DateOverridesCard({
                         size="sm"
                         leftIcon={<Trash className="text-red-500" />}
                         onClick={() => {
-                          //   deleteRecurringAvailability.mutate({
-                          //     recurringAvailabilityId: availability.id,
-                          //   });
+                          deleteDateOverride.mutate({
+                            dateOverrideId: dateOverride.id,
+                          });
                         }}
                       />
                     </Card>
