@@ -227,3 +227,30 @@ export async function sendBookingPaidChefEmail({
       View booking details: ${bookingLink}`,
   });
 }
+
+export async function sendResetPasswordEmail({
+  email,
+  resetPasswordToken,
+}: {
+  email: string;
+  resetPasswordToken: string;
+}) {
+  const resetPasswordLink = `${process.env.FEAST_WEB_URL}/auth/reset-password?token=${resetPasswordToken}&email=${email}`;
+
+  const html = `
+      <p>Hello,</p>
+      <p>You have requested to reset your password. Please click the link below to reset your password.</p>
+      <p><a href="${resetPasswordLink}">Reset password</a></p>
+    `;
+
+  await sendEmail({
+    to: email,
+    subject: "Reset your password",
+    html,
+    text: `Hello,
+    
+      You have requested to reset your password. Please click the link below to reset your password.
+
+      Reset password: ${resetPasswordLink}`,
+  });
+}

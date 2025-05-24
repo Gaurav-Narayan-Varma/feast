@@ -6,16 +6,18 @@ import { listChefUsers } from "./procedures/admin/listChefUsers.js";
 import { login } from "./procedures/auth/login.js";
 import { logout } from "./procedures/auth/logout.js";
 import { registerUser } from "./procedures/auth/registerUser.js";
+import { requestPasswordReset } from "./procedures/auth/requestPasswordReset.js";
+import { resetPassword } from "./procedures/auth/resetPassword.js";
 import { verifyEmail } from "./procedures/auth/verifyEmail.js";
 import { addDateOverride } from "./procedures/availability/addDateOverride.js";
 import { addRecurringAvailability } from "./procedures/availability/addRecurringAvailability.js";
 import { deleteDateOverride } from "./procedures/availability/deleteDateOverride.js";
 import { deleteRecurringAvailability } from "./procedures/availability/deleteRecurringAvailability.js";
+import { confirmBookingPayment } from "./procedures/booking/confirmBookingPayment.js";
 import { createBooking } from "./procedures/booking/createBooking.js";
 import { createCheckoutSession } from "./procedures/booking/createCheckoutSession.js";
 import { getBooking } from "./procedures/booking/getBooking.js";
 import { respondToBooking } from "./procedures/booking/respondToBooking.js";
-import { confirmBookingPayment } from "./procedures/booking/confirmBookingPayment.js";
 import { getChefUser } from "./procedures/chefUser/getChefUser.js";
 import { getChefUserPublic } from "./procedures/chefUser/getChefUserPublic.js";
 import { listChefUsersPublic } from "./procedures/chefUser/listChefUsersPublic.js";
@@ -43,6 +45,8 @@ export const appRouter = trpcRouter({
     verifyEmail,
     login,
     logout,
+    requestPasswordReset,
+    resetPassword,
   }),
   admin: trpcRouter({
     listChefUsers,

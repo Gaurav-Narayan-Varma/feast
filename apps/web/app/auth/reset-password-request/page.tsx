@@ -7,43 +7,20 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { AlertCircle, ArrowLeftIcon } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import React, { useRef, useState } from "react";
-import { toast } from "react-hot-toast";
+import { useState } from "react";
+import toast from "react-hot-toast";
 
-export default function ChefLogin() {
+export default function ResetPasswordRequest() {
   const [error, setError] = useState<string | null>(null);
-  const emailRef = useRef<HTMLInputElement>(null);
-  const passwordRef = useRef<HTMLInputElement>(null);
-  const router = useRouter();
-  /**
-   * We manually track loading state instead of using React Query's isPending
-   * because we want the button to remain in loading state during the
-   * post-mutation navigation delay.
-   */
-  const [isLoading, setIsLoading] = useState(false);
 
-  const login = trpc.auth.login.useMutation({
+  const requestPasswordReset = trpc.auth.requestPasswordReset.useMutation({
     onSuccess: () => {
-      toast.success("Login successful! Welcome back");
-      router.push("/chef-console/dashboard");
+      toast.success("Reset password email sent");
     },
     onError: (error) => {
-      setError(error.message ?? "An error occurred");
-      setIsLoading(false);
+      toast.error(error.message);
     },
   });
-
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError(null);
-    setIsLoading(true);
-
-    await login.mutateAsync({
-      email: emailRef.current?.value || "",
-      password: passwordRef.current?.value || "",
-    });
-  };
 
   return (
     <div className="flex min-h-screen bg-gradient-to-br from-ds-chef-50 to-ds-chef-100 relative">
@@ -53,9 +30,11 @@ export default function ChefLogin() {
       <div className="m-auto w-full max-w-md p-8 rounded-xl bg-white shadow-lg">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-display font-bold text-ds-chef-800">
-            Chef Login
+            Reset Password
           </h1>
-          <p className="text-ds-chef-600 mt-2">Welcome back to Feast</p>
+          <p className="text-ds-chef-600 mt-2">
+            Enter your email to reset your password
+          </p>
         </div>
 
         {error && (
@@ -67,7 +46,17 @@ export default function ChefLogin() {
           </Alert>
         )}
 
-        <form className="space-y-6" onSubmit={handleLogin}>
+        <form
+          className="space-y-6"
+          onSubmit={(e: React.FormEvent) => {
+            e.preventDefault();
+
+            const form = e.target as HTMLFormElement;
+            const email = form.email.value;
+
+            requestPasswordReset.mutate({ email });
+          }}
+        >
           <div className="space-y-2">
             <Label htmlFor="email" className="text-ds-chef-700">
               Email
@@ -77,29 +66,6 @@ export default function ChefLogin() {
               id="email"
               name="email"
               placeholder="your@email.com"
-              ref={emailRef}
-              className="w-full"
-              required
-            />
-          </div>
-
-          <div className="space-y-2">
-            <div className="flex justify-between items-center">
-              <Label htmlFor="password" className="text-chef-700">
-                Password
-              </Label>
-              <Link
-                href="/auth/reset-password-request"
-                className="text-sm text-ds-chef-600 hover:text-ds-chef-800 hover:underline"
-              >
-                Forgot password?
-              </Link>
-            </div>
-            <Input
-              type="password"
-              id="password"
-              name="password"
-              ref={passwordRef}
               className="w-full"
               required
             />
@@ -108,8 +74,8 @@ export default function ChefLogin() {
           <Button
             type="submit"
             className="w-full bg-ds-chef-700 hover:bg-ds-chef-800 text-white"
-            label="Login"
-            isLoading={isLoading}
+            label="Reset Password"
+            isLoading={requestPasswordReset.isPending}
           />
         </form>
 

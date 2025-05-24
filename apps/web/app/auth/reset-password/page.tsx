@@ -1,5 +1,4 @@
 "use client";
-
 import { trpc } from "@/app/_trpc/client";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -7,43 +6,32 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { AlertCircle, ArrowLeftIcon } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import React, { useRef, useState } from "react";
-import { toast } from "react-hot-toast";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
+import toast from "react-hot-toast";
+import { z } from "zod";
 
-export default function ChefLogin() {
+const passwordSchema = z.object({
+  password: z.string().min(8).max(100),
+  confirmPassword: z.string().min(8).max(100),
+});
+
+export default function ResetPassword() {
   const [error, setError] = useState<string | null>(null);
-  const emailRef = useRef<HTMLInputElement>(null);
-  const passwordRef = useRef<HTMLInputElement>(null);
+  const searchParams = useSearchParams();
+  const token = searchParams.get("token");
+  const email = searchParams.get("email");
   const router = useRouter();
-  /**
-   * We manually track loading state instead of using React Query's isPending
-   * because we want the button to remain in loading state during the
-   * post-mutation navigation delay.
-   */
-  const [isLoading, setIsLoading] = useState(false);
-
-  const login = trpc.auth.login.useMutation({
+  
+  const resetPassword = trpc.auth.resetPassword.useMutation({
     onSuccess: () => {
-      toast.success("Login successful! Welcome back");
-      router.push("/chef-console/dashboard");
+      toast.success("Password reset successfully!");
+      router.push("/auth/chef-login");
     },
     onError: (error) => {
-      setError(error.message ?? "An error occurred");
-      setIsLoading(false);
+      toast.error(error.message);
     },
   });
-
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError(null);
-    setIsLoading(true);
-
-    await login.mutateAsync({
-      email: emailRef.current?.value || "",
-      password: passwordRef.current?.value || "",
-    });
-  };
 
   return (
     <div className="flex min-h-screen bg-gradient-to-br from-ds-chef-50 to-ds-chef-100 relative">
@@ -53,9 +41,9 @@ export default function ChefLogin() {
       <div className="m-auto w-full max-w-md p-8 rounded-xl bg-white shadow-lg">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-display font-bold text-ds-chef-800">
-            Chef Login
+            Reset Password
           </h1>
-          <p className="text-ds-chef-600 mt-2">Welcome back to Feast</p>
+          <p className="text-ds-chef-600 mt-2">Enter your new password below</p>
         </div>
 
         {error && (
@@ -67,39 +55,59 @@ export default function ChefLogin() {
           </Alert>
         )}
 
-        <form className="space-y-6" onSubmit={handleLogin}>
+        <form
+          className="space-y-6"
+          onSubmit={(e: React.FormEvent) => {
+            e.preventDefault();
+
+            const form = e.target as HTMLFormElement;
+            const password = form.password.value;
+            const confirmPassword = form.confirmPassword.value;
+
+            if (password !== confirmPassword) {
+              setError("Passwords do not match");
+              return;
+            }
+
+            const result = passwordSchema.safeParse({
+              password,
+              confirmPassword,
+            });
+
+            if (!result.success) {
+              setError(result.error.issues[0]?.message ?? "Invalid password");
+
+              return;
+            }
+
+            resetPassword.mutate({
+              email: email as string,
+              token: token as string,
+              password,
+            });
+          }}
+        >
           <div className="space-y-2">
-            <Label htmlFor="email" className="text-ds-chef-700">
-              Email
+            <Label htmlFor="password" className="text-ds-chef-700">
+              Password
             </Label>
             <Input
-              type="email"
-              id="email"
-              name="email"
-              placeholder="your@email.com"
-              ref={emailRef}
+              type="password"
+              id="password"
+              name="password"
               className="w-full"
               required
             />
           </div>
 
           <div className="space-y-2">
-            <div className="flex justify-between items-center">
-              <Label htmlFor="password" className="text-chef-700">
-                Password
-              </Label>
-              <Link
-                href="/auth/reset-password-request"
-                className="text-sm text-ds-chef-600 hover:text-ds-chef-800 hover:underline"
-              >
-                Forgot password?
-              </Link>
-            </div>
+            <Label htmlFor="confirmPassword" className="text-ds-chef-700">
+              Confirm Password
+            </Label>
             <Input
               type="password"
-              id="password"
-              name="password"
-              ref={passwordRef}
+              id="confirmPassword"
+              name="confirmPassword"
               className="w-full"
               required
             />
@@ -108,8 +116,8 @@ export default function ChefLogin() {
           <Button
             type="submit"
             className="w-full bg-ds-chef-700 hover:bg-ds-chef-800 text-white"
-            label="Login"
-            isLoading={isLoading}
+            label="Reset Password"
+            isLoading={resetPassword.isPending}
           />
         </form>
 

@@ -41,6 +41,8 @@ model ChefUser {
   emailVerified      Boolean   @default(false)
   verifyToken        String?
   verifyTokenExpires DateTime?
+  resetPasswordToken String?
+  resetPasswordTokenExpires DateTime?
 
   sessions  Session[]
   isAdmin   Boolean   @default(false)
