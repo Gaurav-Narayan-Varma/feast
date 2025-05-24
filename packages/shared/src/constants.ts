@@ -92,5 +92,4 @@ export const dateOverrideSchema = z.object({
   endTime: z.enum(timesOfDay, {
     errorMap: () => ({ message: "End time is required" }),
   }),
-  isAvailable: z.boolean(),
 });

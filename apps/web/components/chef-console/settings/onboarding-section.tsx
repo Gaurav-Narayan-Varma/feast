@@ -72,7 +72,12 @@ export default function OnboardingSection() {
 
   return (
     <>
-      <div className="section-title">Account Settings</div>
+      <div>
+        <div className="section-title">Account Settings</div>
+        <div className="text-sm text-muted-foreground">
+          Manage your account settings
+        </div>
+      </div>
       <Card>
         <CardHeader>
           <CardTitle>Onboarding Tasks</CardTitle>

@@ -1,5 +1,4 @@
 "use client";
-import { Instagram, Linkedin } from "lucide-react";
 
 export default function Footer() {
   return (
@@ -14,22 +13,6 @@ export default function Footer() {
               Connecting culinary artists with food enthusiasts for
               extraordinary dining experiences.
             </p>
-            <div className="flex gap-4">
-              <a
-                href="#"
-                className="text-white hover:text-ds-chef-400 transition-colors"
-              >
-                <Instagram size={20} />
-              </a>
-              <a
-                href="https://www.linkedin.com/company/joinfeastco/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-white hover:text-ds-chef-400 transition-colors"
-              >
-                <Linkedin size={20} />
-              </a>
-            </div>
           </div>
         </div>
 

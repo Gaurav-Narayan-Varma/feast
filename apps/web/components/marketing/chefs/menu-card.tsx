@@ -67,14 +67,14 @@ export default function MenuCard({
                   <Button
                     variant="outline"
                     className="py-0 hover:bg-ds-chef-100 text-ds-chef-500 px-2"
-                    onClick={() => onAddToCart(recipe)}
-                    leftIcon={<Plus size={12} />}
+                    onClick={() => onRemoveFromCart(recipe)}
+                    leftIcon={<Minus size={12} />}
                   />
                   <Button
                     variant="outline"
                     className="py-0 hover:bg-ds-chef-100 text-ds-chef-500 px-2"
-                    onClick={() => onRemoveFromCart(recipe)}
-                    leftIcon={<Minus size={12} />}
+                    onClick={() => onAddToCart(recipe)}
+                    leftIcon={<Plus size={12} />}
                   />
                 </div>
               </div>

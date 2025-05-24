@@ -1,6 +1,5 @@
 "use client";
 import { trpc } from "@/app/_trpc/client";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -18,11 +17,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { AppRouter } from "@feast/api";
 import { dateOverrideSchema, timesOfDay } from "@feast/shared";
 import { inferProcedureOutput } from "@trpc/server";
 import { format } from "date-fns";
-import { Check, Plus, Trash, X } from "lucide-react";
+import { Check, Info, Plus, Trash, X } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
@@ -86,8 +91,28 @@ export function DateOverridesCard({
     <Card>
       <CardHeader>
         <CardTitle>Date Overrides</CardTitle>
-        <CardDescription>
-          Override your availability for specific dates
+        <CardDescription className="flex flex-row gap-1 items-center">
+          Set custom availability for specific dates. Note: your regular
+          recurring schedule for the date you add override will not apply
+          <TooltipProvider delayDuration={100}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Info className="h-4 w-4 text-muted-foreground cursor-help stroke-[1.5]" />
+              </TooltipTrigger>
+              <TooltipContent className="max-w-[300px] p-3 text-xs">
+                <p>
+                  For example, if you have a recurring schedule of 9am-5pm on
+                  Wednesdays, and you create an override for Wednesday on
+                  January 1st, 2025 from 7pm-9pm, your only availability for
+                  that date will be 7pm-9pm.
+                  <br />
+                  <br />
+                  To retain 9am-5pm as well as the 7pm-9pm override, you would
+                  need to add the override for 2025-01-01 from 9am-5pm as well.
+                </p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -165,27 +190,6 @@ export function DateOverridesCard({
                     </SelectContent>
                   </Select>
                 </div>
-                <div className="flex-1">
-                  <Select
-                    value={
-                      dateOverrideForm.isAvailable ? "Available" : "Unavailable"
-                    }
-                    onValueChange={(value: "Available" | "Unavailable") =>
-                      setDateOverrideForm((current) => ({
-                        ...current,
-                        isAvailable: value === "Available",
-                      }))
-                    }
-                  >
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select availability" />
-                    </SelectTrigger>
-                    <SelectContent className="w-fit">
-                      <SelectItem value="Available">Available</SelectItem>
-                      <SelectItem value="Unavailable">Unavailable</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
                 <Button
                   variant="outline"
                   className="p-2 "
@@ -195,7 +199,6 @@ export function DateOverridesCard({
                       date: dateOverrideForm.selectedDate,
                       startTime: dateOverrideForm.startTime,
                       endTime: dateOverrideForm.endTime,
-                      isAvailable: dateOverrideForm.isAvailable,
                     });
 
                     if (!result.success) {
@@ -217,9 +220,14 @@ export function DateOverridesCard({
                 />
               </div>
             )}
-            {dateOverrides.filter(a => a.date.toDateString() === dateOverrideForm.selectedDate.toDateString()).length === 0 && (
+            {dateOverrides.filter(
+              (a) =>
+                a.date.toDateString() ===
+                dateOverrideForm.selectedDate.toDateString()
+            ).length === 0 && (
               <div className="text-muted-foreground h-full flex items-center justify-center">
-                No date overrides set for {dateOverrideForm.selectedDate.toLocaleDateString()}
+                No date overrides set for{" "}
+                {dateOverrideForm.selectedDate.toLocaleDateString()}
               </div>
             )}
             {/* Recurring availability list */}
@@ -239,15 +247,6 @@ export function DateOverridesCard({
                           {format(dateOverride.startTime, "h:mm a")} -{" "}
                           {format(dateOverride.endTime, "h:mm a")}
                         </div>
-                        <Badge
-                          variant={
-                            dateOverride.isAvailable ? "outline" : "secondary"
-                          }
-                        >
-                          {dateOverride.isAvailable
-                            ? "Available"
-                            : "Unavailable"}
-                        </Badge>
                       </div>
                       <Button
                         variant="ghost"

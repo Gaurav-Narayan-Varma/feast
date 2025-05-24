@@ -38,8 +38,12 @@ export default function ChefConsoleAdminPanelPage() {
     
   return (
     <div className="space-y-6">
-      <div className="section-title">Admin Panel</div>
-
+      <div>
+        <div className="section-title">Admin Panel</div>
+        <div className="text-sm text-muted-foreground">
+          Track and approve chef users
+        </div>
+      </div>
       <div className="rounded-md border">
         <Table>
           <TableHeader>

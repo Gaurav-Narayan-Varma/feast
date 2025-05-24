@@ -23,6 +23,14 @@ enum Form1099Status {
   Approved
 }
 
+enum PaymentStatus {
+  Pending
+  Paid
+  Failed
+  Refunding
+  Refunded
+}
+
 model ChefUser {
   id                 String    @id
   email              String    @unique
@@ -56,6 +64,7 @@ model ChefUser {
   profilePictureKey           String?
   recurringAvailabilities     RecurringAvailability[]
   dateOverrides               DateOverride[]
+  bookings                    Booking[]
 }
 
 model Session {
@@ -107,13 +116,33 @@ model RecurringAvailability {
 }
 
 model DateOverride {
-  id          String   @id
-  chefUser    ChefUser @relation(fields: [chefUserId], references: [id])
-  chefUserId  String
-  date        DateTime
-  startTime   DateTime
-  endTime     DateTime
-  isAvailable Boolean
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id         String   @id
+  chefUser   ChefUser @relation(fields: [chefUserId], references: [id])
+  chefUserId String
+  date       DateTime
+  startTime  DateTime
+  endTime    DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Booking {
+  id                      String         @id
+  totalAmount             Int
+  paymentStatus           PaymentStatus?
+  /// [BookingItem]
+  items                   Json[]
+  stripeSessionId         String?        @unique
+  appointmentAt           DateTime
+  timeCustomerRequestedAt DateTime
+  timeChefAcceptedAt      DateTime?
+  timeChefRejectedAt      DateTime?
+  timeCustomerPaidAt      DateTime?
+  timeBookingCompletedAt  DateTime?
+  customerEmail           String
+
+  chef       ChefUser @relation(fields: [chefUserId], references: [id])
+  chefUserId String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }

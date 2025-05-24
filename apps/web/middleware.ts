@@ -1,6 +1,6 @@
+import { Cookie } from "@feast/shared";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import { Cookie } from "@feast/shared";
 
 export function middleware(request: NextRequest) {
   const sessionId = request.cookies.get(Cookie.SessionId);
@@ -15,7 +15,7 @@ export function middleware(request: NextRequest) {
   }
 
   /**
-   * Redirect to the dashboard if user doesn't specify nav item
+   * Redirect if user doesn't specify nav item
    */
   if (
     request.nextUrl.pathname === "/chef-console" ||
@@ -26,8 +26,7 @@ export function middleware(request: NextRequest) {
   }
 
   /**
-   * If user with session_id cookie tries to access /auth routes,
-   * redirect to /chef-console/dashboard
+   * If user with session_id cookie tries to access /auth routes, redirect them
    */
   if (request.nextUrl.pathname.startsWith("/auth") && !!sessionId) {
     const dashboardUrl = new URL("/chef-console/dashboard", request.url);

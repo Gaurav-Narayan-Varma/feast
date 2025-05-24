@@ -1,13 +1,14 @@
 import { db } from "@/db.js";
 import { chefUserProcedure } from "@/routes/trpc/trpcBase.js";
 import { getImageSignedUrl, ImageQuality } from "@/utils/s3.js";
-import { ChefUser, DateOverride, Menu, RecurringAvailability } from "@prisma/client";
+import { ChefUser, DateOverride, Menu, RecurringAvailability, Booking } from "@prisma/client";
 
 type GetChefUserResponse = {
   chefUser: ChefUser & {
     profilePictureUrl: string | null;
     availabilities: RecurringAvailability[];
     dateOverrides: DateOverride[];
+    bookings: Booking[];
   };
 };
 
@@ -15,6 +16,9 @@ export const getChefUser = chefUserProcedure.query<GetChefUserResponse>(
   async ({ ctx }) => {
     const chefUser = await db.chefUser.findUniqueOrThrow({
       where: { id: ctx.chefUserId },
+      include: {
+        bookings: true,
+      },
     });
 
     const profilePictureUrl = chefUser.profilePictureKey

@@ -178,17 +178,17 @@ input:-internal-autofill-selected {
 /**
  * When user selects text in an input field that is autocompleted
  */
- input:-webkit-autofill::selection,
- input:-webkit-autofill:focus::selection,
- input:-internal-autofill-selected::selection {
-    background-color: #000000 !important;
- }
+input:-webkit-autofill::selection,
+input:-webkit-autofill:focus::selection,
+input:-internal-autofill-selected::selection {
+  background-color: #000000 !important;
+}
 
- .section-title {
+.section-title {
   @apply text-2xl font-bold;
- }
+}
 
- /* Scrollbar Styling */
+/* Scrollbar Styling */
 
 ::-webkit-scrollbar-track {
   background: transparent;
@@ -201,4 +201,28 @@ input:-internal-autofill-selected {
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-border);
+}
+
+.shimmer-text {
+  background-clip: text;
+  color: transparent;
+  background-image: linear-gradient(110deg, #000 45%, #e2533f 55%, #000);
+  background-size: 200% 100%;
+  animation: text-shimmer 8s ease-in-out infinite;
+}
+
+@keyframes text-shimmer {
+  0% {
+    background-position: 100%;
+  }
+  45% {
+    background-position: 0;
+  }
+  /* Pause at the end position */
+  55% {
+    background-position: 0;
+  }
+  100% {
+    background-position: 100%;
+  }
 }

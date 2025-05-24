@@ -163,8 +163,13 @@ export default function ChefConsoleRecipesPage() {
 
   return (
     <div className="flex flex-col gap-6 w-full max-w-[800px]">
-      <div className="flex justify-between w-full">
-        <div className="section-title">My Recipes</div>
+      <div className="flex justify-between w-full items-center">
+        <div>
+          <div className="section-title">My Menus</div>
+          <div className="text-sm text-muted-foreground">
+            Craft your individual recipes
+          </div>
+        </div>
         {isCreateMode || isEditMode ? (
           <Button
             label="Back to Recipes"
@@ -285,7 +290,7 @@ export default function ChefConsoleRecipesPage() {
               {/* Cuisines */}
               <FilterableBadgeList
                 label="Cuisines"
-                selectedItems={recipe.cuisines}
+                selectedItems={recipe.cuisines as Cuisine[]}
                 onOpenSelector={() => setCuisineModalOpen(true)}
                 onRemoveItem={removeCuisine}
               />
@@ -293,7 +298,7 @@ export default function ChefConsoleRecipesPage() {
               {/* Dietary Tags */}
               <FilterableBadgeList
                 label="Dietary Tags"
-                selectedItems={recipe.dietaryTags}
+                selectedItems={recipe.dietaryTags as DietaryTags[]}
                 onOpenSelector={() => setDietaryTagsModalOpen(true)}
                 onRemoveItem={removeDietaryTag}
                 badgeClassName="flex items-center gap-1 bg-green-100 text-green-800 hover:bg-green-200"
@@ -303,7 +308,7 @@ export default function ChefConsoleRecipesPage() {
               {/* Allergens */}
               <FilterableBadgeList
                 label="Allergens"
-                selectedItems={recipe.foodAllergens}
+                selectedItems={recipe.foodAllergens as FoodAllergen[]}
                 onOpenSelector={() => setAllergenModalOpen(true)}
                 onRemoveItem={removeAllergen}
                 badgeClassName="flex items-center gap-1 bg-amber-100 text-amber-800 hover:bg-amber-200"
@@ -351,17 +356,17 @@ export default function ChefConsoleRecipesPage() {
         cuisineModalOpen={cuisineModalOpen}
         setCuisineModalOpen={setCuisineModalOpen}
         availableCuisines={availableCuisines}
-        selectedCuisines={recipe.cuisines}
+        selectedCuisines={recipe.cuisines as Cuisine[]}
         handleCuisineSelection={handleCuisineSelection}
         dietaryTagsModalOpen={dietaryTagsModalOpen}
         setDietaryTagsModalOpen={setDietaryTagsModalOpen}
         availableDietaryTags={availableDietaryTags}
-        selectedDietaryTags={recipe.dietaryTags}
+        selectedDietaryTags={recipe.dietaryTags as DietaryTags[]}
         handleDietaryTagsSelection={handleDietaryTagsSelection}
         allergenModalOpen={allergenModalOpen}
         setAllergenModalOpen={setAllergenModalOpen}
         availableAllergens={availableAllergens}
-        selectedAllergens={recipe.foodAllergens}
+        selectedAllergens={recipe.foodAllergens as FoodAllergen[]}
         handleAllergenSelection={handleAllergenSelection}
       />
     </div>

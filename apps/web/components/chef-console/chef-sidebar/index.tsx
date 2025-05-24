@@ -55,7 +55,6 @@ export default function ChefSidebar({ isAdmin }: { isAdmin: boolean }) {
       path: `${basePath}/profile`,
       icon: User,
     },
-
     {
       title: "Settings",
       path: `${basePath}/settings`,

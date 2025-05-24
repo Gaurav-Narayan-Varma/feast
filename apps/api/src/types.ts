@@ -8,6 +8,15 @@ declare global {
       unit: string;
       preparation: string;
     };
+
+    type BookingItem = {
+      recipe: {
+        id: string;
+        name: string;
+        price: number;
+      };
+      quantity: number;
+    };
   }
 }
 

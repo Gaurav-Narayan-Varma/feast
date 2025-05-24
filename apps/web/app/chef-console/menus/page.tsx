@@ -18,8 +18,11 @@ export default function ChefConsoleMenusPage() {
 
   return (
     <div className="flex flex-col gap-6 h-full w-full max-w-[800px]">
-      <div className="flex justify-between">
-        <div className="section-title">My Menus</div>
+      <div className="flex justify-between items-center">
+        <div>
+          <div className="section-title">My Menus</div>
+          <div className="text-sm text-muted-foreground">Manage your dishes and menus</div>
+        </div>
         <Button
           leftIcon={
             isCreateMode || isEditMode ? <ArrowLeftIcon /> : <PlusIcon />

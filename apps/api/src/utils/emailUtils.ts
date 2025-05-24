@@ -84,3 +84,146 @@ export async function sendVerificationEmail({
       ${verificationLink}`,
   });
 }
+
+export async function sendBookingCreatedCustomerEmail({
+  email,
+  bookingId,
+  chefName,
+}: {
+  email: string;
+  bookingId: string;
+  chefName: string;
+}) {
+  const bookingLink = `${process.env.FEAST_WEB_URL}/booking/${bookingId}`;
+
+  const html = `
+      <p>Hello,</p>
+      <p>Thank you for requesting a booking with Chef ${chefName}! Your booking is pending chef approval. Once approved, we will notify you and you'll be able to complete your payment through the booking link below.</p>
+      <p><a href="${bookingLink}">Track your booking status</a></p>
+    `;
+
+  await sendEmail({
+    to: email,
+    subject: "Your booking request has been sent!",
+    html,
+    text: `Hello,
+  
+      Thank you for requesting a booking with Chef ${chefName}! Your booking is pending chef approval. Once approved, you'll be able to complete your payment through the booking link below.
+
+      Track your booking status here: ${bookingLink}`,
+  });
+}
+
+export async function sendBookingCreatedChefEmail({
+  email,
+  bookingId,
+}: {
+  email: string;
+  bookingId: string;
+}) {
+  const dashboardLink = `${process.env.FEAST_WEB_URL}/chef-console/dashboard`;
+  const bookingLink = `${process.env.FEAST_WEB_URL}/booking/${bookingId}`;
+
+  const html = `
+      <p>Hello,</p>
+      <p>You have a new booking request! The booking is pending your approval. Please click the link below to view the booking request and approve of it. Once approved, the customer will be notified and be able to complete their payment.</p>
+      <p><a href="${dashboardLink}">View booking request and approve here</a></p>
+      <p><a href="${bookingLink}">Track your booking status</a></p>
+    `;
+
+  await sendEmail({
+    to: email,
+    subject: "New booking request!",
+    html,
+    text: `Hello,
+  
+      You have a new booking request! The booking is pending your approval. Please click the link below to view the booking request and approve of it. Once approved, the customer will be able to complete their payment.
+
+      View booking request and approve here: ${bookingLink}`,
+  });
+}
+
+export async function sendBookingAcceptedCustomerEmail({
+  email,
+  bookingId,
+  chefName,
+}: {
+  email: string;
+  bookingId: string;
+  chefName: string;
+}) {
+  const bookingLink = `${process.env.FEAST_WEB_URL}/booking/${bookingId}`;
+
+  const html = `
+      <p>Hello,</p>
+      <p>Your booking with Chef ${chefName} has been accepted! Please click the link below to view the booking details and complete your payment.</p>
+      <p><a href="${bookingLink}">View booking details and complete payment</a></p>
+    `;
+
+  await sendEmail({
+    to: email,
+    subject: "Your booking has been accepted!",
+    html,
+    text: `Hello,
+    
+      Your booking with Chef ${chefName} has been accepted! Please click the link below to view the booking request and complete your payment.
+
+      View booking request and complete payment: ${bookingLink}`,
+  });
+}
+
+export async function sendBookingRejectedCustomerEmail({
+  email,
+  chefId,
+  chefName,
+}: {
+  email: string;
+  chefId: string;
+  chefName: string;
+}) {
+  const chefLink = `${process.env.FEAST_WEB_URL}/chefs/${chefId}`;
+
+  const html = `
+      <p>Hello,</p>
+      <p>Chef ${chefName} has declined your booking request. They may be unavailable for your requested date and time. You can click the link below to view Chef ${chefName}'s profile and request a different booking time.</p>
+      <p><a href="${chefLink}">View Chef ${chefName}'s profile</a></p>
+    `;
+
+  await sendEmail({
+    to: email,
+    subject: "Your booking has been rejected",
+    html,
+    text: `Hello,
+    
+      Chef ${chefName} has declined your booking request. They may be unavailable for your requested date and time. You can click the link below to view Chef ${chefName}'s profile and request a different booking time.
+
+      View Chef ${chefName}'s profile: ${chefLink}`,
+  });
+}
+
+export async function sendBookingPaidChefEmail({
+  email,
+  bookingId,
+}: {
+  email: string;
+  bookingId: string;
+}) {
+  const bookingLink = `${process.env.FEAST_WEB_URL}/booking/${bookingId}`;
+
+  const html = `
+      <p>Hello,</p>
+      <p>Your booking has been paid! The session is confirmed. Please click the link below to view the booking details.</p>
+      <p><a href="${bookingLink}">View booking details</a></p>
+    `;
+
+  await sendEmail({
+    to: email,
+    subject: "Your booking has been paid!",
+    html,
+    text: `Hello,
+    
+      Your booking has been paid! The session is confirmed. Please click the link below to view the booking details.
+
+      View booking details: ${bookingLink}`,
+  });
+}

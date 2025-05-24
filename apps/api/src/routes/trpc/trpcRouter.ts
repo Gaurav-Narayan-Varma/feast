@@ -11,6 +11,11 @@ import { addDateOverride } from "./procedures/availability/addDateOverride.js";
 import { addRecurringAvailability } from "./procedures/availability/addRecurringAvailability.js";
 import { deleteDateOverride } from "./procedures/availability/deleteDateOverride.js";
 import { deleteRecurringAvailability } from "./procedures/availability/deleteRecurringAvailability.js";
+import { createBooking } from "./procedures/booking/createBooking.js";
+import { createCheckoutSession } from "./procedures/booking/createCheckoutSession.js";
+import { getBooking } from "./procedures/booking/getBooking.js";
+import { respondToBooking } from "./procedures/booking/respondToBooking.js";
+import { confirmBookingPayment } from "./procedures/booking/confirmBookingPayment.js";
 import { getChefUser } from "./procedures/chefUser/getChefUser.js";
 import { getChefUserPublic } from "./procedures/chefUser/getChefUserPublic.js";
 import { listChefUsersPublic } from "./procedures/chefUser/listChefUsersPublic.js";
@@ -75,6 +80,13 @@ export const appRouter = trpcRouter({
     deleteRecurringAvailability,
     addDateOverride,
     deleteDateOverride,
+  }),
+  booking: trpcRouter({
+    createCheckoutSession,
+    createBooking,
+    getBooking,
+    respondToBooking,
+    confirmBookingPayment,
   }),
 });
 

@@ -22,7 +22,7 @@ const steps = [
     icon: <CreditCard className="w-10 h-10 text-chef-800" />,
     title: "Review & Pay",
     description:
-      "Secure payment is processed once you book your meal. We gaurantee satisfaction or your money back.",
+      "Customer confirms payment after chef accepts the booking request",
   },
 ];
 

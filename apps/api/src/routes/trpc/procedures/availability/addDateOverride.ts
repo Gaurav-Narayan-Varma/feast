@@ -8,7 +8,7 @@ import { formatInTimeZone } from "date-fns-tz";
 export const addDateOverride = chefUserProcedure
   .input(dateOverrideSchema)
   .mutation(async ({ ctx, input }) => {
-    const { date, startTime, endTime, isAvailable } = input;
+    const { date, startTime, endTime } = input;
 
     /**
      * Convert the start and end times to ISO 8601 format
@@ -72,7 +72,6 @@ export const addDateOverride = chefUserProcedure
         date,
         startTime: isoStartTime,
         endTime: isoEndTime,
-        isAvailable,
         chefUserId: ctx.chefUserId,
       },
     });

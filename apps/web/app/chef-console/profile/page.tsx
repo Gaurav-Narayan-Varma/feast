@@ -15,7 +15,12 @@ export default function ProfilePage() {
 
   return (
     <div className="flex flex-col gap-6 w-full max-w-[1200px] cursor-default">
-      <div className="section-title">My Profile</div>
+      <div>
+        <div className="section-title">My Profile</div>
+        <div className="text-sm text-muted-foreground">
+          Manage your profile information
+        </div>
+      </div>
 
       <div className="flex gap-6 w-full justify-center">
         <ProfileInformationCard chefUser={getChefUser.data.chefUser} />

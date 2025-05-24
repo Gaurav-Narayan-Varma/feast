@@ -43,8 +43,12 @@ export default function ChefConsoleQA() {
 
   return (
     <div className="w-full max-w-[800px] flex flex-col gap-6">
-      <div className="section-title">Help & Support</div>
-
+      <div>
+        <div className="section-title">Help & Support</div>
+        <div className="text-sm text-muted-foreground">
+          Find answers to common questions about using the chef platform
+        </div>
+      </div>
       <Card>
         <CardHeader>
           <CardTitle>Frequently Asked Questions</CardTitle>

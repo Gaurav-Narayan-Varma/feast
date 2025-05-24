@@ -2,14 +2,46 @@
 import { trpc } from "@/app/_trpc/client";
 import MenuCard from "@/components/marketing/chefs/menu-card";
 import NavigationHeader from "@/components/marketing/chefs/navigation-header";
+import Footer from "@/components/marketing/marketing-main/footer";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Recipe } from "@/lib/types";
 import { generateTimeSlots } from "@/lib/utils";
 import cx from "clsx";
-import { Loader2, MapPin } from "lucide-react";
+import { ArrowRight, Loader2, MapPin } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { use, useState } from "react";
+import { toast } from "react-hot-toast";
+import z from "zod";
+
+const bookingSchema = z.object({
+  cart: z
+    .array(
+      z.object({
+        recipe: z.object({
+          id: z.string(),
+          name: z.string(),
+          price: z.number(),
+        }),
+        quantity: z.number(),
+      })
+    )
+    .min(1, { message: "Please add at least one item to your cart" }),
+  selectedDate: z.date({
+    errorMap: () => ({ message: "Please select a date" }),
+  }),
+  selectedTime: z.date({
+    errorMap: () => ({ message: "Please select a time" }),
+  }),
+  email: z
+    .string({
+      errorMap: () => ({ message: "Please enter a valid email" }),
+    })
+    .email({ message: "Please enter a valid email" }),
+});
 
 export default function ChefProfile({
   params,
@@ -18,18 +50,30 @@ export default function ChefProfile({
 }) {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [selectedTime, setSelectedTime] = useState<Date | null>(null);
-  const resolvedParams = use(params);
-
-  const getChefUser = trpc.chefUser.getChefUserPublic.useQuery({
-    chefUserId: resolvedParams.id,
-  });
-
   const [cart, setCart] = useState<
     {
       recipe: Recipe;
       quantity: number;
     }[]
   >([]);
+  const [email, setEmail] = useState("");
+  const resolvedParams = use(params);
+  const router = useRouter();
+
+  const getChefUser = trpc.chefUser.getChefUserPublic.useQuery({
+    chefUserId: resolvedParams.id,
+  });
+
+  const createBooking = trpc.booking.createBooking.useMutation({
+    onSuccess: (data) => {
+      console.log("data.booking.id", data.booking.id);
+      router.push(`/booking/${data.booking.id}`);
+      toast.success("Booking created successfully! The chef has been notified.");
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
 
   return (
     <div>
@@ -99,8 +143,18 @@ export default function ChefProfile({
                   } else {
                     setCart([...cart, { recipe, quantity: 1 }]);
                   }
+
+                  toast.success("Added to cart");
                 }}
                 onRemoveFromCart={(recipe) => {
+                  const existingCartItem = cart.find(
+                    (item) => item.recipe.id === recipe.id
+                  );
+
+                  if (!existingCartItem) {
+                    return;
+                  }
+
                   setCart(
                     cart
                       .map((item) =>
@@ -113,103 +167,157 @@ export default function ChefProfile({
                       )
                       .filter((item) => item.quantity > 0)
                   );
+
+                  toast.success("Removed from cart");
                 }}
               />
             ))}
           </div>
         </div>
 
-        {/* Cart Section */}
-        <div className="px-[140px] py-9 bg-ds-chef-50">
-          <div className="text-2xl font-bold mb-4">Cart</div>
-          <div className="flex flex-col gap-4">
-            {cart.length === 0 && (
-              <div className="text-muted-foreground italic text-sm">
-                Your cart is empty
-              </div>
-            )}
-            {cart.map((item) => (
-              <div
-                key={item.recipe.id}
-                className="flex gap-2 text-muted-foreground"
-              >
-                <div>{item.recipe.name}</div>
-                <div>x{item.quantity}</div>
-                <div className="flex-1 border-b border-ds-chef-300 self-center border-dashed mx-3" />
-                <div>${item.recipe.price * item.quantity}</div>
-              </div>
-            ))}
-          </div>
-          <div className="border-t self-center mt-6" />
-          <div className="flex justify-between mt-4">
-            <div>Total</div>
+        <div className="flex gap-6 py-9 px-[140px]">
+          {/* Cart Section */}
+          <div className="w-1/2 justify-between flex flex-col">
             <div>
-              $
-              {cart.reduce(
-                (acc, item) => acc + item.recipe.price * item.quantity,
-                0
-              )}
+              <div className="text-2xl font-bold mb-1">Cart</div>
+              <div className="text-sm text-muted-foreground mb-4">
+                View a breakdown of your cart.
+              </div>
+            </div>
+            <div className="p-3">
+              <div className="flex flex-col gap-4">
+                {cart.length === 0 && (
+                  <div className="text-muted-foreground text-sm">
+                    Your cart is empty
+                  </div>
+                )}
+                {cart.map((item) => (
+                  <div
+                    key={item.recipe.id}
+                    className="flex gap-2 text-muted-foreground"
+                  >
+                    <div>{item.recipe.name}</div>
+                    <div>x{item.quantity}</div>
+                    <div className="flex-1 border-b border-ds-chef-300 self-center border-dashed mx-3" />
+                    <div>${item.recipe.price * item.quantity}</div>
+                  </div>
+                ))}
+              </div>
+              <div className="border-t self-center mt-5" />
+              <div className="flex justify-between mt-4">
+                <div>Total</div>
+                <div>
+                  $
+                  {cart.reduce(
+                    (acc, item) => acc + item.recipe.price * item.quantity,
+                    0
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Scheduling Section */}
+          <div className="w-1/2">
+            <div className="text-2xl font-bold mb-1">Scheduling</div>
+            <div className="text-sm text-muted-foreground mb-4">
+              Select a date and time to book a chef (~2 hours)
+            </div>
+            <div className="flex gap-6 h-[283.2px]">
+              <div className="w-1/2 flex justify-center">
+                <Calendar
+                  mode="single"
+                  selected={selectedDate}
+                  onSelect={(date) => {
+                    setSelectedDate(date ?? new Date());
+                    setSelectedTime(null);
+                  }}
+                  fromDate={new Date()}
+                />
+              </div>
+              <div className="w-1/2 flex flex-col gap-4 p-3">
+                <div className="text-sm font-medium">Availabilities</div>
+                {/* Availability slots */}
+                <ScrollArea className="overflow-y-auto">
+                  <div className="flex flex-col gap-2 pr-4">
+                    {generateTimeSlots({
+                      recurringAvailabilities:
+                        getChefUser.data?.chefUser.recurringAvailabilities ??
+                        [],
+                      dateOverrides:
+                        getChefUser.data?.chefUser.dateOverrides ?? [],
+                      selectedDate: selectedDate,
+                    }).map((slot) => (
+                      <Button
+                        key={slot.toISOString()}
+                        variant={
+                          selectedTime?.toISOString() === slot.toISOString()
+                            ? "default"
+                            : "outline"
+                        }
+                        className={cx("text-sm", {
+                          "text-white":
+                            selectedTime?.toISOString() === slot.toISOString(),
+                        })}
+                        label={slot.toLocaleTimeString([], {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                        onClick={() => setSelectedTime(slot)}
+                      />
+                    ))}
+                  </div>
+                </ScrollArea>
+              </div>
             </div>
           </div>
         </div>
+        {/* Request Booking Section */}
+        <div className="flex justify-center items-center gap-6 pb-10 px-[140px]">
+          <Label htmlFor="email">Email:</Label>
+          <Input
+            id="email"
+            placeholder="john@doe.com"
+            className="w-1/3"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <Button
+            className="w-1/3"
+            variant="default"
+            label="Request Booking"
+            isLoading={createBooking.isPending}
+            rightIcon={<ArrowRight />}
+            onClick={() => {
+              const result = bookingSchema.safeParse({
+                cart,
+                selectedDate,
+                selectedTime,
+                email,
+              });
 
-        {/* Scheduling Section */}
-        <div className="px-[140px] py-9">
-          <div className="text-2xl font-bold mb-1">Scheduling</div>
-          <div className="text-sm text-muted-foreground mb-4">
-            Select a date and time to book a chef. Appointments can typically
-            last up to 2 hours.
-          </div>
-          <div className="flex gap-6 h-[283.2px]">
-            <div className="w-1/2 flex justify-center">
-              <Calendar
-                mode="single"
-                selected={selectedDate}
-                onSelect={(date) => {
-                  setSelectedDate(date ?? new Date());
-                  setSelectedTime(null);
-                }}
-                fromDate={new Date()}
-              />
-            </div>
-            <div className="w-1/2 flex flex-col gap-4 p-3">
-              <div className="text-sm font-medium">
-                {selectedDate.toLocaleDateString()} Availabilities
-              </div>
-              {/* Availability slots */}
-              <ScrollArea className="overflow-y-auto">
-                <div className="flex flex-col gap-2 pr-4">
-                  {generateTimeSlots({
-                    recurringAvailability:
-                      getChefUser.data?.chefUser.recurringAvailabilities ?? [],
-                    dateOverride:
-                      getChefUser.data?.chefUser.dateOverrides ?? [],
-                    selectedDate: selectedDate,
-                  }).map((slot) => (
-                    <Button
-                      key={slot.toISOString()}
-                      variant={
-                        selectedTime?.toISOString() === slot.toISOString()
-                          ? "default"
-                          : "outline"
-                      }
-                      className={cx("text-sm text-muted-foreground", {
-                        "text-white":
-                          selectedTime?.toISOString() === slot.toISOString(),
-                      })}
-                      label={slot.toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
-                      onClick={() => setSelectedTime(slot)}
-                    />
-                  ))}
-                </div>
-              </ScrollArea>
-            </div>
-          </div>
+              if (!result.success) {
+                toast.error(result.error.issues[0]?.message ?? "Invalid date");
+                return;
+              }
+
+              createBooking.mutate({
+                chefUserId: getChefUser.data?.chefUser.id ?? "",
+                cart,
+                appointmentAt: new Date(
+                  selectedDate.getFullYear(),
+                  selectedDate.getMonth(),
+                  selectedDate.getDate(),
+                  selectedTime?.getHours() ?? 0,
+                  selectedTime?.getMinutes() ?? 0
+                ).toISOString(),
+                customerEmail: result.data.email,
+              });
+            }}
+          />
         </div>
       </div>
+      <Footer />
     </div>
   );
 }
