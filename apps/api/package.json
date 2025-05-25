@@ -9,7 +9,8 @@
     "build": "tsc -b && tsc-alias",
     "test": "echo \"Error: no test specified\" && exit 1",
     "predev": "docker compose up -d",
-    "dev": "concurrently \"nodemon --exec 'tsc -b && tsc-alias' -e ts --watch src\" \"tsx src/server.ts --swc --watch src\""
+    "dev": "concurrently \"nodemon --exec 'tsc -b && tsc-alias' -e ts --watch src\" \"tsx src/server.ts --swc --watch src\"",
+    "check-types": "tsc --noEmit"
   },
   "keywords": [],
   "author": "",
