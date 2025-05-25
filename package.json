@@ -5,7 +5,7 @@
     "build": "turbo run build",
     "build:shared": "cd apps/shared && npm run build",
     "build:api": "cd packages/shared && npm run build && cd ../../apps/api && npm run build",
-    "build:web": "cd packages/shared && npm run build && cd ../../apps/web && npm run build",
+    "build:web": "cd packages/shared && npm run build && cd ../../apps/api && npm run build && cd ../web && npm run build",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
