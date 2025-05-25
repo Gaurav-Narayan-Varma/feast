@@ -120,6 +120,7 @@ export const publicProcedure = t.procedure
         serialize(name, value, {
           secure: process.env.NODE_ENV === "production",
           domain: process.env.COOKIE_DOMAIN,
+          sameSite: "none",
           path: "/",
           ...(persistent ? { maxAge: MAX_COOKIE_AGE } : {}),
           ...defaultOptions,
