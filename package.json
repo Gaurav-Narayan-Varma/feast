@@ -13,7 +13,7 @@
     "prisma:migrate": "cd apps/api && npx prisma migrate dev",
     "prisma:reset": "cd apps/api && npx prisma migrate reset",
     "start:api": "cd apps/api && npm run start",
-    "start:web": "cd apps/web && npm run start"
+    "start:web": "cd apps/api && prisma migrate deploy && cd ../web && npm run start"
   },
   "devDependencies": {
     "prettier": "^3.5.3",
