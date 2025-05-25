@@ -118,7 +118,7 @@ export const publicProcedure = t.procedure
       res.appendHeader(
         "Set-Cookie",
         serialize(name, value, {
-          secure: process.env.NODE_ENV === "production",
+          secure: true,
           domain: process.env.COOKIE_DOMAIN,
           path: "/",
           ...(persistent ? { maxAge: MAX_COOKIE_AGE } : {}),
@@ -131,7 +131,7 @@ export const publicProcedure = t.procedure
       res.appendHeader(
         "Set-Cookie",
         serialize(name, "", {
-          secure: process.env.NODE_ENV === "production",
+          secure: true,
           domain: process.env.COOKIE_DOMAIN,
           path: "/",
           maxAge: 0,
