@@ -32,16 +32,16 @@ enum PaymentStatus {
 }
 
 model ChefUser {
-  id                 String    @id
-  email              String    @unique
-  password           String
-  name               String
-  zipCode            String
-  phoneNumber        String?
-  emailVerified      Boolean   @default(false)
-  verifyToken        String?
-  verifyTokenExpires DateTime?
-  resetPasswordToken String?
+  id                        String    @id
+  email                     String    @unique
+  password                  String
+  name                      String
+  zipCode                   String
+  phoneNumber               String?
+  emailVerified             Boolean   @default(false)
+  verifyToken               String?
+  verifyTokenExpires        DateTime?
+  resetPasswordToken        String?
   resetPasswordTokenExpires DateTime?
 
   sessions  Session[]
@@ -87,7 +87,7 @@ model Recipe {
   price         Int
   /// [Ingredient]
   ingredients   Json[]
-  chefUser      ChefUser @relation(fields: [chefUserId], references: [id])
+  chefUser      ChefUser @relation(fields: [chefUserId], references: [id], onDelete: Cascade)
   chefUserId    String
   menu          Menu?    @relation(fields: [menuId], references: [id])
   menuId        String?
@@ -100,7 +100,7 @@ model Menu {
   name        String
   description String
   recipes     Recipe[]
-  chefUser    ChefUser @relation(fields: [chefUserId], references: [id])
+  chefUser    ChefUser @relation(fields: [chefUserId], references: [id], onDelete: Cascade)
   chefUserId  String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -108,7 +108,7 @@ model Menu {
 
 model RecurringAvailability {
   id         String   @id
-  chefUser   ChefUser @relation(fields: [chefUserId], references: [id])
+  chefUser   ChefUser @relation(fields: [chefUserId], references: [id], onDelete: Cascade)
   chefUserId String
   dayOfWeek  String
   startTime  DateTime
@@ -119,7 +119,7 @@ model RecurringAvailability {
 
 model DateOverride {
   id         String   @id
-  chefUser   ChefUser @relation(fields: [chefUserId], references: [id])
+  chefUser   ChefUser @relation(fields: [chefUserId], references: [id], onDelete: Cascade)
   chefUserId String
   date       DateTime
   startTime  DateTime

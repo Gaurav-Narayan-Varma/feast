@@ -223,7 +223,7 @@ export default function BookingTabs({
                   key={booking.id}
                   className="flex flex-row justify-between px-5 items-center py-3"
                 >
-                  <div className="flex flex-row gap-3 items-center">
+                  <div className="flex flex-row gap-3 items-center justify-between flex-1">
                     <div className="text-sm">
                       {booking.appointmentAt &&
                         new Date(booking.appointmentAt)
