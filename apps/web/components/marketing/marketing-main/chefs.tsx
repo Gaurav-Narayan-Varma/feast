@@ -4,15 +4,28 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
 } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useRef } from "react";
 import ChefCard from "./chef-card";
-import { CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
 
 export default function Chefs() {
+  console.log("from Client");
+  console.log("from Client");
+  console.log("from Client");
+  console.log("from Client");
+  console.log("from Client");
+  console.log("from Client");
+  console.log("from Client");
+  console.log("from Client");
+  console.log("from Client");
+  console.log("from Client");
+  console.log("from Client");
+  console.log("from Client");
   const listChefUsers = trpc.chefUser.listChefUsersPublic.useQuery();
   const plugin = useRef(Autoplay({ delay: 2000, stopOnInteraction: true }));
 
