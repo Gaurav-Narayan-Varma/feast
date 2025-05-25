@@ -26,7 +26,7 @@ import {
 import { AppRouter } from "@feast/api";
 import { dateOverrideSchema, timesOfDay } from "@feast/shared";
 import { inferProcedureOutput } from "@trpc/server";
-import { format } from "date-fns";
+import { formatInTimeZone } from "date-fns-tz";
 import { Check, Info, Plus, Trash, X } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -244,8 +244,17 @@ export function DateOverridesCard({
                     >
                       <div className="flex flex-row gap-2 items-center">
                         <div className="text-sm">
-                          {format(dateOverride.startTime, "h:mm a")} -{" "}
-                          {format(dateOverride.endTime, "h:mm a")}
+                          {formatInTimeZone(
+                            new Date(dateOverride.startTime),
+                            "UTC",
+                            "h:mm a"
+                          )}{" "}
+                          -{" "}
+                          {formatInTimeZone(
+                            new Date(dateOverride.endTime),
+                            "UTC",
+                            "h:mm a"
+                          )}
                         </div>
                       </div>
                       <Button

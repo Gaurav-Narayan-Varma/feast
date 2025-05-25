@@ -23,7 +23,7 @@ import {
 } from "@feast/shared";
 import { type inferProcedureOutput } from "@trpc/server";
 import cx from "clsx";
-import { formatInTimeZone } from "date-fns-tz"; // Add this import at the top
+import { formatInTimeZone } from "date-fns-tz";
 import { Check, Plus, Trash, X } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
