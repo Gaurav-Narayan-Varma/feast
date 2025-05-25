@@ -13,16 +13,16 @@ export const addRecurringAvailability = chefUserProcedure
     /**
      * Convert the start and end times to ISO 8601 format
      */
-    const isoStartTime = formatInTimeZone(
-      parse(startTime, "h:mm a", new Date()),
-      "America/New_York",
-      "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"
-    );
-    const isoEndTime = formatInTimeZone(
-      parse(endTime, "h:mm a", new Date()),
-      "America/New_York",
-      "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"
-    );
+    // const isoStartTime = formatInTimeZone(
+    //   parse(startTime, "h:mm a", new Date()),
+    //   "America/New_York",
+    //   "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"
+    // );
+    // const isoEndTime = formatInTimeZone(
+    //   parse(endTime, "h:mm a", new Date()),
+    //   "America/New_York",
+    //   "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"
+    // );
 
     const overlappingAvailability = await db.recurringAvailability.findFirst({
       where: {
@@ -34,8 +34,8 @@ export const addRecurringAvailability = chefUserProcedure
              * New start time falls within existing window
              */
             AND: [
-              { startTime: { lte: isoStartTime } },
-              { endTime: { gt: isoStartTime } },
+              { startTime: { lte: parse(startTime, "h:mm a", new Date()) } },
+              { endTime: { gt: parse(startTime, "h:mm a", new Date()) } },
             ],
           },
           {
@@ -43,8 +43,8 @@ export const addRecurringAvailability = chefUserProcedure
              * New end time falls within existing window
              */
             AND: [
-              { startTime: { lt: isoEndTime } },
-              { endTime: { gte: isoEndTime } },
+              { startTime: { lt: parse(endTime, "h:mm a", new Date()) } },
+              { endTime: { gte: parse(endTime, "h:mm a", new Date()) } },
             ],
           },
           {
@@ -52,8 +52,8 @@ export const addRecurringAvailability = chefUserProcedure
              * New window completely encompasses existing window
              */
             AND: [
-              { startTime: { gte: isoStartTime } },
-              { endTime: { lte: isoEndTime } },
+              { startTime: { gte: parse(startTime, "h:mm a", new Date()) } },
+              { endTime: { lte: parse(endTime, "h:mm a", new Date()) } },
             ],
           },
         ],
@@ -70,8 +70,8 @@ export const addRecurringAvailability = chefUserProcedure
       data: {
         id: nid(),
         dayOfWeek,
-        startTime: isoStartTime,
-        endTime: isoEndTime,
+        startTime: parse(startTime, "h:mm a", new Date()),
+        endTime: parse(endTime, "h:mm a", new Date()),
         chefUserId: ctx.chefUserId,
       },
     });
