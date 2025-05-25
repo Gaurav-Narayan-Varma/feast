@@ -35,13 +35,16 @@ async function getChefUser() {
     redirect("/auth/chef-login");
   }
 
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/trpc/chefUser.getChefUser`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Cookie: `session_id=${sessionId.value}`,
-    },
-  });
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/trpc/chefUser.getChefUser`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Cookie: `session_id=${sessionId.value}`,
+      },
+    }
+  );
 
   if (!response.ok) {
     redirect("/auth/chef-login");
