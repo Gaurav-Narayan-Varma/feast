@@ -7,7 +7,7 @@
   "type": "module",
   "scripts": {
     "build": "prisma generate && tsc -b && tsc-alias",
-    "start": "node dist/server.js",
+    "start": "prisma migrate deploy && node dist/server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "predev": "docker compose up -d",
     "dev": "concurrently \"nodemon --exec 'tsc -b && tsc-alias' -e ts --watch src\" \"tsx src/server.ts --swc --watch src\"",
