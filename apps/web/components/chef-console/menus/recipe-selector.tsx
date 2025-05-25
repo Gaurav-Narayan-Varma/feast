@@ -9,12 +9,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Recipe } from "@/lib/types";
-import type {
-  Cuisine,
-  DietaryTags,
-  FoodAllergen,
-  PriceRange,
-} from "@feast/shared";
+import type { Cuisine, DietaryTags, FoodAllergen } from "@feast/shared";
 import { skipToken } from "@tanstack/react-query";
 import { Loader2, PlusIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -55,7 +50,7 @@ export default function RecipeSelector({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-3xl max-h-[80vh] flex flex-col">
+      <DialogContent className="max-w-3xl max-h-[80vh] flex flex-col lg:w-1/2 lg:h-1/2">
         <DialogHeader className="mb-2">
           <DialogTitle>Select Recipes</DialogTitle>
         </DialogHeader>
@@ -77,36 +72,37 @@ export default function RecipeSelector({
           )?.length === 0 ? (
           <EmptyRecipeState onOpenChange={onOpenChange} />
         ) : (
-          <RecipeGrid
-            recipes={
-              (menuId
-                ? listAvailableRecipes.data?.recipes.filter(
-                    (recipe) =>
-                      !menuRecipes.some(
-                        (menuRecipe) => menuRecipe.id === recipe.id
-                      )
-                  )
-                : listRecipes.data?.recipes.filter(
-                    (recipe) =>
-                      !menuRecipes.some(
-                        (menuRecipe) => menuRecipe.id === recipe.id
-                      )
-                  )
-              )?.map((recipe) => ({
-                ...recipe,
-                cuisines: recipe.cuisines as Cuisine[],
-                dietaryTags: recipe.dietaryTags as DietaryTags[],
-                foodAllergens: recipe.foodAllergens as FoodAllergen[],
-                priceRange: recipe.priceRange as PriceRange,
-              })) || []
-            }
-            onSelect={(recipe) => {
-              onSelectRecipe(recipe);
-            }}
-            onDeselect={(recipe) => {
-              onDeselectRecipe(recipe);
-            }}
-          />
+          <div className="flex-1 overflow-y-auto">
+            <RecipeGrid
+              recipes={
+                (menuId
+                  ? listAvailableRecipes.data?.recipes.filter(
+                      (recipe) =>
+                        !menuRecipes.some(
+                          (menuRecipe) => menuRecipe.id === recipe.id
+                        )
+                    )
+                  : listRecipes.data?.recipes.filter(
+                      (recipe) =>
+                        !menuRecipes.some(
+                          (menuRecipe) => menuRecipe.id === recipe.id
+                        )
+                    )
+                )?.map((recipe) => ({
+                  ...recipe,
+                  cuisines: recipe.cuisines as Cuisine[],
+                  dietaryTags: recipe.dietaryTags as DietaryTags[],
+                  foodAllergens: recipe.foodAllergens as FoodAllergen[],
+                })) || []
+              }
+              onSelect={(recipe) => {
+                onSelectRecipe(recipe);
+              }}
+              onDeselect={(recipe) => {
+                onDeselectRecipe(recipe);
+              }}
+            />
+          </div>
         )}
 
         <DialogFooter className="pt-4 border-t mt-2">

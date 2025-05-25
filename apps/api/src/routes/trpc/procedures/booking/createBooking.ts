@@ -21,6 +21,7 @@ const input = z.object({
   ),
   appointmentAt: z.string(),
   customerEmail: z.string().email(),
+  customerAddress: z.string(),
 });
 
 export const createBooking = publicProcedure
@@ -44,6 +45,7 @@ export const createBooking = publicProcedure
           (acc, item) => acc + item.recipe.price * item.quantity,
           0
         ),
+        customerAddress: input.customerAddress,
       },
     });
 

@@ -15,7 +15,7 @@ export default function Hero() {
       <div className="absolute inset-0 bg-gradient-to-b from-white/70 via-white/50 to-white/90 z-10" />
 
       <div className="max-w-7xl mx-auto relative z-20 text-center py-12 md:py-24">
-        <span className="inline-block py-1 px-3 bg-ds-chef-100 text-ds-chef-400 rounded-full text-sm font-medium mb-4 md:mb-6 font-[Inter]">
+        <span className="inline-block py-1 px-3 bg-ds-chef-100 text-ds-chef-600 border border-ds-chef-200 rounded-full text-sm font-medium mb-4 md:mb-6 font-[Inter]">
           A Personal Chef Marketplace
         </span>
 

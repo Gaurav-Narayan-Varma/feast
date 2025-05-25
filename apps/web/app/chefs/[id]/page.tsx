@@ -41,6 +41,9 @@ const bookingSchema = z.object({
       errorMap: () => ({ message: "Please enter a valid email" }),
     })
     .email({ message: "Please enter a valid email" }),
+  address: z.string({
+    errorMap: () => ({ message: "Please enter a valid address" }),
+  }),
 });
 
 export default function ChefProfile({
@@ -50,6 +53,7 @@ export default function ChefProfile({
 }) {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [selectedTime, setSelectedTime] = useState<Date | null>(null);
+  const [address, setAddress] = useState<string | null>(null);
   const [cart, setCart] = useState<
     {
       recipe: Recipe;
@@ -68,7 +72,9 @@ export default function ChefProfile({
     onSuccess: (data) => {
       console.log("data.booking.id", data.booking.id);
       router.push(`/booking/${data.booking.id}`);
-      toast.success("Booking created successfully! The chef has been notified.");
+      toast.success(
+        "Booking created successfully! The chef has been notified."
+      );
     },
     onError: (error) => {
       toast.error(error.message);
@@ -113,14 +119,14 @@ export default function ChefProfile({
         </div>
 
         {/* Menu Section */}
-        <div className="px-[140px] py-9">
+        <div className="px-[140px] pb-9 pt-14">
           <div className="mb-4">
             <div className="text-2xl font-bold mb-1">Menu Options</div>
             <div className="text-sm text-muted-foreground mb-4">
               Add items to your cart to create a custom menu.
             </div>
           </div>
-          <div className="flex gap-8">
+          <div className="gap-8 grid grid-cols-2">
             {getChefUser.data?.chefUser.menus.map((menu) => (
               <MenuCard
                 key={menu.id}
@@ -272,16 +278,31 @@ export default function ChefProfile({
             </div>
           </div>
         </div>
-        {/* Request Booking Section */}
+        {/* Customer Info Section */}
+        <div className="flex justify-center items-center gap-6 pb-10 px-[140px] lg:w-4/5 lg:mx-auto">
+          <div className="flex items-center gap-2 flex-1">
+            <Label htmlFor="email">Email:</Label>
+            <Input
+              id="email"
+              placeholder="john@doe.com"
+              className="w-full"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+          <div className="flex items-center gap-2 flex-1">
+            <Label htmlFor="address">Address:</Label>
+            <Input
+              id="address"
+              placeholder="123 Main St, Anytown, USA"
+              className="w-full"
+              value={address ?? ""}
+              onChange={(e) => setAddress(e.target.value)}
+            />
+          </div>
+        </div>
+        {/* Request Booking */}
         <div className="flex justify-center items-center gap-6 pb-10 px-[140px]">
-          <Label htmlFor="email">Email:</Label>
-          <Input
-            id="email"
-            placeholder="john@doe.com"
-            className="w-1/3"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
           <Button
             className="w-1/3"
             variant="default"
@@ -294,6 +315,7 @@ export default function ChefProfile({
                 selectedDate,
                 selectedTime,
                 email,
+                address,
               });
 
               if (!result.success) {
@@ -312,6 +334,7 @@ export default function ChefProfile({
                   selectedTime?.getMinutes() ?? 0
                 ).toISOString(),
                 customerEmail: result.data.email,
+                customerAddress: result.data.address,
               });
             }}
           />

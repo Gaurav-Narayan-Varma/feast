@@ -91,6 +91,7 @@ export default function ChefConsoleMenusPage() {
 
       {(isCreateMode || isEditMode) && (
         <MenuForm
+          isCreateMode={isCreateMode}
           setIsCreateMode={setIsCreateMode}
           setIsEditMode={setIsEditMode}
           selectedMenu={selectedMenu}

@@ -64,6 +64,7 @@ export default function BookingPage({
             items={getBooking.data?.booking.items}
             totalAmount={getBooking.data?.booking.totalAmount}
             appointmentAt={getBooking.data?.booking.appointmentAt}
+            customerAddress={getBooking.data?.booking.customerAddress ?? ""}
           />
           <div className="flex flex-col gap-4">
             <h2 className="font-bold">Tracker</h2>

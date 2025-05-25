@@ -142,6 +142,7 @@ model Booking {
   timeCustomerPaidAt      DateTime?
   timeBookingCompletedAt  DateTime?
   customerEmail           String
+  customerAddress         String?
 
   chef       ChefUser @relation(fields: [chefUserId], references: [id])
   chefUserId String

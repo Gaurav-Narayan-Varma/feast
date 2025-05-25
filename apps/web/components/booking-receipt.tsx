@@ -13,12 +13,14 @@ export default function BookingReceipt({
   items,
   totalAmount,
   appointmentAt,
+  customerAddress,
 }: {
   chefId: string;
   chefName: string;
   items: Item[];
   totalAmount: number;
   appointmentAt: string;
+  customerAddress: string;
 }) {
   const appointmentDate = new Date(appointmentAt);
   const appointmentDateString = appointmentDate.toLocaleDateString("en-US", {
@@ -45,6 +47,7 @@ export default function BookingReceipt({
           </a>
         </div>
         <p>Appointment Date: {appointmentDateString}</p>
+        <p>Customer Address: {customerAddress}</p>
       </div>
       <div>
         <p>Dishes:</p>

@@ -22,11 +22,13 @@ import RecipeGrid from "../recipes/recipe-grid";
 import RecipeSelector from "./recipe-selector";
 
 function MenuForm({
+  isCreateMode,
   selectedMenu,
   setIsCreateMode,
   setIsEditMode,
   setSelectedMenu,
 }: {
+  isCreateMode: boolean;
   selectedMenu: Menu | null;
   setIsCreateMode: (isCreateMode: boolean) => void;
   setIsEditMode: (isEditMode: boolean) => void;
@@ -107,7 +109,7 @@ function MenuForm({
     const menuData = {
       name: menu.name,
       description: menu.description,
-      recipes: menu.recipes.map((recipe) => recipe.id),
+      recipes: menu.recipes.map((recipe) => recipe.id) as [string, ...string[]],
     };
 
     const result = menuSchema.safeParse(menuData);
@@ -174,10 +176,17 @@ function MenuForm({
             <RecipeGrid
               recipes={menu.recipes}
               onDelete={(recipeId) => {
-                removeRecipeFromMenu.mutate({
-                  menuId: selectedMenu?.id ?? "",
-                  recipeId,
-                });
+                if (isCreateMode) {
+                  setMenu({
+                    ...menu,
+                    recipes: menu.recipes.filter((r) => r.id !== recipeId),
+                  });
+                } else {
+                  removeRecipeFromMenu.mutate({
+                    menuId: selectedMenu?.id ?? "",
+                    recipeId,
+                  });
+                }
               }}
               isRemovableFromMenu={true}
               nonSelectable
