@@ -48,8 +48,8 @@ export function generateTimeSlots({
 
     dateOverridesForSelectedDate.forEach((o) => {
       const slotsForRange = generateSlotsForRange(
-        new Date(o.startTime),
-        new Date(o.endTime),
+        new Date(o.startTime.replace("Z", "")),
+        new Date(o.endTime.replace("Z", "")),
         []
       );
 
@@ -71,8 +71,8 @@ export function generateTimeSlots({
 
     recurringAvailabilitiesForSelectedDayOfWeek.forEach((r) => {
       const slotsForRange = generateSlotsForRange(
-        new Date(r.startTime),
-        new Date(r.endTime),
+        new Date(r.startTime.replace("Z", "")),
+        new Date(r.endTime.replace("Z", "")),
         []
       );
 
