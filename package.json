@@ -4,12 +4,16 @@
   "scripts": {
     "build": "turbo run build",
     "build:shared": "turbo run build --filter=@feast/shared",
+    "build:api": "turbo run build --filter=@feast/api",
+    "build:web": "turbo run build --filter=@feast/web",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo run check-types",
     "prisma:migrate": "cd apps/api && npx prisma migrate dev",
-    "prisma:reset": "cd apps/api && npx prisma migrate reset"
+    "prisma:reset": "cd apps/api && npx prisma migrate reset",
+    "start:api": "cd apps/api && npm run start",
+    "start:web": "cd apps/web && npm run start"
   },
   "devDependencies": {
     "prettier": "^3.5.3",

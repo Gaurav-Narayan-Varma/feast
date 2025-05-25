@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { Cuisine, DietaryTags, FoodAllergen } from "./types";
+import { Cuisine, DietaryTags, FoodAllergen } from "./types.js";
 
 export const recipeSchema = z.object({
   name: z.string().min(1, "Recipe name is required"),
