@@ -8,7 +8,6 @@ type Response = {
 
 export const get1099ContractLink = chefUserProcedure.query<Response>(
   async ({ ctx }) => {
-    console.log("ctx.chefUserId", ctx.chefUserId);
 
     const chefUser = await db.chefUser.findUniqueOrThrow({
       where: { id: ctx.chefUserId },
@@ -20,8 +19,6 @@ export const get1099ContractLink = chefUserProcedure.query<Response>(
 
     const contractUrl = await getSignedUrlUtil(chefUser.form1099DocumentKey);
     
-    console.log("contractUrl BE", contractUrl);
-
     return {
       contractUrl,
     };

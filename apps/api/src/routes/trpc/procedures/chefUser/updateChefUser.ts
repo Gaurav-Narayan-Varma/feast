@@ -26,8 +26,6 @@ export const updateChefUser = chefUserProcedure
     try {
       const { data } = input;
 
-      console.log("data", data);
-
       const chefUser = await db.chefUser.update({
         where: { id: ctx.chefUserId },
         data,

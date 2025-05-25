@@ -33,7 +33,7 @@ export default function Navbar() {
   return (
     <div
       className={cx(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-6 lg:px-12 py-4",
+        "fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-6 lg:px-12 py-4 bg-white",
         mobileMenuOpen
           ? "bg-white shadow-sm"
           : scrolled

@@ -35,7 +35,7 @@ async function getChefUser() {
     redirect("/auth/chef-login");
   }
 
-  const response = await fetch(`${process.env.NEXT_PUBLIC_FEAST_WEB_URL}/api/trpc/chefUser.getChefUser`, {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/trpc/chefUser.getChefUser`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

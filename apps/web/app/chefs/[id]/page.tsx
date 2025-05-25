@@ -70,7 +70,6 @@ export default function ChefProfile({
 
   const createBooking = trpc.booking.createBooking.useMutation({
     onSuccess: (data) => {
-      console.log("data.booking.id", data.booking.id);
       router.push(`/booking/${data.booking.id}`);
       toast.success(
         "Booking created successfully! The chef has been notified."

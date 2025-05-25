@@ -3,17 +3,19 @@
   "private": true,
   "scripts": {
     "build": "turbo run build",
-    "build:shared": "cd apps/shared && npm run build",
-    "build:api": "cd packages/shared && npm run build && cd ../../apps/api && npm run build",
     "build:web": "cd packages/shared && npm run build && cd ../../apps/api && npm run build && cd ../web && npm run build",
+    "start:web": "cd apps/api && prisma migrate deploy && cd ../web && npm run start",
+    "build:api": "cd packages/shared && npm run build && cd ../../apps/api && npm run build",
+    "start:api": "cd apps/api && npm run start",
+    "build:shared": "cd apps/shared && npm run build",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo run check-types",
     "prisma:migrate": "cd apps/api && npx prisma migrate dev",
     "prisma:reset": "cd apps/api && npx prisma migrate reset",
-    "start:api": "cd apps/api && npm run start",
-    "start:web": "cd apps/api && prisma migrate deploy && cd ../web && npm run start"
+    "serve:web": "npm run build:web && npm run start:web",
+    "serve:api": "npm run build:api && npm run start:api"
   },
   "devDependencies": {
     "prettier": "^3.5.3",

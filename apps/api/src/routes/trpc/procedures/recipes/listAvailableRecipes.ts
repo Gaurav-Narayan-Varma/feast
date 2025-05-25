@@ -21,7 +21,5 @@ export const listAvailableRecipes = chefUserProcedure
       },
     });
 
-    console.log("recipes", recipes);
-
     return { recipes };
   });
