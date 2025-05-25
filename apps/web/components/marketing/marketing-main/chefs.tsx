@@ -14,18 +14,6 @@ import { useRef } from "react";
 import ChefCard from "./chef-card";
 
 export default function Chefs() {
-  console.log("from Client");
-  console.log("from Client");
-  console.log("from Client");
-  console.log("from Client");
-  console.log("from Client");
-  console.log("from Client");
-  console.log("from Client");
-  console.log("from Client");
-  console.log("from Client");
-  console.log("from Client");
-  console.log("from Client");
-  console.log("from Client");
   const listChefUsers = trpc.chefUser.listChefUsersPublic.useQuery();
   const plugin = useRef(Autoplay({ delay: 2000, stopOnInteraction: true }));
 
