@@ -13,6 +13,19 @@ type GetChefUserResponse = {
 
 export const listChefUsersPublic = publicProcedure.query<GetChefUserResponse>(
   async () => {
+
+    console.log("listChefUsersPublic");
+    console.log("listChefUsersPublic");
+    console.log("listChefUsersPublic");
+    console.log("listChefUsersPublic");
+    console.log("listChefUsersPublic");
+    console.log("listChefUsersPublic");
+    console.log("listChefUsersPublic");
+    console.log("listChefUsersPublic");
+    console.log("listChefUsersPublic");
+    console.log("listChefUsersPublic");
+    console.log("listChefUsersPublic");
+    console.log("listChefUsersPublic");
     const chefUsers = await db.chefUser.findMany({
       where: {
         isApproved: true,
