@@ -10,20 +10,6 @@ export const addRecurringAvailability = chefUserProcedure
   .mutation(async ({ ctx, input }) => {
     const { dayOfWeek, startTime, endTime } = input;
 
-    /**
-     * Convert the start and end times to ISO 8601 format
-     */
-    // const isoStartTime = formatInTimeZone(
-    //   parse(startTime, "h:mm a", new Date()),
-    //   "America/New_York",
-    //   "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"
-    // );
-    // const isoEndTime = formatInTimeZone(
-    //   parse(endTime, "h:mm a", new Date()),
-    //   "America/New_York",
-    //   "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"
-    // );
-
     const overlappingAvailability = await db.recurringAvailability.findFirst({
       where: {
         chefUserId: ctx.chefUserId,

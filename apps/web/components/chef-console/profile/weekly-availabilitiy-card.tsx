@@ -23,7 +23,7 @@ import {
 } from "@feast/shared";
 import { type inferProcedureOutput } from "@trpc/server";
 import cx from "clsx";
-import { format } from "date-fns";
+import { formatInTimeZone } from "date-fns-tz"; // Add this import at the top
 import { Check, Plus, Trash, X } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -227,8 +227,17 @@ export default function WeeklyAvailabilityCard({
                       className="px-3 py-1 text-muted-foreground flex flex-row justify-between items-center ml-1 mr-3 mb-2 last:mb-1"
                     >
                       <div className="text-sm">
-                        {format(availability.startTime, "h:mm a")} -{" "}
-                        {format(availability.endTime, "h:mm a")}
+                        {formatInTimeZone(
+                          new Date(availability.startTime),
+                          "UTC",
+                          "h:mm a"
+                        )}{" "}
+                        -{" "}
+                        {formatInTimeZone(
+                          new Date(availability.endTime),
+                          "UTC",
+                          "h:mm a"
+                        )}
                       </div>
                       <Button
                         variant="ghost"
