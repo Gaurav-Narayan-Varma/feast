@@ -77,8 +77,8 @@ export default function OnboardingItem({
                   <TooltipTrigger asChild>
                     <Info className="h-4 w-4 text-muted-foreground cursor-help stroke-[1.5]" />
                   </TooltipTrigger>
-                  <TooltipContent className="max-w-[300px] p-3 text-xs">
-                    <p>{tooltipContent}</p>
+                  <TooltipContent align="end" className="p-3 text-xs data-[state=delayed-open]:data-[side=top]:animate-slideDownAndFade data-[state=delayed-open]:data-[side=bottom]:animate-slideUpAndFade data-[state=delayed-open]:data-[side=left]:animate-slideRightAndFade data-[state=delayed-open]:data-[side=right]:animate-slideLeftAndFade">
+                    {tooltipContent}
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>

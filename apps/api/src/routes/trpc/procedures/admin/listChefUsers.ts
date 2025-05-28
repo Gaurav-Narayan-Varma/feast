@@ -1,9 +1,9 @@
-import { ChefUser } from "@prisma/client";
 import { db } from "@/db.js";
 import { adminProcedure } from "@/routes/trpc/trpcBase.js";
+import { ChefUser, Menu } from "@prisma/client";
 
 type ListChefUsersResponse = {
-  chefUsers: ChefUser[];
+  chefUsers: (ChefUser & { menus: Menu[] })[];
 };
 
 export const listChefUsers = adminProcedure.query<ListChefUsersResponse>(
@@ -11,6 +11,9 @@ export const listChefUsers = adminProcedure.query<ListChefUsersResponse>(
     const chefUsers = await db.chefUser.findMany({
       orderBy: {
         createdAt: "desc",
+      },
+      include: {
+        menus: true,
       },
     });
 

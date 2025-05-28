@@ -35,7 +35,7 @@ export default function ChefConsoleAdminPanelPage() {
   if (listChefUsers.isLoading) {
     return <PageSpinner />;
   }
-    
+
   return (
     <div className="space-y-6">
       <div>
@@ -53,6 +53,7 @@ export default function ChefConsoleAdminPanelPage() {
               <TableHead>ID Verified</TableHead>
               <TableHead>Stripe Setup</TableHead>
               <TableHead>1099 Status</TableHead>
+              <TableHead>Menus</TableHead>
               <TableHead>Approved</TableHead>
               <TableHead>Actions</TableHead>
             </TableRow>
@@ -87,6 +88,7 @@ export default function ChefConsoleAdminPanelPage() {
                     }
                   />
                 </TableCell>
+                <TableCell>{chef.menus.length}</TableCell>
                 <TableCell>
                   <StatusIcon status={chef.isApproved} />
                 </TableCell>

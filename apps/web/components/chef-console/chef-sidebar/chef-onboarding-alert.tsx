@@ -33,6 +33,10 @@ export default function ChefOnboardingAlert() {
     incompleteTasks.push("form1099");
   }
 
+  if (getChefUser.data?.chefUser.menus.length === 0) {
+    incompleteTasks.push("menus");
+  }
+
   if (getChefUser.data?.chefUser.isApproved === false) {
     incompleteTasks.push("platformApproval");
   }
@@ -57,6 +61,11 @@ export default function ChefOnboardingAlert() {
       path: "/chef-console/settings",
       tooltip:
         "Submit your 1099 contract to officially join the Feast platform.",
+    },
+    menus: {
+      label: "Dining Options",
+      path: "/chef-console/settings",
+      tooltip: "Add at least one menu to your profile",
     },
     platformApproval: {
       label: "Platform approval",

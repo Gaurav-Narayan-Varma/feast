@@ -9,6 +9,7 @@ type GetChefUserResponse = {
     availabilities: RecurringAvailability[];
     dateOverrides: DateOverride[];
     bookings: Booking[];
+    menus: Menu[];
   };
 };
 
@@ -18,6 +19,7 @@ export const getChefUser = chefUserProcedure.query<GetChefUserResponse>(
       where: { id: ctx.chefUserId },
       include: {
         bookings: true,
+        menus: true,
       },
     });
 

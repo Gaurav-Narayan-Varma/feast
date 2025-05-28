@@ -16,7 +16,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { CreditCard, ShieldCheck, Upload } from "lucide-react";
+import { CreditCard, Menu, ShieldCheck, Upload } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
@@ -194,6 +194,26 @@ export default function OnboardingSection() {
                   )}
                 </Tooltip>
               </TooltipProvider>
+            )}
+          </OnboardingItem>
+
+          <OnboardingItem
+            icon={<Menu />}
+            title="Dining Options"
+            description="Add at least one menu to your profile"
+            status={
+              (getChefUser.data?.chefUser?.menus?.length ?? 0) > 0
+                ? "completed"
+                : "pending"
+            }
+            isMobile={isMobile}
+          >
+            {getChefUser.data?.chefUser?.menus?.length === 0 && (
+              <Button
+                type="button"
+                label="Add Menu"
+                onClick={() => router.push("/chef-console/menus")}
+              />
             )}
           </OnboardingItem>
           <div className="text-sm text-muted-foreground">
