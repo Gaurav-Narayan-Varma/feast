@@ -80,7 +80,7 @@ export default function RecipeSlot({
           />
         )}
         <div
-          className={`overflow-hidden transition-all duration-200 ${
+          className={`transition-all overflow-y-auto duration-200 ${
             isIngredientsExpanded ? "max-h-40" : "max-h-0"
           }`}
         >
