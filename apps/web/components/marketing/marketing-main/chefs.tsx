@@ -26,7 +26,7 @@ export default function Chefs() {
   }
 
   return (
-    <section id="chefs" className="pt-24 pb-16">
+    <section id="chefs" className="pt-24 pb-16 bg-ds-chef-50">
       <div>
         <div className="text-center mb-4">
           <span className="inline-block py-1 px-3 bg-ds-chef-100 text-ds-chef-800 rounded-full text-sm font-medium mb-4 animate-on-scroll">
