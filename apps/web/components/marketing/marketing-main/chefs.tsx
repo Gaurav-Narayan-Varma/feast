@@ -51,7 +51,7 @@ export default function Chefs() {
           onMouseLeave={plugin.current.reset}
         >
           <CarouselContent className="p-4 pb-8 md:-ml-4 flex justify-center">
-            {listChefUsers.data?.chefUsers.slice(0, 1).map((chef, index) => (
+            {listChefUsers.data?.chefUsers.map((chef, index) => (
               <CarouselItem
                 key={chef.id}
                 className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/4"
