@@ -88,15 +88,15 @@ export default function ChefProfile({
           <Loader2 className="animate-spin" />
         </div>
       )}
-      <div className="mt-20">
+      <div className="mt-20 px-8 lg:px-[140px] py-7">
         {/* Hero Section */}
-        <div className="px-[140px] py-7 bg-ds-chef-50 flex gap-8">
+        <div className="bg-ds-chef-50 gap-8 py-7 px-6 rounded-lg flex flex-col lg:flex-row items-center">
           <img
             src={getChefUser.data?.chefUser.profilePictureUrl ?? undefined}
             alt="Chef Profile Picture"
             className="w-[460px] h-[460px] rounded-lg shadow-md object-cover"
           />
-          <div>
+          <div className="p-6 pb-0">
             <div className="px-3 py-1 bg-ds-chef-100 text-ds-chef-800 rounded-full text-sm font-medium w-fit mb-4">
               {getChefUser.data?.chefUser.cuisines
                 .map((cuisine) => cuisine)
@@ -106,7 +106,7 @@ export default function ChefProfile({
               {getChefUser.data?.chefUser.name}
             </h1>
 
-            <div className="flex items-center text-ds-chef-600 mb-6">
+            <div className="flex items-center text-ds-chef-600">
               <MapPin className="w-4 h-4 mr-1" />
               <span>{getChefUser.data?.chefUser.zipCode}</span>
             </div>
@@ -118,14 +118,14 @@ export default function ChefProfile({
         </div>
 
         {/* Menu Section */}
-        <div className="px-[140px] pb-9 pt-14">
+        <div className="pb-9 pt-14">
           <div className="mb-4">
             <div className="text-2xl font-bold mb-1">Menu Options</div>
             <div className="text-sm text-muted-foreground mb-4">
               Add items to your cart to create a custom menu.
             </div>
           </div>
-          <div className="gap-8 grid grid-cols-2">
+          <div className="gap-8 flex flex-col lg:grid lg:grid-cols-2">
             {getChefUser.data?.chefUser.menus.map((menu) => (
               <MenuCard
                 key={menu.id}
@@ -180,9 +180,9 @@ export default function ChefProfile({
           </div>
         </div>
 
-        <div className="flex gap-6 py-9 px-[140px]">
+        <div className="flex gap-12 md:gap-6 py-9 md:flex-row flex-col justify-center">
           {/* Cart Section */}
-          <div className="w-1/2 justify-between flex flex-col">
+          <div className="md:w-1/2 justify-between flex flex-col">
             <div>
               <div className="text-2xl font-bold mb-1">Cart</div>
               <div className="text-sm text-muted-foreground mb-4">
@@ -223,12 +223,12 @@ export default function ChefProfile({
           </div>
 
           {/* Scheduling Section */}
-          <div className="w-1/2">
+          <div className="md:w-1/2">
             <div className="text-2xl font-bold mb-1">Scheduling</div>
             <div className="text-sm text-muted-foreground mb-4">
               Select a date and time to book a chef (~2 hours)
             </div>
-            <div className="flex gap-6 h-[283.2px]">
+            <div className="flex gap-6 md:h-[283.2px] flex-col md:flex-row items-center">
               <div className="w-1/2 flex justify-center">
                 <Calendar
                   mode="single"
@@ -240,10 +240,12 @@ export default function ChefProfile({
                   fromDate={new Date()}
                 />
               </div>
-              <div className="w-1/2 flex flex-col gap-4 p-3">
-                <div className="text-sm font-medium">Availabilities</div>
+              <div className="w-full md:w-1/2 flex flex-col gap-4 p-3">
+                <div className="text-sm font-medium">
+                  {selectedDate.toLocaleDateString()} Availabilities
+                </div>
                 {/* Availability slots */}
-                <ScrollArea className="overflow-y-auto">
+                <ScrollArea className="overflow-y-auto h-[200px]">
                   <div className="flex flex-col gap-2 pr-4">
                     {generateTimeSlots({
                       recurringAvailabilities:
@@ -278,9 +280,9 @@ export default function ChefProfile({
           </div>
         </div>
         {/* Customer Info Section */}
-        <div className="flex justify-center items-center gap-6 pb-10 px-[140px] lg:w-4/5 lg:mx-auto">
-          <div className="flex items-center gap-2 flex-1">
-            <Label htmlFor="email">Email:</Label>
+        <div className="flex justify-center items-start md:items-center gap-6 pb-10 xl:px-[140px] lg:w-4/5 lg:mx-auto flex-col md:flex-row">
+          <div className="flex gap-2 flex-1 flex-col items-start w-full">
+            <Label htmlFor="email">Email</Label>
             <Input
               id="email"
               placeholder="john@doe.com"
@@ -289,11 +291,11 @@ export default function ChefProfile({
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
-          <div className="flex items-center gap-2 flex-1">
-            <Label htmlFor="address">Address:</Label>
+          <div className="flex gap-2 flex-1 flex-col items-start w-full">
+            <Label htmlFor="address">Address</Label>
             <Input
               id="address"
-              placeholder="123 Main St, Anytown, USA"
+              placeholder="Enter your address"
               className="w-full"
               value={address ?? ""}
               onChange={(e) => setAddress(e.target.value)}
@@ -301,9 +303,8 @@ export default function ChefProfile({
           </div>
         </div>
         {/* Request Booking */}
-        <div className="flex justify-center items-center gap-6 pb-10 px-[140px]">
+        <div className="flex justify-center items-center gap-6 pb-10 xl:px-[140px]">
           <Button
-            className="w-1/3"
             variant="default"
             label="Request Booking"
             isLoading={createBooking.isPending}
