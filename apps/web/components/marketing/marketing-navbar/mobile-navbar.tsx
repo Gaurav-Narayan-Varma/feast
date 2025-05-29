@@ -25,18 +25,18 @@ export default function MobileNavBar({
 
       <div className="flex flex-col gap-6 bg-white">
         <a
-          href="#how-it-works"
-          className="text-lg font-medium py-2 border-b border-gray-100"
-          onClick={() => setMobileMenuOpen(false)}
-        >
-          How it Works
-        </a>
-        <a
           href="#chefs"
           className="text-lg font-medium py-2 border-b border-gray-100"
           onClick={() => setMobileMenuOpen(false)}
         >
           Our Chefs
+        </a>
+        <a
+          href="#how-it-works"
+          className="text-lg font-medium py-2 border-b border-gray-100"
+          onClick={() => setMobileMenuOpen(false)}
+        >
+          How it Works
         </a>
         <a
           href="#cuisines"
@@ -52,25 +52,12 @@ export default function MobileNavBar({
         >
           Testimonials
         </a>
-        <a
-          href="#subscription-plans"
-          className="text-lg font-medium py-2 border-b border-gray-100"
-          onClick={() => setMobileMenuOpen(false)}
-        >
-          Subscriptions
-        </a>
         <div className="flex flex-col gap-3 mt-4">
-          <Button
-            onClick={() => console.log("TODO: implement login function here")}
-            variant="outline"
-            className="w-full rounded-full"
-          >
-            Log in
-          </Button>
           <a href="/auth/chef-login" className="w-full">
-            <Button className="w-full rounded-full bg-ds-chef-800 hover:bg-ds-chef-900">
-              Start Cooking
-            </Button>
+            <Button
+              className="w-full rounded-full bg-ds-chef-800 hover:bg-ds-chef-900"
+              label="Start Cooking"
+            />
           </a>
         </div>
       </div>
